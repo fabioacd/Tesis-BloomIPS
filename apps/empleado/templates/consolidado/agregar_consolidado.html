@@ -1,0 +1,190 @@
+{% extends 'base/base.html' %}
+{% load bootstrap3 %}
+{% load staticfiles %}
+
+{% block titulo_block %} BloomIPS | Registrar consolidado{% endblock %}
+
+{% block title_content_block %}<strong>Registro de consolidado</strong>{% endblock %}
+
+{% block css_block %}
+
+    <!-- Select2 -->
+    {{ form.media.css }}
+    <!-- daterange picker -->
+    <link rel="stylesheet" href="{% static 'bower_components/bootstrap-daterangepicker/daterangepicker.css' %}">
+
+
+    <link rel="stylesheet" href="{% static 'css/css_personalizados.css' %}">
+    <style>
+        #btn-buscar {
+            margin: 25px 0px;
+        }
+
+        #id_descripcion {
+            text-align: justify
+        }
+
+
+    </style>
+
+{% endblock %}
+
+{% block content_body_block %}
+    <form role="form" method="POST"> {% csrf_token %}
+
+        <div>
+            {% bootstrap_field form.fecha_inicio %}
+            {% bootstrap_field form.fecha_fin %}
+        </div>
+
+        <div class="box-body">
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-4 col-md-offset-1">
+                        {% bootstrap_field form.paciente layout="vertical" %}
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Seleccione rango de Fechas:</label>
+
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <input type="text" class="form-control pull-right" id="rango_fecha">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 ">
+                        <button type="button" class="btn btn-info" id="btn-buscar" onclick="generarConsolidado()">
+                            Generar
+                        </button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-10 col-md-offset-1">
+                        {% bootstrap_field form.descripcion layout="vertical" %}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="box-footer">
+            <button type="button" class="btn btn-primary col-md-offset-1" data-target="#modal-default"
+                    onclick="setText()"
+                    type="button">Guardar
+            </button>
+        </div>
+
+
+        <!-- Modal -->
+        <div class="modal fade" id="modal-default">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Guardar consolidado</h4>
+                    </div>
+                    <div class="modal-body" id="mostrar-alerta">
+                        <p id="info_mostrar"> &hellip;</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-primary" onclick="cerrarModal()">Registrar</button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+    </form>
+{% endblock %}
+
+
+{% block js_block %}
+    {{ form.media.js }}
+    <!-- date-range-picker -->
+    <script src="{% static 'bower_components/moment/min/moment.min.js' %}"></script>
+    <script src="{% static 'bower_components/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+
+    <script>
+
+        //Date range picker
+        $('#rango_fecha').daterangepicker()
+
+        function setText() {
+
+            //Se ponen los valores a fecha_inicio y fecha_fin
+            var fecha_inicio = $('#rango_fecha').data('daterangepicker').startDate.format().split('T')[0];
+            var fecha_fin = $('#rango_fecha').data('daterangepicker').endDate.format().split('T')[0];
+            $('#id_fecha_inicio').val(fecha_inicio);
+            $('#id_fecha_fin').val(fecha_fin);
+
+            //Información a mostrar
+            document.getElementById("info_mostrar").innerHTML = "¿Está seguro que desea aprobar el consolidado?"
+            $("#modal-default").modal('toggle');
+        }
+
+        function cerrarModal() {
+            $("#modal-default .close").click()
+        }
+
+
+        function generarConsolidado() {
+            //Se ponen los valores a fecha_inicio y fecha_fin
+            var fecha_inicio = $('#rango_fecha').data('daterangepicker').startDate.format().split('T')[0];
+            var fecha_fin = $('#rango_fecha').data('daterangepicker').endDate.format().split('T')[0];
+            $('#id_fecha_inicio').val(fecha_inicio);
+            $('#id_fecha_fin').val(fecha_fin);
+
+            var id_paciente = $('#id_paciente').val();
+
+            $.ajax({
+                url: "{% url 'get_consolidado_ajax' %}",
+                data: {'id_paciente': id_paciente, 'fecha_inicio': fecha_inicio, 'fecha_fin': fecha_fin},
+                dataType: 'json',
+                success: function (data) {
+                    var json = JSON.parse(data)
+                    var info = "";
+                    var tamaño = json.length
+                    $('#id_descripcion').text("")
+                    console.log(tamaño)
+                    //En caso de sólo haber 1 resúmen asociado al paciente
+                    if (tamaño == 1) {
+                        var area = json[0].area
+                        info += "Área: " + area.toUpperCase() + "\n" + json[0].descripcion + "\n"
+                        $('#id_descripcion').append(info)
+                    }
+                    //En caso de haber varios, se obtiene el área del primero y se compara para poder agruparla con los demás resúmenes
+                    else if (tamaño > 1) {
+                        var area = json[0].area
+                        info += "Área: " + area.toUpperCase() + "\n" + json[0].descripcion + "\n"
+                        for (var i = 1; i < tamaño; i++) {
+                            while (area == json[i].area) {
+                                info += json[i].descripcion + "\n"
+                                i += 1
+                                //En caso de que sobrepase el tamaño se sale del while
+                                if (i >= tamaño) {
+                                    break;
+                                }
+                            }
+                            //Si se salió del rango pone la info acumulada hasta el momento. De lo contrario, es porque no hay más áreas en común y se debe de actualizar dicha variable
+                            if (i < tamaño) {
+                                area = json[i].area
+                                info += "\nÁrea: " + area.toUpperCase() + "\n" + json[i].descripcion + "\n"
+                            }
+                        }
+                        $('#id_descripcion').append(info)
+                    }
+                    else {
+                        $('#id_descripcion').append("El paciente no tiene resúmenes asociados")
+                    }
+                }
+            });
+        }
+
+
+    </script>
+{% endblock %}
+

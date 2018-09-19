@@ -1,0 +1,66 @@
+{% extends 'base/base.html' %}
+{% load bootstrap3 %}
+{% load staticfiles %}
+
+{% block titulo_block %} BloomIPS | Consultar área{% endblock  %}
+
+{% block css_block %}
+
+    <link rel="stylesheet" href="{% static 'bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css' %}">
+
+{% endblock %}
+
+{% block title_content_block %}<strong>Consultar área</strong>{% endblock %}
+
+{% block content_body_block %}
+
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <div class="table-responsive">
+                <table id="example1" class="table table-bordered table-striped">
+                    <thead>
+                    <tr>
+                      <th>Nombre</th>
+                      <th style="text-align:center">Descripción</th>
+                      <th style="text-align:center">Modificar</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    {% for area in areas %}
+                            <tr>
+                            <td> {{ area.nombre }}</td>
+                            <td style="text-align:justify" > {{ area.descripcion}}</td>
+                            <td> <a href="{% url 'modificar_area' area.id %}" class="btn btn-block btn-primary">Modificar</a> </td>
+                            </tr>
+                    {% endfor %}
+
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                      <th>Nombre</th>
+                      <th style="text-align:center">Descripción</th>
+                      <th style="text-align:center">Modificar</th>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block js_block %}
+
+<!-- DataTables -->
+<script src="{% static 'bower_components/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
+
+<script >
+ $(function () {
+    $('#example1').DataTable()
+
+  })
+</script>
+
+{% endblock %}

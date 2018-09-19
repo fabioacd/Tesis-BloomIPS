@@ -1,0 +1,90 @@
+{% extends 'base/base.html' %}
+{% load bootstrap3 %}
+{% load staticfiles %}
+
+{% block titulo_block %} BloomIPS | Consultar empleado{% endblock %}
+
+{% block title_content_block %}<strong>Consultar empleado</strong>{% endblock %}
+
+{% block css_block %}
+
+    <link rel="stylesheet" href="{% static 'bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css' %}">
+
+{% endblock %}
+
+
+{% block content_body_block %}
+
+    <div class="row">
+        <div class="col-md-12 ">
+            <div class="table-responsive">
+                <table id="example1" class="table table-bordered table-striped">
+                    <thead>
+                    <tr>
+                        <th>Identificación</th>
+                        <th>Nombres</th>
+                        <th>Apellidos</th>
+                        <th>Cargo</th>
+                        <th>Área</th>
+                        <th>Email</th>
+                        <th>Teléfono</th>
+                        <th>Celular</th>
+                        <th>Dirección</th>
+                        <th>Modificar</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    {% for empleado in empleados %}
+                        <tr>
+                            <td> {{ empleado.username }}</td>
+                            <td> {{ empleado.first_name }}</td>
+                            <td> {{ empleado.last_name }}</td>
+                            <td> {{ empleado.cargo }}</td>
+                            <td> {{ empleado.area }}</td>
+                            <td> {{ empleado.email }}</td>
+                            <td> {{ empleado.telefono }}</td>
+                            <td> {{ empleado.celular }}</td>
+                            <td> {{ empleado.direccion }}</td>
+                            <td><a href="{% url 'modificar_empleado' empleado.username %}"
+                                   class="btn btn-block btn-primary">Modificar</a></td>
+                        </tr>
+                    {% endfor %}
+
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <th>Identificación</th>
+                        <th>Nombres</th>
+                        <th>Apellidos</th>
+                        <th>Cargo</th>
+                        <th>Área</th>
+                        <th>Email</th>
+                        <th>Teléfono</th>
+                        <th>Celular</th>
+                        <th>Dirección</th>
+                        <th>Modificar</th>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block js_block %}
+
+    <!-- DataTables -->
+    <script src="{% static 'bower_components/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
+
+    <script>
+        $(function () {
+            $('#example1').DataTable()
+
+        })
+    </script>
+
+{% endblock %}
