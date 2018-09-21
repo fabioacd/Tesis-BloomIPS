@@ -1,0 +1,15 @@
+<li class="treeview {% if 'empleado/modificar_area/' in request.path or 'empleado/agregar_area' in request.path or 'empleado/consultar_area' in request.path %} active {% else %} disabled {% endif %}">
+    <a href="#">
+        <i class="fa  fa-circle"></i> <span>Area</span>
+        <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right"></i>
+        </span>
+    </a>
+    <ul class="treeview-menu">
+        <li class="{% if 'empleado/agregar_area' in request.path %} active {% else %} disabled {% endif %}">
+            <a href="{% url 'agregar_area' %}">
+            <i class="fa  fa-plus-square">
+            </i> Agregar area </a>
+        </li>
+    </ul>
+</li>

@@ -23,12 +23,11 @@
 
 {% endif %}
 
-{% comment %}
 
-{% if user.is_anonymous if user.get_cargo == 'Administrador' %}
+
+{% if user.is_anonymous %}
 
     {% include "menus/menu_administrador.html" %}
 
 {% endif %}
 
-{% endcomment %}
