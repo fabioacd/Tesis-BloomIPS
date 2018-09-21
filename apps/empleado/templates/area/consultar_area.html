@@ -31,7 +31,7 @@
                             <tr>
                             <td> {{ area.nombre }}</td>
                             <td style="text-align:justify" > {{ area.descripcion}}</td>
-                            <td> <a href="#{% comment %}{% url 'modificar_area' area.id %} {% endcomment %}" class="btn btn-block btn-primary">Modificar</a> </td>
+                            <td> <a href="{% url 'modificar_area' area.id %}" class="btn btn-block btn-primary">Modificar</a> </td>
                             </tr>
                     {% endfor %}
 
