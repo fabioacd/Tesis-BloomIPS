@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.shortcuts import redirect
 from django.contrib import messages
 from .forms import AgregarAreaForm
+from .models import Area
 
 # Create your views here.
 
@@ -22,3 +23,9 @@ def agregar_area(request):
     # return redirect('login')
     contexto = {'form': form}
     return render(request, 'area/agregar_area.html', contexto)
+
+
+def consultar_area(request):
+    areas = list(Area.objects.all())
+    contexto = {'areas': areas}
+    return render(request, 'area/consultar_area.html', contexto)
