@@ -1,0 +1,34 @@
+{% if user.get_cargo == 'Coordinador'%}
+
+    {% include "menus/menu_coordinador.html" %}
+
+{% endif %}
+
+{% if user.get_cargo == 'Terapeuta' %}
+
+    {% include "menus/menu_terapeuta.html" %}
+
+{% endif %}
+
+{% if user.get_cargo == 'Secretaria' %}
+
+    {% include "menus/menu_secretaria.html" %}
+
+{% endif %}
+
+
+{% if user.get_cargo ==  'Administrador' %}
+
+    {% include "menus/menu_administrador.html" %}
+
+{% endif %}
+
+{% comment %}
+
+{% if user.is_anonymous if user.get_cargo == 'Administrador' %}
+
+    {% include "menus/menu_administrador.html" %}
+
+{% endif %}
+
+{% endcomment %}
