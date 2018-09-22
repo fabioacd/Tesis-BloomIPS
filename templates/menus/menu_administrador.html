@@ -1,3 +1,4 @@
+{# -------------------------------AREA--------------------------------------------#}
 <li class="treeview {% if 'empleado/modificar_area/' in request.path or 'empleado/agregar_area' in request.path or 'empleado/consultar_area' in request.path %} active {% else %} disabled {% endif %}">
     <a href="#">
         <i class="fa  fa-circle"></i> <span>Area</span>
@@ -15,6 +16,30 @@
             <a href="{% url 'consultar_area' %}">
             <i class="fa fa-th-large">
             </i> Consultar area </a>
+        </li>
+    </ul>
+</li>
+
+
+{# -------------------------------EPS--------------------------------------------#}
+<li class="treeview {% if 'agregar_eps' in request.path or 'consultar_eps' in request.path or 'modificar_eps' in request.path %}
+    active {% else %} disabled {% endif %}">
+    <a href="#">
+        <i class="fa fa-hospital-o"></i> <span>Eps</span>
+        <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+        </span>
+    </a>
+     <ul class="treeview-menu">
+        <li class="{% if 'agregar_eps' in request.path  %} active {% else %} disabled {% endif %}">
+            <a href="{% url 'agregar_eps' %}">
+            <i class="fa fa-plus-square">
+            </i> Agregar Eps</a>
+        </li>
+        <li class="{% if 'consultar_eps' in request.path  %} active {% else %} disabled {% endif %}">
+            <a href="{% url 'consultar_eps' %}">
+            <i class="fa fa-table">
+            </i> Consultar eps </a>
         </li>
     </ul>
 </li>
