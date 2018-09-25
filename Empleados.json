@@ -1,0 +1,146 @@
+[
+  {
+      "model": "empleado.empleado",
+      "pk": "1",
+      "fields": {
+          "password": "pbkdf2_sha256$100000$NzYxpU3SrTBn$1ctUZ1OqHqYVtqTwB3iJLKeaWNfBVy6uDFq7TTJGdg4=",
+          "last_login": "2018-07-25 11:51:01.076592-05",
+          "is_superuser": "f",
+          "username": "123",
+          "first_name": "Sebastian",
+          "last_name": "Castaño",
+          "email": "sebas@gmail.com",
+          "is_staff": "f",
+          "is_active": "t",
+          "date_joined": "2018-07-25 11:50:46.489758-05",
+          "imagen": "empleado/default-image.png",
+          "cargo": "Administrador",
+          "direccion": "calle 5 # 38 - 45",
+          "telefono": "3289808",
+          "celular": "3256589875",
+          "fecha_nacimiento": "1980-02-03",
+          "area_id": "8"
+      }
+  },
+
+  {
+      "model": "empleado.empleado",
+      "pk": "2",
+      "fields": {
+          "password": "pbkdf2_sha256$100000$NzYxpU3SrTBn$1ctUZ1OqHqYVtqTwB3iJLKeaWNfBVy6uDFq7TTJGdg4=",
+          "last_login": "2018-07-25 11:51:01.076592-05",
+          "is_superuser": "f",
+          "username": "321",
+          "first_name": "Fabio",
+          "last_name": "Castañeda",
+          "email": "fabio@gmail.com",
+          "is_staff": "f",
+          "is_active": "t",
+          "date_joined": "2018-07-25 11:50:46.489758-05",
+          "imagen": "empleado/default-image.png",
+          "cargo": "Terapeuta",
+          "direccion": "calle 5 # 38 - 45",
+          "telefono": "3289815",
+          "celular": "3125689785",
+          "fecha_nacimiento": "1980-02-03",
+          "area_id": "5"
+      }
+  },
+
+  {
+      "model": "empleado.empleado",
+      "pk": "3",
+      "fields": {
+          "password": "pbkdf2_sha256$100000$NzYxpU3SrTBn$1ctUZ1OqHqYVtqTwB3iJLKeaWNfBVy6uDFq7TTJGdg4=",
+          "last_login": "2018-07-25 11:51:01.076592-05",
+          "is_superuser": "f",
+          "username": "456",
+          "first_name": "Pablo",
+          "last_name": "Moreno",
+          "email": "pablo@gmail.com",
+          "is_staff": "f",
+          "is_active": "t",
+          "date_joined": "2018-07-25 11:50:46.489758-05",
+          "imagen": "empleado/default-image.png",
+          "cargo": "Terapeuta",
+          "direccion": "calle 5 # 38 - 45",
+          "telefono": "3289815",
+          "celular": "3125689785",
+          "fecha_nacimiento": "1980-02-03",
+          "area_id": "5"
+      }
+  },
+
+  {
+      "model": "empleado.empleado",
+      "pk": "4",
+      "fields": {
+          "password": "pbkdf2_sha256$100000$NzYxpU3SrTBn$1ctUZ1OqHqYVtqTwB3iJLKeaWNfBVy6uDFq7TTJGdg4=",
+          "last_login": "2018-07-25 11:51:01.076592-05",
+          "is_superuser": "f",
+          "username": "654",
+          "first_name": "Jorge",
+          "last_name": "Castro",
+          "email": "jorge@gmail.com",
+          "is_staff": "f",
+          "is_active": "t",
+          "date_joined": "2018-07-25 11:50:46.489758-05",
+          "imagen": "empleado/default-image.png",
+          "cargo": "Terapeuta",
+          "direccion": "calle 5 # 38 - 45",
+          "telefono": "3289815",
+          "celular": "3125689785",
+          "fecha_nacimiento": "1980-02-03",
+          "area_id": "5"
+      }
+  },
+
+  {
+      "model": "empleado.empleado",
+      "pk": "5",
+      "fields": {
+          "password": "pbkdf2_sha256$100000$NzYxpU3SrTBn$1ctUZ1OqHqYVtqTwB3iJLKeaWNfBVy6uDFq7TTJGdg4=",
+          "last_login": "2018-07-25 11:51:01.076592-05",
+          "is_superuser": "f",
+          "username": "789",
+          "first_name": "Mateo",
+          "last_name": "Gonzalez",
+          "email": "mateo@gmail.com",
+          "is_staff": "f",
+          "is_active": "t",
+          "date_joined": "2018-07-25 11:50:46.489758-05",
+          "imagen": "empleado/default-image.png",
+          "cargo": "Administrador",
+          "direccion": "calle 5 # 38 - 45",
+          "telefono": "3289815",
+          "celular": "3125689785",
+          "fecha_nacimiento": "1980-02-03",
+          "area_id": "8"
+      }
+  },
+
+  {
+      "model": "empleado.empleado",
+      "pk": "6",
+      "fields": {
+          "password": "pbkdf2_sha256$100000$NzYxpU3SrTBn$1ctUZ1OqHqYVtqTwB3iJLKeaWNfBVy6uDFq7TTJGdg4=",
+          "last_login": "2018-07-25 11:51:01.076592-05",
+          "is_superuser": "f",
+          "username": "987",
+          "first_name": "Elon",
+          "last_name": "Musk",
+          "email": "elon@gmail.com",
+          "is_staff": "f",
+          "is_active": "t",
+          "date_joined": "2018-07-25 11:50:46.489758-05",
+          "imagen": "empleado/default-image.png",
+          "cargo": "Coordinador",
+          "direccion": "calle 5 # 38 - 45",
+          "telefono": "3289815",
+          "celular": "3125689785",
+          "fecha_nacimiento": "1980-02-03",
+          "area_id": "8"
+      }
+  }
+]
+

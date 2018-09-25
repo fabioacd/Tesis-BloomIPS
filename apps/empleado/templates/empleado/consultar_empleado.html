@@ -46,7 +46,7 @@
                             <td> {{ empleado.telefono }}</td>
                             <td> {{ empleado.celular }}</td>
                             <td> {{ empleado.direccion }}</td>
-                            <td><a href="#{% comment %}{% url 'modificar_empleado' empleado.username %} {% endcomment %}"
+                            <td><a href="{% url 'modificar_empleado' empleado.username %}"
                                    class="btn btn-block btn-primary">Modificar</a></td>
                         </tr>
                     {% endfor %}

@@ -1,12 +1,15 @@
 from django.shortcuts import render
 from django.shortcuts import redirect
 from django.contrib import messages
-from .forms import AgregarAreaForm, ModificarAreaForm, AgregarEpsForm, ModificarEpsForm, AgregarEmpleadoForm
+from .forms import AgregarAreaForm, ModificarAreaForm, AgregarEpsForm, ModificarEpsForm, AgregarEmpleadoForm, \
+    ModificarEmpleadoForm
 from .models import Area, Empleado
 from apps.paciente.models import Eps
 
 # Create your views here.
 
+def index(request):
+    return render(request, 'empleado/index.html')
 
 # --------------------AREA-----------------------------------------------------
 def agregar_area(request):
@@ -115,3 +118,24 @@ def consultar_empleado(request):
     empleados = list(Empleado.objects.all())
     contexto = {'empleados': empleados}
     return render(request, 'empleado/consultar_empleado.html', contexto)
+
+
+def modificar_empleado(request, id_empleado):
+    empleado = Empleado.objects.get(username=id_empleado)
+
+    if request.method == 'POST':
+        form = ModificarEmpleadoForm(request.POST, request.FILES, instance=empleado)
+
+        if form.is_valid():
+            form.save()
+            form = ModificarEmpleadoForm(instance=empleado)
+            messages.success(request, 'Usuario modificado exitosamente')
+            return redirect(consultar_empleado)
+        else:
+            messages.error(request, 'No se pudo modificar el empleado')
+
+    else:
+        form = ModificarEmpleadoForm(instance=empleado)
+
+    contexto = {'form': form, 'empleado': empleado}
+    return render(request, 'empleado/modificar_empleado.html', contexto)
