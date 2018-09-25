@@ -134,3 +134,50 @@ class AgregarEmpleadoForm(UserCreationForm):
             'telefono': 'Teléfono',
             'email': 'Correo electrónico',
         }
+
+
+class ModificarEmpleadoForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(ModificarEmpleadoForm, self).__init__(*args, **kwargs)
+        self.fields['username'].widget.attrs['readonly'] = "readonly"
+        self.fields['imagen'].required = False
+        self.fields['username'].widget.attrs['class'] = "numeric"
+        self.fields['telefono'].widget.attrs['class'] = "numeric"
+        self.fields['celular'].widget.attrs['class'] = "numeric"
+        self.fields['first_name'].widget.attrs['class'] = "alphabetic"
+        self.fields['last_name'].widget.attrs['class'] = "alphabetic"
+        self.fields['imagen'].help_text = "Si desea modificar su imagen de perfil seleccione una nueva"
+        self.fields[
+            'is_active'].help_text = "Indica si el empleado se encuentra activo actualmente. Desmarque en caso de que el empleado cambie su estado a inactivo."
+
+        # PlaceHolders
+        self.fields['first_name'].widget.attrs['placeholder'] = "Ej. Luis Felipe"
+        self.fields['last_name'].widget.attrs['placeholder'] = "Ej. Gómez Castrillon"
+        self.fields['direccion'].widget.attrs['placeholder'] = "Ej. Calle 40 #56-34"
+        self.fields['telefono'].widget.attrs['placeholder'] = "Ej. 3758990"
+        self.fields['celular'].widget.attrs['placeholder'] = "Ej. 3154896325"
+        self.fields['email'].widget.attrs['placeholder'] = "Ej. luis.univalle@gmail.com"
+
+        imagen = self.instance.imagen
+        if imagen:
+            self.fields['imagen'].widget.attrs['data-default-file'] = "%s%s" % (settings.MEDIA_URL, imagen.name)
+
+    class Meta:
+        model = Empleado
+        fields = (
+            'username', 'first_name', 'last_name', 'email', 'telefono', 'celular', 'direccion', 'cargo',
+            'fecha_nacimiento',
+            'area', 'is_active', 'imagen')
+        widgets = {
+            "imagen": forms.widgets.FileInput(attrs={'class': 'dropify', 'data-height': 150})
+        }
+        labels = {
+            "is_active": "Empleado activo",
+            'username': 'Número de identificación',
+            'imagen': '',
+            'first_name': 'Nombre(s)',
+            'direccion': 'Dirección',
+            'telefono': 'Teléfono',
+            'email': 'Correo electrónico',
+        }
