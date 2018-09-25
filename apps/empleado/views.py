@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.shortcuts import redirect
 from django.contrib import messages
 from .forms import AgregarAreaForm, ModificarAreaForm, AgregarEpsForm, ModificarEpsForm, AgregarEmpleadoForm
-from .models import Area
+from .models import Area, Empleado
 from apps.paciente.models import Eps
 
 # Create your views here.
@@ -110,3 +110,8 @@ def agregar_empleado(request):
     # return redirect('login')
     contexto = {'form': form}
     return render(request, 'empleado/agregar_empleado.html', contexto)
+
+def consultar_empleado(request):
+    empleados = list(Empleado.objects.all())
+    contexto = {'empleados': empleados}
+    return render(request, 'empleado/consultar_empleado.html', contexto)

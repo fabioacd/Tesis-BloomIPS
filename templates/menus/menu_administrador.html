@@ -13,6 +13,11 @@
             <i class="fa fa-user-plus">
             </i> Agregar empleado </a>
         </li>
+        <li class="{% if 'empleado/consultar_empleado' in request.path  %} active {% else %} disabled {% endif %}">
+            <a href="{% url 'consultar_empleado' %}">
+            <i class="fa fa-users">
+            </i> Consultar empleado </a>
+        </li>
     </ul>
 </li>
 
