@@ -15,3 +15,4 @@ urlpatterns = [
     path('consultar_empleado/', consultar_empleado, name='consultar_empleado'),
     path('modificar_empleado/<id_empleado>/', modificar_empleado, name='modificar_empleado'),
 ]
+
