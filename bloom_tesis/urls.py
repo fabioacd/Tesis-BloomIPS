@@ -9,4 +9,5 @@ from django.urls import path
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('empleado/', include('apps.empleado.urls')),
+    path('login/', include('apps.login.urls'), name = "login"),
 ]
