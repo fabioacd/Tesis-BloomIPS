@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'apps.reportes',
     'bootstrap3',
     'django_select2',
+    'django_cleanup'
 ]
 
 AUTH_USER_MODEL = 'empleado.Empleado'
