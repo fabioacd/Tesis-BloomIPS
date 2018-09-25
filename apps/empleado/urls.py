@@ -1,5 +1,5 @@
 from django.urls import path
-from apps.empleado.views import agregar_area, consultar_area, modificar_area
+from apps.empleado.views import agregar_area, consultar_area, modificar_area, agregar_empleado
 from apps.empleado.views import agregar_eps, consultar_eps, modificar_eps
 
 urlpatterns = [
@@ -9,4 +9,5 @@ urlpatterns = [
     path('agregar_eps/', agregar_eps, name='agregar_eps'),
     path('modificar_eps/<nit>/', modificar_eps, name='modificar_eps'),
     path('consultar_eps/', consultar_eps, name='consultar_eps'),
+    path('agregar_empleado/', agregar_empleado, name='agregar_empleado'),
 ]
