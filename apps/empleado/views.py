@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.shortcuts import redirect
 from django.contrib import messages
-from .forms import AgregarAreaForm, ModificarAreaForm, AgregarEpsForm, ModificarEpsForm
+from .forms import AgregarAreaForm, ModificarAreaForm, AgregarEpsForm, ModificarEpsForm, AgregarEmpleadoForm
 from .models import Area
 from apps.paciente.models import Eps
 
@@ -93,3 +93,20 @@ def consultar_eps(request):
     contexto = {'eps': eps}
     return render(request, 'eps/consultar_eps.html', contexto)
 
+#---------------------EMPLEADO-----------------------------------------------------
+
+
+def agregar_empleado(request):
+    form = AgregarEmpleadoForm()
+    if request.method == 'POST':
+        form = AgregarEmpleadoForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            form = AgregarEmpleadoForm()
+            messages.success(request, 'Empleado registrado exitosamente')
+        else:
+            messages.error(request, 'No se pudo registrar el empleado')
+    # elif  not request.user.is_authenticated:
+    # return redirect('login')
+    contexto = {'form': form}
+    return render(request, 'empleado/agregar_empleado.html', contexto)
