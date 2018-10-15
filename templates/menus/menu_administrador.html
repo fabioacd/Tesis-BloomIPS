@@ -69,7 +69,7 @@
 
 
 {# -------------------------------EVENTO ADVERSO--------------------------------------------#}
-<li class="treeview {% if 'evento_adverso/' in request.path or 'evento_adverso/agregar_implicado_evento' in request.path %} active {% else %} disabled {% endif %}">
+<li class="treeview {% if 'evento_adverso/' in request.path or 'evento_adverso/agregar_implicado_evento' in request.path or 'evento_adverso/consultar_implicados_evento' in request.path %} active {% else %} disabled {% endif %}">
     <a href="#">
         <i class="fa fa-exclamation-circle"></i> <span>Evento adverso</span>
         <span class="pull-right-container">
@@ -83,5 +83,10 @@
                 </i> Agregar implicado</a>
         </li>
 
+        <li class="{% if 'evento_adverso/consultar_implicados_evento' in request.path %} active {% else %} disabled {% endif %}">
+            <a href="{% url 'consultar_implicados_evento_adverso' %}">
+                <i class="fa fa-file-o">
+                </i> Consultar implicados </a>
+        </li>
     </ul>
 </li>
