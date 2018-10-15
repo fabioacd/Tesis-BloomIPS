@@ -1,0 +1,34 @@
+[
+{
+    "model": "evento_adverso.claseeventoadverso",
+    "pk": 1,
+    "fields": {
+        "nombre": "EA prevenible",
+        "descripcion": "Descripci\u00f3n de EA prevenible"
+    }
+},
+{
+    "model": "evento_adverso.claseeventoadverso",
+    "pk": 2,
+    "fields": {
+        "nombre": "EA NO prevenible",
+        "descripcion": "Descripci\u00f3n de EA NO prevenible"
+    }
+},
+{
+    "model": "evento_adverso.claseeventoadverso",
+    "pk": 3,
+    "fields": {
+        "nombre": "Incidente",
+        "descripcion": "Descripci\u00f3n de incidente"
+    }
+},
+{
+    "model": "evento_adverso.claseeventoadverso",
+    "pk": 4,
+    "fields": {
+        "nombre": "Complicaci\u00f3n",
+        "descripcion": "Descripci\u00f3n de complicaci\u00f3n"
+    }
+}
+]
