@@ -2,7 +2,7 @@
 {% load bootstrap3 %}
 {% load staticfiles %}
 
-{% block titulo_block %} BloomIPS | Consultar área{% endblock  %}
+{% block titulo_block %} BloomIPS | Consultar implicados a evento adversos{% endblock  %}
 
 {% block css_block %}
 
@@ -10,7 +10,7 @@
 
 {% endblock %}
 
-{% block title_content_block %}<strong>Consultar área</strong>{% endblock %}
+{% block title_content_block %}<strong>Consultar implicados a eventos adversos</strong>{% endblock %}
 
 {% block content_body_block %}
 
@@ -20,26 +20,29 @@
                 <table id="example1" class="table table-bordered table-striped">
                     <thead>
                     <tr>
-                      <th>Nombre</th>
-                      <th style="text-align:center">Descripción</th>
+                      <th style="text-align:center">Cédula</th>
+                      <th style="text-align:center">Seguridad Social</th>
+                      <th style="text-align:center">Nombre</th>
                       <th style="text-align:center">Modificar</th>
                     </tr>
                     </thead>
                     <tbody>
 
-                    {% for area in areas %}
+                    {% for implicado in implicados %}
                             <tr>
-                            <td> {{ area.nombre }}</td>
-                            <td style="text-align:justify" > {{ area.descripcion}}</td>
-                            <td> <a href="{% url 'modificar_area' area.id %}" class="btn btn-block btn-primary">Modificar</a> </td>
+                            <td style="text-align:center"> {{ implicado.id_implicado }}</td>
+                            <td style="text-align:justify" > {{ implicado.seguridad_social}}</td>
+                            <td style="text-align:justify" > {{ implicado.nombre}}</td>
+                            <td> <a href="{% url 'modificar_implicado_evento_adverso' implicado.id_implicado %}" class="btn btn-block btn-primary">Modificar</a> </td>
                             </tr>
                     {% endfor %}
 
                     </tbody>
                     <tfoot>
                     <tr>
-                      <th>Nombre</th>
-                      <th style="text-align:center">Descripción</th>
+                      <th style="text-align:center">Cédula</th>
+                      <th style="text-align:center">Seguridad Social</th>
+                      <th style="text-align:center">Nombre</th>
                       <th style="text-align:center">Modificar</th>
                     </tr>
                     </tfoot>

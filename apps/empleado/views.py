@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import render
 from django.shortcuts import redirect
 from django.contrib import messages
@@ -8,10 +9,12 @@ from apps.paciente.models import Eps
 
 # Create your views here.
 
+@login_required
 def index(request):
     return render(request, 'empleado/index.html')
 
 # --------------------AREA-----------------------------------------------------
+@login_required
 def agregar_area(request):
     form = AgregarAreaForm()
     if request.method == 'POST':
@@ -28,12 +31,12 @@ def agregar_area(request):
     contexto = {'form': form}
     return render(request, 'area/agregar_area.html', contexto)
 
-
+@login_required
 def consultar_area(request):
     areas = list(Area.objects.all())
     contexto = {'areas': areas}
     return render(request, 'area/consultar_area.html', contexto)
-
+@login_required
 def modificar_area(request, id_area):
     area = Area.objects.get(id=id_area)
 
@@ -54,6 +57,11 @@ def modificar_area(request, id_area):
     return render(request, 'area/modificar_area.html', contexto)
 
 # -------------------------------EPS--------------------------------------------
+def administrador_check(user):
+    return user.check_cargo('Administrador')
+
+@login_required
+@user_passes_test(administrador_check, login_url='index')
 def agregar_eps(request):
     form = AgregarEpsForm()
     if request.method == 'POST':
@@ -70,7 +78,7 @@ def agregar_eps(request):
     contexto = {'form': form}
     return render(request, 'eps/agregar_eps.html', contexto)
 
-
+@login_required
 def modificar_eps(request, nit):
     eps = Eps.objects.get(nit=nit)
 
@@ -90,7 +98,7 @@ def modificar_eps(request, nit):
     contexto = {'form': form}
     return render(request, 'eps/modificar_eps.html', contexto)
 
-
+@login_required
 def consultar_eps(request):
     eps = list(Eps.objects.all())
     contexto = {'eps': eps}
@@ -99,12 +107,14 @@ def consultar_eps(request):
 #---------------------EMPLEADO-----------------------------------------------------
 
 
+@login_required
 def agregar_empleado(request):
     form = AgregarEmpleadoForm()
     if request.method == 'POST':
         form = AgregarEmpleadoForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
+            empleado = Empleado.objects.get(username=form.username)
             form = AgregarEmpleadoForm()
             messages.success(request, 'Empleado registrado exitosamente')
         else:
@@ -114,12 +124,13 @@ def agregar_empleado(request):
     contexto = {'form': form}
     return render(request, 'empleado/agregar_empleado.html', contexto)
 
+@login_required
 def consultar_empleado(request):
     empleados = list(Empleado.objects.all())
     contexto = {'empleados': empleados}
     return render(request, 'empleado/consultar_empleado.html', contexto)
 
-
+@login_required
 def modificar_empleado(request, id_empleado):
     empleado = Empleado.objects.get(username=id_empleado)
 

@@ -34,6 +34,11 @@ class Empleado(AbstractUser):
     def get_cargo(self):
         return self.cargo
 
+    def check_cargo(self, cargo):
+        if cargo == self.cargo:
+            return True
+        else:
+            return False
 
 class Actividad(models.Model):
     nombre = models.CharField(max_length = 50)
