@@ -1,0 +1,39 @@
+[
+  {
+    "model": "paciente.paciente",
+        "pk": "1",
+        "fields": {
+          "identificacion": "123",
+          "nombre": "Juan",
+          "apellido": "Kuri",
+          "ciudad_residencia": "Cali",
+          "direccion": "calle 32 # 56 -78",
+          "barrio": "Melendez",
+          "estrato": "01",
+          "telefono": "3256988",
+          "celular": "3215648975",
+          "email": "juan@gmail.com",
+          "genero": "Masculino",
+          "tipo_paciente": "Adulto",
+          "tipo_identificacion": "Cédula ciudadania",
+          "lugar_nacimiento": "Pereira",
+          "fecha_nacimiento": "1980-02-03",
+          "escolaridad": "Profesional",
+          "ocupacion": "Pandillero",
+          "motivo_consulta": "No puede mover el brazo derecho",
+          "tiempo_evolucion": "Ni idea que poner acá",
+          "remitente": "Mi tia",
+          "diagnosticador": "Doctor pereira",
+          "ips_atencion": "Clinica amiga",
+          "enfermedad_actual": "Gripe",
+          "nombre_responsable": "",
+          "parentesco_responsable": "",
+          "telefono_responsable": "",
+          "evaluacion_inicial": "",
+          "estado": "Activo",
+          "eps_id": "123"
+        }
+
+  }
+
+]
