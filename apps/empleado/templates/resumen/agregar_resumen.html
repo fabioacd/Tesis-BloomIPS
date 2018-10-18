@@ -1,0 +1,218 @@
+{% extends 'base/base.html' %}
+{% load bootstrap3 %}
+{% load staticfiles %}
+
+{% block titulo_block %} BloomIPS | Agregar informe mensual{% endblock %}
+
+{% block title_content_block %}<strong>Agregar informe mensual</strong>{% endblock %}
+
+{% block css_block %}
+
+    <!-- Select2 -->
+    {{ form.media.css }}
+    <!-- daterange picker -->
+    <link rel="stylesheet" href="{% static 'bower_components/bootstrap-daterangepicker/daterangepicker.css' %}">
+    <!-- bootstrap wysihtml5 - text editor -->
+    <link rel="stylesheet" href="{% static 'plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css' %}">
+
+    <style>
+
+        #btn-buscar {
+            margin: 25px 0px;
+        }
+
+        #div-entradas {
+            height: 340px;
+            overflow: auto;
+        }
+    </style>
+{% endblock %}
+
+{% block content_body_block %}
+    <form role="form" method="POST" enctype="multipart/form-data"> {% csrf_token %}
+        <div class="box-body">
+            <div class="form-group">
+
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <label>Seleccione rango de Fechas:</label>
+
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <input type="text" class="form-control pull-right" id="rango_fecha">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        {% bootstrap_field form.paciente layout="vertical" %}
+                    </div>
+                    <div class="col-md-1">
+                        <button type="button" class="btn btn-info" id="btn-buscar">Buscar</button>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="col-md-5" id="div-entradas">
+                        <ul class='timeline' id="ul-entradas">
+
+
+                        </ul>
+                    </div>
+                    <div class="col-md-5">
+                        {% bootstrap_field form.descripcion layout="vertical" %}
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="box-footer">
+            <button type="button" class="btn btn-primary" onclick="setText()">Guardar</button>
+        </div>
+
+
+        <!-- Modal -->
+        <div class="modal fade" id="modal-default">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Guardar resumen</h4>
+                    </div>
+                    <div class="modal-body" id="mostrar-alerta">
+                        <p id="info_mostrar"> &hellip;</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-primary" onclick="cerrarModal()">Registrar</button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+
+    </form>
+{% endblock %}
+
+{% block js_block %}
+    {{ form.media.js }}
+
+    <!-- date-range-picker -->
+    <script src="{% static 'bower_components/moment/min/moment.min.js' %}"></script>
+    <script src="{% static 'bower_components/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+    <script>
+
+        //Date range picker
+        $('#rango_fecha').daterangepicker()
+
+        $("#btn-buscar").click(function () {
+            $("#ul-entradas").empty()
+            var id_paciente = $('#id_paciente').val();
+            var id_empleado = {{ user.username }};
+            var fechas = $('#rango_fecha').val()
+            $.ajax({
+                url: "{% url 'get_entradas_ajax' %}",
+                data: {'id_paciente': id_paciente, 'rango_fecha': fechas, 'id_empleado': id_empleado},
+                dataType: 'json',
+                success: function (data) {
+
+                    var json = JSON.parse(data)
+                    var json_size = Object.keys(json).length;
+
+
+                    if (json_size > 0) {
+
+                        for (var i in json)
+
+                            //En caso de que la fecha del actual seguimiento sea igual a la del anterior, no se coloca un label indicando la fecha.
+                            if (i != 0 && json[i].fecha == json[i - 1].fecha) {
+
+                                $("#ul-entradas").append(
+                                "<li>" +
+                            	"<!-- timeline icon -->" +
+                            	"<i class='fa fa-sticky-note-o bg-blue'></i>" +
+                            	"<div class='timeline-item'>" +
+                            	"<span class='time'><i class='fa fa-clock-o'></i>" + json[i].hora + "</span>" +
+                            	"<h3 class='timeline-header'><a href='#'>Entrada Numero " + (json_size - 1) + "</a></h3>" +
+                            	"<div class='timeline-body'>" +
+                            	json[i].descripcion +
+                            	"</div>" +
+                            	"</div>" +
+                            	"</li>" +
+                                "<!-- END timeline item -->"
+                                )
+
+                            }
+
+                            //En caso de que no correspondan las fechas, se agrega un nuevo label con la fecha
+                            else {
+
+                                $("#ul-entradas").append(
+                                    "<li class='time-label' id=li_'" + i + "'>" +
+                                    "<span class='bg-red'>" +
+                                    json[i].fecha +
+                                    "</span>" +
+                                    "</li>" +
+                                    "<!-- /.timeline-label -->" +
+                                    "<!-- timeline item -->" +
+                                    "<li>" +
+                                    "<!-- timeline icon -->" +
+                                    "<i class='fa fa-sticky-note-o bg-blue'></i>" +
+                                    "<div class='timeline-item'>" +
+                                    "<span class='time'><i class='fa fa-clock-o'></i>" + json[i].hora + "</span>" +
+                                    "<h3 class='timeline-header'><a href='#'>Entrada Numero " + (json_size - i) + "</a></h3>" +
+                                    "<div class='timeline-body'>" +
+                                    json[i].descripcion +
+                                    "</div>" +
+                                    "</div>" +
+                                    "</li>" +
+                                    "<!-- END timeline item -->"
+                                )
+                            }
+
+
+                    }
+                    //En caso de que no hayan entradas
+                    else {
+
+                        $("#ul-entradas").append(
+                            "<li>" +
+                            "<!-- timeline icon -->" +
+                            "<i class='fa fa-sticky-note-o bg-blue'></i>" +
+                            "<div class='timeline-item'>" +
+                            "<h3 class='timeline-header'><a href='#'>Entradas no encontradas</a></h3>" +
+                            "<div class='timeline-body'>" +
+                            "No hay entradas registradas" +
+                            "</div>" +
+                            "</div>" +
+                            "</li>"
+                        )
+
+                    }
+                }
+            });
+        });
+
+        function setText() {
+            //Información a mostrar
+            document.getElementById("info_mostrar").innerHTML = "¿Está seguro que desea registrar el resumen?"
+            $("#modal-default").modal('toggle');
+        }
+
+        function cerrarModal() {
+            $("#modal-default .close").click()
+        }
+
+    </script>
+
+{% endblock %}
+
+{% block footer_content_block %}
+
+
+{% endblock %}

@@ -4,7 +4,7 @@ from django.forms import SelectDateWidget
 from datetime import datetime
 from django_select2.forms import Select2Widget
 from bloom_tesis import settings
-from .models import Area, Empleado
+from .models import Area, Empleado, Resumen
 from apps.paciente.models import Eps
 
 
@@ -181,3 +181,39 @@ class ModificarEmpleadoForm(forms.ModelForm):
             'telefono': 'Teléfono',
             'email': 'Correo electrónico',
         }
+
+#------------------------------------------------------RESUMEN-------------------------------------
+class AgregarResumenForm(forms.ModelForm):
+    descripcion = forms.CharField(widget=forms.Textarea)
+
+    def __init__(self, *args, **kwargs):
+        super(AgregarResumenForm, self).__init__(*args, **kwargs)
+        self.fields['descripcion'].label = "Descripción del resumen"
+        #Placeholders
+        self.fields['descripcion'].widget.attrs['placeholder'] = ""
+        self.fields['descripcion'].widget.attrs['style'] = "resize:none"
+
+
+    class Meta:
+        model = Resumen
+        fields = ('descripcion','paciente')
+        widgets = {
+            "paciente": Select2Widget(),
+        }
+
+
+
+class ModificarResumenForm(forms.ModelForm):
+    descripcion = forms.CharField(widget=forms.Textarea)
+
+    def __init__(self, *args, **kwargs):
+        super(ModificarResumenForm, self).__init__(*args, **kwargs)
+        self.fields['paciente'].widget.attrs['readonly'] = "readonly"
+        self.fields['descripcion'].label = "Descripción del resumen"
+        # Placeholders
+        self.fields['descripcion'].widget.attrs['placeholder'] = ""
+
+    class Meta:
+        model = Resumen
+        fields = ('descripcion', 'paciente', 'revisado')
+
