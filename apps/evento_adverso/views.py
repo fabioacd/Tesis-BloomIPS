@@ -33,11 +33,11 @@ def agregar_implicado_evento_adverso(request):
 
             form_crear_implicado.save()
 
-            messages.success(request, 'se agregó el implicado al  evento adverso')
+            messages.success(request, 'Implicado agregado exitosamente')
             return redirect(agregar_implicado_evento_adverso)
         else:
             print(form_crear_implicado.errors)
-            messages.error(request, 'Error al registrar el implicado, intente nuevamente')
+            messages.error(request, 'No se pudo registrar el implicado')
 
 
     contexto = {'form_crear_implicado': form_crear_implicado}
@@ -52,7 +52,7 @@ def modificar_implicado_evento_adverso(request, id_implicado):
         if form.is_valid():
             form.save()
             form = ModificarImplicadoEventoAdversoForm(instance=implicado)
-            messages.success(request, 'Implicado a evento modificado exitosamente')
+            messages.success(request, 'Implicado modificado exitosamente')
             return redirect(consultar_implicados_evento_adverso)
         else:
             messages.error(request, 'No se pudo modificar el implicado')
