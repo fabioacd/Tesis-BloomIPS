@@ -1,0 +1,217 @@
+{% extends 'base/base.html' %}
+{% load bootstrap3 %}
+{% load staticfiles %}
+
+{% block titulo_block %} BloomIPS | Registro de evento adverso{% endblock %}
+
+{% block title_content_block %}<strong>Registro de evento adverso</strong>{% endblock %}
+
+{% block css_block %}
+
+    <!-- Select2 -->
+    {{ form_evento_adverso.media.css }}
+    <!-- bootstrap datepicker -->
+    <link rel="stylesheet"
+          href="{% static 'bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css' %}">
+    <!-- Bootstrap time Picker -->
+    <link rel="stylesheet" href="{% static 'plugins/timepicker/bootstrap-timepicker.min.css' %}">
+
+
+    <link rel="stylesheet" href="{% static 'css/css_personalizados.css' %}">
+{% endblock %}
+
+{% block content_body_block %}
+    <form role="form" method="POST"> {% csrf_token %}
+        <div class="box-body">
+            <div class="form-group">
+
+                <div class="row">
+                    <div class="col-md-5 col-md-offset-1">
+                        <h4>Implicado al evento</h4>
+                    </div>
+                    <div class="col-md-10 col-md-offset-1">
+                        <hr/>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-5 col-md-offset-1">
+                        {% bootstrap_field form_evento_adverso.implicado layout="vertical" %}
+                    </div>
+                    <div class="col-md-5 col-md-offset-1 hidden">
+                        {% bootstrap_field form_evento_adverso.empleado layout="vertical" %}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-5 col-md-offset-1">
+                        <h4>Momento de la ocurrencia</h4>
+                    </div>
+                    <div class="col-md-10 col-md-offset-1">
+                        <hr/>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-md-5 col-md-offset-1">
+                        <!-- time Picker -->
+                        <div class="bootstrap-timepicker">
+
+                            {% bootstrap_field form_evento_adverso.hora layout="vertical" %}
+
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        {% bootstrap_field form_evento_adverso.fecha_ocurrencia layout="vertical" %}
+                        <!--</div>-->
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-5 col-md-offset-1">
+                        <h4>Información del evento</h4>
+                    </div>
+                    <div class="col-md-10 col-md-offset-1">
+                        <hr/>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-5 col-md-offset-1">
+                        {% bootstrap_field form_evento_adverso.clase_evento layout="vertical" %}
+                    </div>
+                    <div class=" col-md-5">
+                        {% bootstrap_field form_evento_adverso.lugar layout="vertical" %}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-5 col-md-offset-1">
+                        {% bootstrap_field form_evento_adverso.tipos_evento layout="vertical" %}
+                    </div>
+                    <div class=" col-md-5 ">
+                        {% bootstrap_field form_evento_adverso.otro_tipo_evento layout="vertical" %}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
+                        {% bootstrap_field form_evento_adverso.causa layout="vertical" %}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
+                        {% bootstrap_field form_evento_adverso.descripcion layout="vertical" %}
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
+                        {% bootstrap_field form_evento_adverso.acciones_realizadas layout="vertical" %}
+                    </div>
+
+                </div>
+
+                <div class="box-footer">
+                    <button type="button" class="btn btn-primary" data-target="#modal-default" onclick="setText()"
+                    >Guardar
+                    </button>
+                </div>
+
+                <!-- Modal -->
+                <div class="modal fade" id="modal-default">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title">Registrar evento adverso</h4>
+                            </div>
+                            <div class="modal-body">
+                                <p id="info_mostrar"> &hellip;</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cerrar
+                                </button>
+                                <button type="submit" class="btn btn-primary" onclick="cerrarModal()">Registrar</button>
+                            </div>
+                        </div>
+                        <!-- /.modal-content -->
+                    </div>
+                    <!-- /.modal-dialog -->
+                </div>
+
+            </div>
+        </div>
+    </form>
+{% endblock %}
+
+
+{% block js_block %}
+
+    <!-- bootstrap datepicker -->
+    <script src="{% static 'bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+    <!-- bootstrap time picker -->
+    <script src="{% static 'plugins/timepicker/bootstrap-timepicker.min.js' %}"></script>
+    {{ form_evento_adverso.media.js }}
+
+    <script>
+        //Date picker
+        $('#id_fecha_ocurrencia').datepicker({
+            format: "dd/mm/yyyy",
+            autoclose: true
+        })
+
+        //Timepicker
+        $('#id_hora').timepicker({
+            showInputs: false,
+            minuteStep: 1,
+            secondStep: 1,
+            showMeridian: false,
+        })
+
+        {#//Poner invisible el empleadoo#}
+        {#$("#id_empleado").hide();#}
+
+        function setDefaultDate() {
+            var date = new Date();
+
+            var day = date.getDate();
+            var month = date.getMonth() + 1;
+            var year = date.getFullYear();
+
+            if (month < 10) month = "0" + month;
+            if (day < 10) day = "0" + day;
+
+            var today = day + "/" + month + "/" + year;
+            $("#id_fecha_ocurrencia").attr("value", today);
+        }
+
+
+        function setText() {
+            //Información a mostrar
+            document.getElementById("info_mostrar").innerHTML = "¿Está seguro que desea registrar el evento adverso?"
+            $("#modal-default").modal('toggle');
+        }
+
+        function cerrarModal(){
+            $("#id_empleado").show()
+            $("#modal-default .close").click()
+        }
+        
+        $(function setEmpleado() {
+            var empleado = '{{ user.id }}'
+            $("#id_empleado").val(empleado)
+        });
+        
+
+        //Llamado de funciones:
+        setDefaultDate()
+
+    </script>
+
+{% endblock %}
+
