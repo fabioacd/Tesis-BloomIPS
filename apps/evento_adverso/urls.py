@@ -1,7 +1,7 @@
 from django.urls import path
 from apps.evento_adverso.views import index
 from apps.evento_adverso.views import agregar_implicado_evento_adverso, modificar_implicado_evento_adverso, consultar_implicados_evento_adverso, \
-    agregar_evento_adverso, consultar_evento, modificar_evento
+    agregar_evento_adverso, consultar_evento, modificar_evento, registrar_protocolo, visualizar_protocolo
 
 
 urlpatterns = [
@@ -12,5 +12,7 @@ urlpatterns = [
     path('agregar_evento_adverso/', agregar_evento_adverso, name='agregar_evento_adverso'),
     path('consultar_evento_adverso/', consultar_evento, name='consultar_evento'),
     path('modificar_evento_adverso/<id_evento>/', modificar_evento, name='modificar_evento'),
+    path('registrar_protocolo_londres/<id_evento>/', registrar_protocolo, name='registrar_protocolo'),
+    path('visualizar_protocolo_londres/<id_evento>/', visualizar_protocolo, name='visualizar_protocolo'),
 ]
 

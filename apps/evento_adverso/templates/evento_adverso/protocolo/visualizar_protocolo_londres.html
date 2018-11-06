@@ -1,0 +1,116 @@
+{% extends 'base/base.html' %}
+{% load bootstrap3 %}
+{% load staticfiles %}
+
+{% block titulo_block %} BloomIPS | Visualización de protocolo de Londres{% endblock %}
+
+{% block title_content_block %}<strong>Visualización de protocolo de Londres</strong>{% endblock %}
+
+{% block css_block %}
+
+    <!-- Select2 -->
+    {{ form_protocolo.media.css }}
+    <!-- bootstrap datepicker -->
+    <link rel="stylesheet"
+          href="{% static 'bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css' %}">
+    <!-- Bootstrap time Picker -->
+    <link rel="stylesheet" href="{% static 'plugins/timepicker/bootstrap-timepicker.min.css' %}">
+
+
+    <link rel="stylesheet" href="{% static 'css/css_personalizados.css' %}">
+{% endblock %}
+
+{% block content_body_block %}
+    <form role="form" method="POST"> {% csrf_token %}
+        <div class="box-body">
+            <div class="form-group">
+
+                <div class="row">
+                    <div class="col-md-5 col-md-offset-1">
+                        <h4>Visualización de protocolo de Londres</h4>
+                    </div>
+                    <div class="col-md-10 col-md-offset-1">
+                        <hr/>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
+                        {% bootstrap_field form_protocolo.cronologia layout="vertical" %}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
+                        {% bootstrap_field form_protocolo.acciones_inseguras layout="vertical" %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
+                        {% bootstrap_field form_protocolo.factores_paciente layout="vertical" %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
+                        {% bootstrap_field form_protocolo.factores_tecnologia layout="vertical" %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
+                        {% bootstrap_field form_protocolo.factores_individuo layout="vertical" %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
+                        {% bootstrap_field form_protocolo.factores_equipo layout="vertical" %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
+                        {% bootstrap_field form_protocolo.factores_ambiental layout="vertical" %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
+                        {% bootstrap_field form_protocolo.factores_organizacion layout="vertical" %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
+                        {% bootstrap_field form_protocolo.factores_institucional layout="vertical" %}
+                    </div>
+                </div>
+
+
+                <div class="box-footer">
+                    <button type="submit" class="btn btn-primary" data-target="#modal-default" onclick="setText()"
+                    >Volver
+                    </button>
+
+                </div>
+
+
+
+
+            </div>
+        </div>
+    </form>
+{% endblock %}
+
+
+{% block js_block %}
+
+    <!-- bootstrap datepicker -->
+    <script src="{% static 'bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+    <!-- bootstrap time picker -->
+    <script src="{% static 'plugins/timepicker/bootstrap-timepicker.min.js' %}"></script>
+    {{ form_protocolo.media.js }}
+
+    <script>
+
+        console.log("Entré al visualizar")
+
+    </script>
+
+{% endblock %}
+
