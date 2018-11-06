@@ -108,5 +108,15 @@
                 <i class="fa fa-file-o">
                 </i> Consultar implicado </a>
         </li>
+        <li class="{% if 'evento_adverso/agregar_evento_adverso' in request.path %} active {% else %} disabled {% endif %}">
+            <a href="{% url 'agregar_evento_adverso' %}">
+                <i class="fa fa-plus-square">
+                </i> Agregar evento adverso </a>
+        </li>
+        <li class="{% if 'evento_adverso/consultar_evento_adverso' in request.path %} active {% else %} disabled {% endif %}">
+            <a href="{% url 'consultar_evento' %}">
+                <i class="fa fa-file-o">
+                </i> Consultar evento adverso </a>
+        </li>
     </ul>
 </li>
