@@ -1,7 +1,7 @@
 from django import forms
 from django.core.exceptions import ObjectDoesNotExist
 from django_select2.forms import Select2MultipleWidget, Select2Widget
-from .models import ImplicadoEvento, EventoAdverso, TipoEventoAdverso
+from .models import ImplicadoEvento, EventoAdverso, TipoEventoAdverso, ProtocoloLondres
 
 #---------------------IMPLICADO A EVENTO ADVERSO-----------------------------------------------------
 
@@ -192,3 +192,93 @@ class ModificarEventoAdversoForm(forms.ModelForm):
                 form_data['otro_tipo_evento'] = ""
 
         return form_data
+
+#---------------------PROTOCOLO LONDRES-----------------------------------------------------
+
+class RegistrarProtocoloForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(RegistrarProtocoloForm, self).__init__(*args, **kwargs)
+
+        #Placeholders
+        self.fields['cronologia'].widget.attrs['placeholder'] = ""
+        self.fields['acciones_inseguras'].widget.attrs['placeholder'] = ""
+        self.fields['factores_ambiental'].widget.attrs['placeholder'] = ""
+        self.fields['factores_equipo'].widget.attrs['placeholder'] = ""
+        self.fields['factores_individuo'].widget.attrs['placeholder'] = ""
+        self.fields['factores_institucional'].widget.attrs['placeholder'] = ""
+        self.fields['factores_organizacion'].widget.attrs['placeholder'] = ""
+        self.fields['factores_paciente'].widget.attrs['placeholder'] = ""
+        self.fields['factores_tecnologia'].widget.attrs['placeholder'] = ""
+
+    class Meta:
+        model = ProtocoloLondres
+        fields = ('cronologia', 'acciones_inseguras', 'factores_ambiental', 'factores_equipo',
+                  'factores_individuo', 'factores_institucional', 'factores_organizacion', 'factores_paciente', 'factores_tecnologia')
+        widgets = {
+            'cronologia': forms.Textarea(attrs={'rows': 5, 'style': 'resize:none;'}),
+            'acciones_inseguras': forms.Textarea(attrs={'rows': 5, 'style': 'resize:none;'}),
+            'factores_ambiental': forms.Textarea(attrs={'rows': 5, 'style': 'resize:none;'}),
+            'factores_equipo': forms.Textarea(attrs={'rows': 5, 'style': 'resize:none;'}),
+            'factores_individuo': forms.Textarea(attrs={'rows': 5, 'style': 'resize:none;'}),
+            'factores_institucional': forms.Textarea(attrs={'rows': 5, 'style': 'resize:none;'}),
+            'factores_organizacion': forms.Textarea(attrs={'rows': 5, 'style': 'resize:none;'}),
+            'factores_paciente': forms.Textarea(attrs={'rows': 5, 'style': 'resize:none;'}),
+            'factores_tecnologia': forms.Textarea(attrs={'rows': 5, 'style': 'resize:none;'}),
+        }
+        labels = {
+            'cronologia': "Cronología",
+            'acciones_inseguras': "Acciones inseguras",
+            'factores_ambiental': "Factores contributivos relacionados con el ambiente",
+            'factores_equipo': "Factores contributivos relacionados con el equipo de trabajo",
+            'factores_individuo': "Factores contributivos relacionados con el individuo",
+            'factores_institucional': "Factores contributivos relacionados con organización y gerencia",
+            'factores_organizacion': "Factores contributivos relacionados con organización y gerencia",
+            'factores_paciente': "Factores contributivos relacionados con el paciente",
+            'factores_tecnologia': "Factores contributivos relacionados con la Tarea y Tecnología",
+        }
+
+
+class VisualizarProtocoloForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(VisualizarProtocoloForm, self).__init__(*args, **kwargs)
+        # Placeholders
+        self.fields['cronologia'].widget.attrs['placeholder'] = ""
+        self.fields['acciones_inseguras'].widget.attrs['placeholder'] = ""
+        self.fields['factores_ambiental'].widget.attrs['placeholder'] = ""
+        self.fields['factores_equipo'].widget.attrs['placeholder'] = ""
+        self.fields['factores_individuo'].widget.attrs['placeholder'] = ""
+        self.fields['factores_institucional'].widget.attrs['placeholder'] = ""
+        self.fields['factores_organizacion'].widget.attrs['placeholder'] = ""
+        self.fields['factores_paciente'].widget.attrs['placeholder'] = ""
+        self.fields['factores_tecnologia'].widget.attrs['placeholder'] = ""
+
+        self.fields['cronologia'].widget.attrs['readonly'] = True
+        self.fields['acciones_inseguras'].widget.attrs['readonly'] = True
+        self.fields['factores_ambiental'].widget.attrs['readonly'] = True
+        self.fields['factores_equipo'].widget.attrs['readonly'] = True
+        self.fields['factores_individuo'].widget.attrs['readonly'] = True
+        self.fields['factores_institucional'].widget.attrs['readonly'] = True
+        self.fields['factores_organizacion'].widget.attrs['readonly'] = True
+        self.fields['factores_paciente'].widget.attrs['readonly'] = True
+        self.fields['factores_tecnologia'].widget.attrs['readonly'] = True
+
+    class Meta:
+        model = ProtocoloLondres
+        fields = ('cronologia', 'acciones_inseguras', 'factores_ambiental', 'factores_equipo',
+                  'factores_individuo', 'factores_institucional', 'factores_organizacion', 'factores_paciente', 'factores_tecnologia')
+        widgets = {
+            #"descripcion": forms.Textarea(attrs={'rows': 7, 'style': 'resize:none;'}),
+        }
+        widgets = {
+            'cronologia': forms.Textarea(attrs={'rows': 5, 'style': 'resize:none;'}),
+            'acciones_inseguras': forms.Textarea(attrs={'rows': 5, 'style': 'resize:none;'}),
+            'factores_ambiental': forms.Textarea(attrs={'rows': 5, 'style': 'resize:none;'}),
+            'factores_equipo': forms.Textarea(attrs={'rows': 5, 'style': 'resize:none;'}),
+            'factores_individuo': forms.Textarea(attrs={'rows': 5, 'style': 'resize:none;'}),
+            'factores_institucional': forms.Textarea(attrs={'rows': 5, 'style': 'resize:none;'}),
+            'factores_organizacion': forms.Textarea(attrs={'rows': 5, 'style': 'resize:none;'}),
+            'factores_paciente': forms.Textarea(attrs={'rows': 5, 'style': 'resize:none;'}),
+            'factores_tecnologia': forms.Textarea(attrs={'rows': 5, 'style': 'resize:none;'}),
+        }

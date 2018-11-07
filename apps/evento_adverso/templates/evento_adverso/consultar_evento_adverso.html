@@ -50,16 +50,16 @@
 {#                            <a href="{% url 'agregar_seguimiento' evento.id %}"#}
 {#                               class="btn-sm btn-block bg-olive" style="text-align: center">Seguimiento </a>#}
 {##}
-{#                            {% if evento.protocolo_londres %}#}
-{##}
-{#                                <a href="{% url 'visualizar_protocolo' evento.id %}"#}
-{#                                   class="btn-sm btn-block bg-olive" style="text-align: center">Protocolo </a>#}
-{##}
-{#                            {% else %}#}
-{##}
-{#                                <a href="{% url 'registrar_protocolo' evento.id %}"#}
-{#                                   class="btn-sm btn-block bg-olive" style="text-align: center">Protocolo </a>#}
-{#                            {% endif %}#}
+                            {% if evento.protocolo_londres %}
+
+                                <a href="{% url 'visualizar_protocolo' evento.id %}"
+                                   class="btn-sm btn-block bg-olive" style="text-align: center">Protocolo </a>
+
+                            {% else %}
+
+                                <a href="{% url 'registrar_protocolo' evento.id %}"
+                                   class="btn-sm btn-block bg-olive" style="text-align: center">Protocolo </a>
+                            {% endif %}
                         </td>
 
 
