@@ -1,0 +1,31 @@
+{% load bootstrap3 %}
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Prueba de PDF</title>
+    <link rel="stylesheet" href="{% static 'css/css_pdf.css' %}">
+</head>
+<body>
+        <!-- Content for Static Frame 'header_frame' -->
+    <div id="header_content">
+        <img src="{% static 'logos/logo_pdf.png' %}" class="img-responsive" alt="Bloom IPS">
+    </div>
+
+    <!-- Content for Static Frame 'footer_frame' -->
+    <div id="footer_content">
+        <p><strong> Calle 33 No. 63 A - 28 ° PBX: 448 30 24 ° Email: gerencia@bloomips.com ° www.bloomips.com  pagina <pdf:pagenumber> de <pdf:pagecount> </strong></p>
+    </div>
+
+    <div class="texto_centrado">
+        <br>
+        <h1> {% block title_block %}{% endblock %} </h1>
+        <br>
+    </div>
+    {% block content_block %}
+    {% endblock %}
+
+</body>
+</html>

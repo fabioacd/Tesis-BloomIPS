@@ -2,8 +2,8 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.contrib import messages
 import json
-from .forms import AgregarImplicadoEventoForm, ModificarImplicadoEventoAdversoForm
-from .models import ImplicadoEvento
+from .forms import AgregarImplicadoEventoForm, ModificarImplicadoEventoAdversoForm, AgregarEventoAdversoForm, ModificarEventoAdversoForm, RegistrarProtocoloForm, VisualizarProtocoloForm
+from .models import ImplicadoEvento, EventoAdverso, ProtocoloLondres
 
 def index(request):
     return render(request, 'evento_adverso/index.html')
@@ -67,3 +67,92 @@ def consultar_implicados_evento_adverso(request):
     implicados = list(ImplicadoEvento.objects.all())
     contexto = {'implicados': implicados}
     return render(request, 'implicado/consultar_implicado_evento_adverso.html', contexto)
+
+
+#---------------------EVENTO ADVERSO-----------------------------------------------------
+
+def agregar_evento_adverso(request):
+    form_evento_adverso = AgregarEventoAdversoForm()
+    if request.method == 'POST':
+        form_evento_adverso = AgregarEventoAdversoForm(request.POST)
+        if form_evento_adverso.is_valid():
+            form_evento_adverso.save()
+            messages.success(request, 'se agregó el evento adverso')
+            return redirect('consultar_evento')
+        else:
+            print(form_evento_adverso.errors)
+            messages.error(request, 'Error al registrar el evento adverso, intente nuevamente')
+
+    contexto = {'form_evento_adverso':form_evento_adverso}
+    return render(request,'evento_adverso/agregar_evento_adverso.html', contexto)
+
+def consultar_evento(request):
+    eventos = list(EventoAdverso.objects.all())
+    contexto = {'eventos': eventos}
+    return render(request, 'evento_adverso/consultar_evento_adverso.html', contexto)
+
+def modificar_evento(request, id_evento):
+    evento = EventoAdverso.objects.get(id = id_evento)
+
+    if request.method == 'POST':
+        form = ModificarEventoAdversoForm(request.POST, instance = evento)
+
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Evento modificado exitosamente')
+            return redirect(consultar_evento)
+        else:
+            messages.error(request, 'No se pudo modificar el evento')
+
+    else:
+        form = ModificarEventoAdversoForm(instance = evento)
+
+    contexto = {'form': form, 'evento': evento}
+    return render(request,'evento_adverso/modificar_evento_adverso.html', contexto)
+
+#---------------------PROTOCOLO LONDRES-----------------------------------------------------
+
+def registrar_protocolo(request, id_evento):
+
+    evento = EventoAdverso.objects.get(id = id_evento)
+    if request.method == 'POST':
+        form = RegistrarProtocoloForm(request.POST)
+
+        if form.is_valid():
+            protocolo = form.save(commit=False)
+            protocolo.evento_adverso = evento
+            protocolo.save()
+            form = RegistrarProtocoloForm()
+            messages.success(request, 'Protocolo registrado exitosamente')
+            return redirect(consultar_evento)
+        else:
+            messages.error(request, 'No se pudo agregar el seguimiento')
+            print(form.errors)
+
+    else:
+        form = RegistrarProtocoloForm()
+
+    contexto = {'form_protocolo': form, 'evento': evento}
+    return render(request,'evento_adverso/protocolo/registrar_protocolo_londres.html', contexto)
+
+def visualizar_protocolo(request, id_evento):
+
+    protocolo = ProtocoloLondres.objects.get(evento_adverso=id_evento)
+    evento = EventoAdverso.objects.get(id = id_evento)
+    if request.method == 'POST':
+        form = VisualizarProtocoloForm(request.POST)
+
+        if form.is_valid():
+            protocolo = form.save(commit=False)
+            protocolo.evento_adverso = evento
+            protocolo.save()
+            return redirect(consultar_evento)
+        else:
+            messages.error(request, 'No se pudo visualizar el protocolo')
+            print(form.errors)
+
+    else:
+        form = VisualizarProtocoloForm(instance=protocolo)
+
+    contexto = {'form_protocolo': form, 'evento': evento}
+    return render(request,'evento_adverso/protocolo/visualizar_protocolo_londres.html', contexto)

@@ -1,0 +1,143 @@
+{% extends 'base/base.html' %}
+{% load bootstrap3 %}
+{% load staticfiles %}
+
+{% block titulo_block %} BloomIPS | Registro de protocolo de Londres{% endblock %}
+
+{% block title_content_block %}<strong>Registro de protocolo de Londres</strong>{% endblock %}
+
+{% block css_block %}
+
+    <!-- Select2 -->
+    {{ form_protocolo.media.css }}
+    <!-- bootstrap datepicker -->
+    <link rel="stylesheet"
+          href="{% static 'bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css' %}">
+    <!-- Bootstrap time Picker -->
+    <link rel="stylesheet" href="{% static 'plugins/timepicker/bootstrap-timepicker.min.css' %}">
+
+
+    <link rel="stylesheet" href="{% static 'css/css_personalizados.css' %}">
+{% endblock %}
+
+{% block content_body_block %}
+    <form role="form" method="POST"> {% csrf_token %}
+        <div class="box-body">
+            <div class="form-group">
+
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
+                        {% bootstrap_field form_protocolo.cronologia layout="vertical" %}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
+                        {% bootstrap_field form_protocolo.acciones_inseguras layout="vertical" %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
+                        {% bootstrap_field form_protocolo.factores_paciente layout="vertical" %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
+                        {% bootstrap_field form_protocolo.factores_tecnologia layout="vertical" %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
+                        {% bootstrap_field form_protocolo.factores_individuo layout="vertical" %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
+                        {% bootstrap_field form_protocolo.factores_equipo layout="vertical" %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
+                        {% bootstrap_field form_protocolo.factores_ambiental layout="vertical" %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
+                        {% bootstrap_field form_protocolo.factores_organizacion layout="vertical" %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
+                        {% bootstrap_field form_protocolo.factores_institucional layout="vertical" %}
+                    </div>
+                </div>
+
+
+                <div class="box-footer">
+                    <button type="button" class="btn btn-primary" data-target="#modal-default" onclick="setText()"
+                    >Guardar
+                    </button>
+
+                </div>
+
+                <!-- Modal -->
+                <div class="modal fade" id="modal-default">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title">Registrar protocolo de Londres</h4>
+                            </div>
+                            <div class="modal-body">
+                                <p id="info_mostrar"> &hellip;</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cerrar
+                                </button>
+                                <button type="submit" class="btn btn-primary" onclick="cerrarModal()">Registrar</button>
+                            </div>
+                        </div>
+                        <!-- /.modal-content -->
+                    </div>
+                    <!-- /.modal-dialog -->
+                </div>
+
+
+            </div>
+        </div>
+    </form>
+{% endblock %}
+
+
+{% block js_block %}
+
+    <!-- bootstrap datepicker -->
+    <script src="{% static 'bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+    <!-- bootstrap time picker -->
+    <script src="{% static 'plugins/timepicker/bootstrap-timepicker.min.js' %}"></script>
+    {{ form_protocolo.media.js }}
+
+    <script>
+
+        //Inicialmente se esconde el botón de volver
+        //document.getElementById("btn-volver").style.display = "show";
+
+        function setText() {
+            //Información a mostrar
+            {#document.getElementById("info_mostrar").innerHTML = "¿Está seguro que desea registrar el implicado?"#}
+            document.getElementById("info_mostrar").innerHTML = "¿Está seguro que desea registrar el protocolo del evento?"
+
+            $("#modal-default").modal('toggle');
+        }
+
+        function cerrarModal() {
+            $("#modal-default .close").click()
+        }
+
+        console.log("Entré al registrar")
+
+    </script>
+
+{% endblock %}
+

@@ -1,0 +1,85 @@
+{% extends 'base/base.html' %}
+{% load bootstrap3 %}
+{% load staticfiles %}
+
+{% block titulo_block %} BloomIPS | Agregar evolución diaria{% endblock  %}
+
+{% block title_content_block %}<strong>Agregar evolución diaria</strong>{% endblock %}
+
+{% block css_block %}
+
+    {{ form.media.css }}
+    <link rel="stylesheet" href="{% static 'css/css_personalizados.css' %}">
+
+{% endblock %}
+
+{% block content_body_block %}
+<form role="form" method="POST"> {% csrf_token %}
+    <div class="box-body">
+        <div class="form-group">
+
+            <div class="row">
+                <div class="col-md-5 col-md-offset-1">
+                    {% bootstrap_field form.paciente layout="vertical" %}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-10 col-md-offset-1">
+                    {% bootstrap_field form.descripcion layout="vertical" %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="box-footer">
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-default" onclick="setText()">Guardar</button>
+    </div>
+
+        <div class="modal fade" id="modal-default">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Guardar Entrada</h4>
+              </div>
+              <div class="modal-body">
+                <p id="info_mostrar"> &hellip;</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cerrar</button>
+                <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+              </div>
+            </div>
+            <!-- /.modal-content -->
+          </div>
+          <!-- /.modal-dialog -->
+        </div>
+</form>
+{% endblock  %}
+
+{% block footer_content_block %}
+{% endblock  %}
+
+
+{% block js_block %}
+
+{{ form.media.js }}
+<!-- CK Editor -->
+<script src="{% static 'bower_components/ckeditor/ckeditor.js' %}"></script>
+
+<script>
+
+    function setText() {
+        document.getElementById("info_mostrar").innerHTML = "Esta seguro que desea guardar la entrada";
+    }
+
+    $(function () {
+    // Replace the <textarea id="editor1"> with a CKEditor
+    // instance, using default configuration.
+    CKEDITOR.replace('editor1')
+    })
+
+</script>
+{% endblock %}

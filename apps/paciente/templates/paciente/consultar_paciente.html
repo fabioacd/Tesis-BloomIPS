@@ -1,0 +1,88 @@
+{% extends 'base/base_tables.html' %}
+{% load bootstrap3 %}
+{% load staticfiles %}
+
+{% block titulo_block %} BloomIPS | Consultar paciente{% endblock %}
+
+{% block title_content_block %}<strong>Consultar paciente</strong>{% endblock %}
+
+
+{% block content_body_block %}
+    <!--<div class="box-body">-->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table-responsive">
+                <table id="example1" class="table table-bordered table-striped my_datatable">
+                    <thead>
+                    <tr>
+                        <th>Identificación</th>
+                        <th>Nombres</th>
+                        <th>Apellidos</th>
+                        <th>Email</th>
+                        <th>Teléfono</th>
+                        <th>Celular</th>
+                        <th>Dirección</th>
+                        <th>EPS</th>
+                        <th style="vertical-align: middle">Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    {% for paciente in pacientes %}
+                        <tr>
+                            <td> {{ paciente.identificacion }}</td>
+                            <td> {{ paciente.nombre }}</td>
+                            <td> {{ paciente.apellido }}</td>
+                            <td> {{ paciente.email }}</td>
+                            <td> {{ paciente.telefono }}</td>
+                            <td> {{ paciente.celular }}</td>
+                            <td> {{ paciente.direccion }}</td>
+                            <td> {{ paciente.eps }}</td>
+                            <td>
+                                <a  href="{% url 'ver_paciente' paciente.identificacion %}"
+                                   class="btn-sm btn-block bg-olive" style="text-align: center">Ver</a>
+                                <a href="{% url 'modificar_paciente' paciente.identificacion %}"
+                                   class="btn-sm btn-block btn-primary" style="text-align: center">Modificar</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <th>Identificación</th>
+                        <th>Nombres</th>
+                        <th>Apellidos</th>
+                        <th>Email</th>
+                        <th>Teléfono</th>
+                        <th>Celular</th>
+                        <th>Dirección</th>
+                        <th>EPS</th>
+                        <th>Acciones</th>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div><!--final div-->
+    <!--</div><!--box-body div-->
+
+{% endblock %}
+
+{% block js_block %}
+{{ block.super }}
+    <script>
+
+        $(function () {
+
+        });
+    </script>
+
+{% endblock %}
+
+
+
+{% block footer_content_block %}
+
+
+{% endblock %}

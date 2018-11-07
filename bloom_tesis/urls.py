@@ -11,6 +11,7 @@ from django.conf import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('empleado/', include('apps.empleado.urls')),
+    path('paciente/', include('apps.paciente.urls')),
     path('login/', include('apps.login.urls'), name = "login"),
     path('evento_adverso/', include('apps.evento_adverso.urls')),
     path('select2/', include('django_select2.urls')),

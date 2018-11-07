@@ -108,5 +108,46 @@
                 <i class="fa fa-file-o">
                 </i> Consultar implicado </a>
         </li>
+        <li class="{% if 'evento_adverso/agregar_evento_adverso' in request.path %} active {% else %} disabled {% endif %}">
+            <a href="{% url 'agregar_evento_adverso' %}">
+                <i class="fa fa-plus-square">
+                </i> Agregar evento adverso </a>
+        </li>
+        <li class="{% if 'evento_adverso/consultar_evento_adverso' in request.path %} active {% else %} disabled {% endif %}">
+            <a href="{% url 'consultar_evento' %}">
+                <i class="fa fa-file-o">
+                </i> Consultar evento adverso </a>
+        </li>
+    </ul>
+</li>
+
+<li class="treeview {% if 'registrar_paciente' in request.path or 'consultar_paciente' in request.path or 'agregar_evolucion_diaria' in request.path or 'consultar_evolucion_diaria' in request.path  %} active {% else %} disabled {% endif %}">
+    <a href="#">
+        <i class="fa fa-male"></i> <span>Paciente</span>
+        <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+        </span>
+    </a>
+     <ul class="treeview-menu">
+        <li class="{% if 'registrar_paciente' in request.path  %} active {% else %} disabled {% endif %}">
+            <a href="{% url 'registrar_paciente' %}">
+            <i class="fa fa-user-plus">
+            </i> Registrar paciente </a>
+        </li>
+        <li class="{% if 'consultar_paciente' in request.path  %} active {% else %} disabled {% endif %}">
+            <a href="{% url 'consultar_paciente' %}">
+            <i class="fa fa-table">
+            </i> Consultar paciente </a>
+        </li>
+        <li class="{% if 'agregar_evolucion_diaria' in request.path  %} active {% else %} disabled {% endif %}">
+            <a href="{% url 'agregar_evolucion_diaria' %}">
+            <i class="fa fa-plus-square">
+            </i> Agregar evolución diaria </a>
+        </li>
+        <li class="{% if 'consultar_evolucion_diaria' in request.path  %} active {% else %} disabled {% endif %}">
+            <a href="{% url 'consultar_evolucion_diaria' %}">
+            <i class="fa fa-search">
+            </i> Consultar evolución diaria </a>
+        </li>
     </ul>
 </li>

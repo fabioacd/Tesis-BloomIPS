@@ -1,0 +1,215 @@
+{% extends 'base/base.html'%}
+{% load bootstrap3 %}
+{% load staticfiles %}
+
+{% block titulo_block %} BloomIPS | Información del paciente {% endblock  %}
+
+{% block title_content_block %}<strong>Información del paciente</strong>{% endblock %}
+
+{% block css_block %}
+
+    <!-- Select2 -->
+    {{ form.media.css }}
+    <link rel="stylesheet" href="{% static 'css/css_personalizados.css' %}">
+
+{% endblock %}
+
+{% block content_body_block %}
+<form role="form" method="POST"> {% csrf_token %}
+    <div class="box-body">
+        <div class="form-group">
+
+            <div class="row">
+                <div class="col-md-5 col-md-offset-1">
+                    {% bootstrap_field form.tipo_paciente layout="vertical" %}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-5 col-md-offset-1">
+                    <h4> Información personal</h4>
+                </div>
+                <div class="col-md-10 col-md-offset-1">
+                    <hr/>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-5 col-md-offset-1">
+                    {% bootstrap_field form.tipo_identificacion layout="vertical" %}
+                </div>
+                <div class="col-md-5">
+                    {% bootstrap_field form.identificacion layout="vertical" %}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-5 col-md-offset-1">
+                    {% bootstrap_field form.nombre layout="vertical" %}
+                </div>
+                <div class="col-md-5">
+                    {% bootstrap_field form.apellido layout="vertical" %}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-5 col-md-offset-1">
+                    {% bootstrap_field form.fecha_nacimiento layout="vertical" %}
+                </div>
+                <div class="col-md-5">
+                    {% bootstrap_field form.lugar_nacimiento layout="vertical" %}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-5 col-md-offset-1">
+                    {% bootstrap_field form.ciudad_residencia layout="vertical" %}
+                </div>
+                <div class="col-md-5">
+                    {% bootstrap_field form.direccion layout="vertical" %}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-5 col-md-offset-1">
+                    {% bootstrap_field form.barrio layout="vertical" %}
+                </div>
+                <div class="col-md-5">
+                    {% bootstrap_field form.estrato layout="vertical" %}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-5 col-md-offset-1">
+                    {% bootstrap_field form.telefono layout="vertical" %}
+                </div>
+                <div class="col-md-5">
+                    {% bootstrap_field form.celular layout="vertical" %}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-5 col-md-offset-1">
+                    {% bootstrap_field form.genero layout="vertical" %}
+                </div>
+                <div class="col-md-5">
+                    {% bootstrap_field form.escolaridad layout="vertical" %}
+                </div>
+            </div>
+
+           <div class="row">
+                <div class="col-md-5 col-md-offset-1">
+                    {% bootstrap_field form.email layout="vertical" %}
+                </div>
+                <div class="col-md-5 adult">
+                    {% bootstrap_field form.ocupacion layout="vertical" %}
+                </div>
+                <div class="col-md-5 infant">
+                    {% bootstrap_field form.nombre_responsable layout="vertical" %}
+                </div>
+           </div>
+
+           <div class="row">
+               <div class="col-md-5 col-md-offset-1 infant">
+                   {% bootstrap_field form.parentesco_responsable layout="vertical" %}
+               </div>
+               <div class="col-md-5  infant">
+                   {% bootstrap_field form.telefono_responsable layout="vertical" %}
+               </div>
+           </div>
+
+            <div class="row">
+                <div class="col-md-5 col-md-offset-1">
+                    <h4> Informacion clínica</h4>
+                </div>
+                <div class="col-md-10 col-md-offset-1">
+                    <hr/>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-5 col-md-offset-1">
+                    {% bootstrap_field form.eps layout="vertical" %}
+                </div>
+                <div class="col-md-5">
+                    {% bootstrap_field form.ips_atencion layout="vertical" %}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-5 col-md-offset-1">
+                    {% bootstrap_field form.remitente layout="vertical" %}
+                </div>
+                <div class="col-md-5">
+                    {% bootstrap_field form.diagnosticador layout="vertical" %}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-10 col-md-offset-1">
+                    {% bootstrap_field form.motivo_consulta layout="vertical" %}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-5 col-md-offset-1">
+                    {% bootstrap_field form.enfermedad_actual layout="vertical" %}
+                </div>
+                <div class="col-md-5">
+                    {% bootstrap_field form.diagnosticos_cie10 layout="vertical" %}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-5 col-md-offset-1">
+                    {% bootstrap_field form.estado layout="vertical" %}
+                </div>
+                <div class="col-md-5 adult">
+                    {% bootstrap_field form.tiempo_evolucion layout="vertical" %}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-5 col-md-offset-1">
+                    {% bootstrap_field form.evaluacion_inicial layout="vertical" %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="box-footer">
+        <div class="row">
+            <div class="col-md-1 col-md-offset-5">
+                <a href="{% url 'consultar_paciente' %}" class="btn btn-block btn-primary">Atrás</a>
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock %}
+
+{% block js_block %}
+
+    {{ form.media.js }}
+
+    <script>
+        $(document).ready( function(){
+
+            var selected_value = $('select[name=tipo_paciente]').val();
+
+            if(selected_value == "Adulto"){
+                    $(".adult").show();
+                    $(".infant").hide();
+            }else if(selected_value == "Infante"){
+                $(".infant").show();
+                $(".adult").hide();
+            }else{
+                $(".adult").hide();
+                $(".infant").hide();
+            }
+        });
+    </script>
+{% endblock %}
+
+{% block footer_content_block %}
+
+
+{% endblock  %}
