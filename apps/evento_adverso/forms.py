@@ -1,7 +1,7 @@
 from django import forms
 from django.core.exceptions import ObjectDoesNotExist
 from django_select2.forms import Select2MultipleWidget, Select2Widget
-from .models import ImplicadoEvento, EventoAdverso, TipoEventoAdverso, ProtocoloLondres
+from .models import ImplicadoEvento, EventoAdverso, TipoEventoAdverso, ProtocoloLondres, SeguimientoEvento
 
 #---------------------IMPLICADO A EVENTO ADVERSO-----------------------------------------------------
 
@@ -281,4 +281,23 @@ class VisualizarProtocoloForm(forms.ModelForm):
             'factores_organizacion': forms.Textarea(attrs={'rows': 5, 'style': 'resize:none;'}),
             'factores_paciente': forms.Textarea(attrs={'rows': 5, 'style': 'resize:none;'}),
             'factores_tecnologia': forms.Textarea(attrs={'rows': 5, 'style': 'resize:none;'}),
+        }
+
+
+#---------------------SEGUIMIENTO A EVENTO-----------------------------------------------------
+class AgregarSeguimientoForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(AgregarSeguimientoForm, self).__init__(*args, **kwargs)
+        # self.fields['tipos_evento'].blank = True
+        self.fields['descripcion'].widget.attrs['placeholder'] = ""
+
+    class Meta:
+        model = SeguimientoEvento
+        fields = ('fecha', 'descripcion')
+        widgets = {
+            "descripcion": forms.Textarea(attrs={'rows': 7, 'style': 'resize:none;'}),
+        }
+        labels = {
+            'descripcion' : "Descripción"
         }
