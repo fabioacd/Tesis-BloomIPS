@@ -1,4 +1,4 @@
-{% extends 'base/base_tables.html' %}
+{% extends 'base/base.html' %}
 {% load bootstrap3 %}
 {% load staticfiles %}
 
@@ -6,6 +6,11 @@
 
 {% block title_content_block %}<strong>Consultar paciente</strong>{% endblock %}
 
+{% block css_block %}
+
+    <link rel="stylesheet" href="{% static 'bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css' %}">
+
+{% endblock %}
 
 {% block content_body_block %}
     <!--<div class="box-body">-->
@@ -70,13 +75,22 @@
 {% endblock %}
 
 {% block js_block %}
-{{ block.super }}
-    <script>
+    <!-- DataTables -->
+<script src="{% static 'bower_components/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
 
-        $(function () {
+<script >
+ $(function () {
+    $('#example1').DataTable(
+        {
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Spanish.json"
+            }
+        }
+    );
 
-        });
-    </script>
+  });
+</script>
 
 {% endblock %}
 
