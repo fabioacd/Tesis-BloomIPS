@@ -1,0 +1,170 @@
+{% extends 'base/base.html'%}
+{% load bootstrap3 %}
+{% load staticfiles %}
+
+{% block titulo_block %} BloomIPS | Registro de antecedentes psicosociales {% endblock  %}
+
+{% block title_content_block %}<strong>Registro de antecedentes psicosociales</strong>{% endblock %}
+
+{% block css_block %}
+
+    <!-- Select2 -->
+    {{ form.media.css }}
+    <link rel="stylesheet" href="{% static 'css/css_personalizados.css' %}">
+
+{% endblock %}
+
+{% block content_body_block %}
+<form role="form" method="POST"> {% csrf_token %}
+    <div class="box-body">
+        <div class="form-group">
+
+            <div class="row">
+                <div class="col-md-5 col-md-offset-1">
+                    {% bootstrap_field form.paciente layout="vertical" %}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-5 col-md-offset-1">
+                    {% bootstrap_field form.numero_habitantes layout="vertical" %}
+                </div>
+
+                <div class="col-md-5">
+                    {% bootstrap_field form.num_integrantes_laboran layout="vertical" %}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-5 col-md-offset-1">
+                    {% bootstrap_field form.num_hermanos layout="vertical" %}
+                </div>
+                <div class="col-md-5">
+                    {% bootstrap_field form.lugar_entre_hermanos layout="vertical" %}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-5 col-md-offset-1">
+                    {% bootstrap_field form.total_ingresos layout="vertical" %}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-5 col-md-offset-1">
+                    {% bootstrap_field form.tipo_vivienda layout="vertical" %}
+                </div>
+                <div class="col-md-5">
+                    {% bootstrap_field form.otro_tipo_vivienda layout="vertical" %}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-5 col-md-offset-1">
+                    {% bootstrap_field form.sector_vivienda layout="vertical" %}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-10 col-md-offset-1">
+                    {% bootstrap_field form.observaciones_vivienda layout="vertical" %}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-2 col-md-offset-1">
+                    <h5 style="font-weight: bold;">
+                        Servicios públicos
+                    </h5>
+                </div>
+                <div class="col-md-2">
+                    {% bootstrap_field form.gas layout="vertical" %}
+                </div>
+                <div class="col-md-2">
+                    {% bootstrap_field form.internet layout="vertical" %}
+                </div>
+                <div class="col-md-2">
+                    {% bootstrap_field form.agua layout="vertical" %}
+                </div>
+                <div class="col-md-2">
+                    {% bootstrap_field form.energia layout="vertical" %}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-10 col-md-offset-1">
+                    {% bootstrap_field form.observacion_servicios layout="vertical" %}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-10 col-md-offset-1">
+                    {% bootstrap_field form.gmfcs layout="vertical" %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="box-footer">
+        <button type="button" class="btn btn-primary" data-target="#modal-default" onclick="setText()"
+                type="button">Guardar</button>
+    </div>
+     <!-- Modal -->
+    <div class="modal fade" id="modal-default">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Registrar antecedentes psicosociales</h4>
+                </div>
+                <div class="modal-body" id="mostrar-alerta">
+                    <p id="info_mostrar"> &hellip;</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary" onclick="cerrarModal()">Registrar</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+</form>
+{% endblock %}
+
+{% block js_block %}
+
+    {{ form.media.js }}
+
+    <script>
+        $(document).ready(function(){
+
+            $('#tipo_vivienda').on('click', function(){
+
+                var selected_value = $('#tipo_vivienda option:selected').text();
+
+                if(selected_value == "Otro"){
+                    $('#otro_tipo_vivienda').prop('disabled', false);
+                }else {
+                    $('#otro_tipo_vivienda').prop('disabled', true);
+                }
+            });
+        });
+
+        function setText() {
+            //Información a mostrar
+            document.getElementById("info_mostrar").innerHTML = "¿Está seguro que desea registrar los antecedentes?"
+            $("#modal-default").modal('toggle');
+        }
+        function cerrarModal() {
+            $("#modal-default .close").click()
+        }
+    </script>
+
+{% endblock %}
+
+{% block footer_content_block %}
+
+
+{% endblock  %}
