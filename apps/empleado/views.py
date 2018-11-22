@@ -216,7 +216,6 @@ def get_entradas_ajax(request):
         'Fecha Inicial: ' + fecha_inicial + ' Fecha Final: ' + fecha_final + ' Empleado: ' + id_empleado + ' Paciente: ' + id_paciente)
     paciente = Paciente.objects.get(identificacion=id_paciente)
     empleado = Empleado.objects.get(username=id_empleado)
-    print('Si pasa por aca mi socio')
     entradas_paciente = Entrada.objects.filter(paciente=paciente, fecha__range=[fecha_inicial, fecha_final])
     area = empleado.area
     empleados_area = area.empleados_area.all()
@@ -229,7 +228,6 @@ def get_entradas_ajax(request):
             'descripcion': entrada.descripcion
         }
         datos.append(temporal)
-    print(datos)
     datosJson = json.dumps(datos)
     return JsonResponse(datosJson, safe=False)
     # --------------------------------------------------------------------------

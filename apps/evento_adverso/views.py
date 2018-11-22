@@ -2,7 +2,8 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.contrib import messages
 import json
-from .forms import AgregarImplicadoEventoForm, ModificarImplicadoEventoAdversoForm, AgregarEventoAdversoForm, ModificarEventoAdversoForm, RegistrarProtocoloForm, VisualizarProtocoloForm
+from apps.evento_adverso.models import SeguimientoEvento
+from .forms import AgregarImplicadoEventoForm, ModificarImplicadoEventoAdversoForm, AgregarEventoAdversoForm, ModificarEventoAdversoForm, RegistrarProtocoloForm, VisualizarProtocoloForm, AgregarSeguimientoForm
 from .models import ImplicadoEvento, EventoAdverso, ProtocoloLondres
 
 def index(request):
@@ -156,3 +157,65 @@ def visualizar_protocolo(request, id_evento):
 
     contexto = {'form_protocolo': form, 'evento': evento}
     return render(request,'evento_adverso/protocolo/visualizar_protocolo_londres.html', contexto)
+
+#---------------------SEGUIMIENTO A EVENTO-----------------------------------------------------
+
+def agregar_seguimiento(request, id_evento):
+
+    evento = EventoAdverso.objects.get(id = id_evento)
+    if request.method == 'POST':
+        form = AgregarSeguimientoForm(request.POST)
+
+        if form.is_valid():
+            seguimiento = form.save(commit=False)
+            seguimiento.evento_adverso = evento
+            seguimiento.save()
+            form = AgregarSeguimientoForm()
+            messages.success(request, 'Seguimiento agregado exitosamente')
+        else:
+            messages.error(request, 'No se pudo agregar el seguimiento')
+            print(form.errors)
+
+    else:
+        form = AgregarSeguimientoForm()
+
+    contexto = {'form': form, 'evento': evento}
+    return render(request,'evento_adverso/agregar_seguimiento_evento.html', contexto)
+
+def get_seguimientos_ajax(request):
+    #--------------------------------------------------------------------------
+
+    id_evento = request.GET.get('id_evento')
+    print('Evento adverso: ' +  id_evento)
+    evento = EventoAdverso.objects.get(id = id_evento)
+    print(evento.descripcion)
+    seguimientos = SeguimientoEvento.objects.filter(evento_adverso=evento)
+    print('Si pasa por aca mi socio')
+    #--------------------------------------------------------------------------
+    datos = []
+    for seguimiento in seguimientos:
+        temporal ={
+                'fecha': str(seguimiento.fecha),
+                'descripcion': str(seguimiento.descripcion),
+        }
+        datos.append(temporal)
+    print(datos)
+    datosJson = json.dumps(datos)
+    return JsonResponse(datosJson,safe=False)
+
+def registrar_seguimiento_ajax(request):
+    evento = EventoAdverso.objects.get(id=request.POST['id_evento'])
+    if request.method == 'POST':
+        form = AgregarSeguimientoForm(request.POST)
+
+        if form.is_valid():
+            seguimiento = form.save(commit=False)
+            seguimiento.evento_adverso = evento
+            seguimiento.save()
+            print('Seguimiento agregado exitosamente')
+        else:
+            print('No se pudo agregar el seguimiento')
+            print(form.errors)
+
+    else:
+        form = AgregarSeguimientoForm()

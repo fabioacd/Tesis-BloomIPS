@@ -1,4 +1,4 @@
-{% extends 'base/base_tables.html' %}
+{% extends 'base/base.html' %}
 {% load bootstrap3 %}
 {% load staticfiles %}
 
@@ -8,7 +8,11 @@
 {% block title_content_block %}<strong>Consultar evento adverso</strong>{% endblock %}
 
 
+{% block css_block %}
 
+    <link rel="stylesheet" href="{% static 'bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css' %}">
+
+{% endblock %}
 
 
 {% block content_body_block %}
@@ -47,9 +51,9 @@
                         <td>
                             <a href="{% url 'modificar_evento' evento.id %}"
                                class="btn-sm btn-block btn-primary" style="text-align: center"> Modificar </a>
-{#                            <a href="{% url 'agregar_seguimiento' evento.id %}"#}
-{#                               class="btn-sm btn-block bg-olive" style="text-align: center">Seguimiento </a>#}
-{##}
+                            <a href="{% url 'agregar_seguimiento' evento.id %}"
+                               class="btn-sm btn-block bg-olive" style="text-align: center">Seguimiento </a>
+
                             {% if evento.protocolo_londres %}
 
                                 <a href="{% url 'visualizar_protocolo' evento.id %}"
@@ -85,12 +89,21 @@
 block
 {% block js_block %}
 
-    {{ block.super }}
+    <!-- DataTables -->
+<script src="{% static 'bower_components/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
 
-    <script>
-        $(function () {
+<script >
+ $(function () {
+    $('#example1').DataTable(
+        {
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Spanish.json"
+            }
+        }
+    );
 
-        });
-    </script>
+  });
+</script>
 
 {% endblock %}
