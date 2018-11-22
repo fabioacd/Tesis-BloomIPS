@@ -1,0 +1,202 @@
+{% extends 'base/base.html'%}
+{% load bootstrap3 %}
+{% load staticfiles %}
+
+{% block titulo_block %} BloomIPS | Consulta de antecedentes psicosociales {% endblock  %}
+
+{% block title_content_block %}<strong>Consulta de antecedentes psicosociales</strong>{% endblock %}
+
+{% block css_block %}
+
+    <!-- Select2 -->
+    {{ form.media.css }}
+    <link rel="stylesheet" href="{% static 'css/css_personalizados.css' %}">
+
+    <style>
+
+        #btn-buscar {
+            margin: 25px 0px;
+        }
+
+    </style>
+
+{% endblock %}
+
+{% block content_body_block %}
+<form role="form" method="POST"> {% csrf_token %}
+    <div class="box-body">
+        <div class="form-group">
+
+            <div class="row">
+                <div class="col-md-5 col-md-offset-1">
+                    {% bootstrap_field form.paciente layout="vertical" %}
+                </div>
+                <div class="col-md-2">
+                    <button type="button" class="btn btn-info" id="btn-buscar">Buscar</button>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-5 col-md-offset-1">
+                    {% bootstrap_field form.numero_habitantes layout="vertical" %}
+                </div>
+
+                <div class="col-md-5">
+                    {% bootstrap_field form.num_integrantes_laboran layout="vertical" %}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-5 col-md-offset-1">
+                    {% bootstrap_field form.num_hermanos layout="vertical" %}
+                </div>
+                <div class="col-md-5">
+                    {% bootstrap_field form.lugar_entre_hermanos layout="vertical" %}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-5 col-md-offset-1">
+                    {% bootstrap_field form.total_ingresos layout="vertical" %}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-5 col-md-offset-1">
+                    {% bootstrap_field form.tipo_vivienda layout="vertical" %}
+                </div>
+                <div class="col-md-5">
+                    {% bootstrap_field form.otro_tipo_vivienda layout="vertical" %}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-5 col-md-offset-1">
+                    {% bootstrap_field form.sector_vivienda layout="vertical" %}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-10 col-md-offset-1">
+                    {% bootstrap_field form.observaciones_vivienda layout="vertical" %}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-2 col-md-offset-1">
+                    <h5 style="font-weight: bold;">
+                        Servicios públicos
+                    </h5>
+                </div>
+                <div class="col-md-2">
+                    {% bootstrap_field form.gas layout="vertical" %}
+                </div>
+                <div class="col-md-2">
+                    {% bootstrap_field form.internet layout="vertical" %}
+                </div>
+                <div class="col-md-2">
+                    {% bootstrap_field form.agua layout="vertical" %}
+                </div>
+                <div class="col-md-2">
+                    {% bootstrap_field form.energia layout="vertical" %}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-10 col-md-offset-1">
+                    {% bootstrap_field form.observacion_servicios layout="vertical" %}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-10 col-md-offset-1">
+                    {% bootstrap_field form.gmfcs layout="vertical" %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+</form>
+{% endblock %}
+
+{% block js_block %}
+
+    {{ form.media.js }}
+
+    <script>
+
+        function limpiar_campos(){
+            $("#id_numero_habitantes").val("");
+            $("#id_num_integrantes_laboran").val("");
+            $("#id_num_hermanos").val("");
+            $("#id_lugar_entre_hermanos").val("");
+            $("#id_total_ingresos").val("");
+            $("#id_tipo_vivienda").val("");
+            $("#id_otro_tipo_vivienda").val("");
+            $("#id_sector_vivienda").val("");
+            $("#id_observaciones_vivienda").val("");
+            $("#id_observaciones_servicios").val("");
+            $("#id_gmfcs").val("");
+            $('#id_gas').prop('checked', false);
+            $('#id_internet').prop('checked', false);
+            $('#id_agua').prop('checked', false);
+            $('#id_energia').prop('checked', false);
+        }
+
+        $('#btn-buscar').on("click", function(){
+            limpiar_campos();
+
+            var id_paciente = $('#id_paciente').val();
+
+            if(id_paciente == ""){
+                alert("Seleccione un paciente");
+            }else{
+                $.ajax({
+                    data: {'id_paciente': id_paciente},
+                    url: "{% url 'get_antecedentes_psicosocial_ajax' %}",
+                    success: function(data){
+                        if(data !== ""){
+                            var json = JSON.parse(data);
+                            if(json.gas == true){
+                                $('#id_gas').prop('checked', true);
+                            }
+                            if(json.internet == true){
+                                $('#id_internet').prop('checked', true);
+                            }
+                            if(json.agua == true){
+                                $('#id_agua').prop('checked', true);
+                            }
+                            if(json.energia == true){
+                                $('#id_energia').prop('checked', true);
+                            }
+                            $("#id_numero_habitantes").val(json.numero_habitantes);
+                            $("#id_num_integrantes_laboran").val(json.num_integrantes_laboran);
+                            $("#id_num_hermanos").val(json.num_hermanos);
+                            $("#id_lugar_entre_hermanos").val(json.lugar_entre_hermanos);
+                            $("#id_total_ingresos").val(json.total_ingresos);
+                            $("#id_tipo_vivienda").val(json.tipo_vivienda);
+                            $("#id_otro_tipo_vivienda").val(json.otro_tipo_vivienda);
+                            $("#id_sector_vivienda").val(json.sector_vivienda);
+                            $("#id_observaciones_vivienda").val(json.observaciones_vivienda);
+                            $("#id_observacion_servicios").val(json.observacion_servicios);
+                            $("#id_gmfcs").val(json.gmfcs);
+                        }else{
+                            alert("No hay antecedentes");
+                        }
+                    },
+                    dataType: "json",
+                    error: function () {
+                        alert("Ocurrió un error al conectar con el servidor");
+                    }
+
+                });
+            }
+        });
+    </script>
+
+{% endblock %}
+
+{% block footer_content_block %}
+
+
+{% endblock  %}

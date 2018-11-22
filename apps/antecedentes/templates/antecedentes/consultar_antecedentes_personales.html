@@ -1,0 +1,142 @@
+{% extends 'base/base.html'%}
+{% load bootstrap3 %}
+{% load staticfiles %}
+
+{% block titulo_block %} BloomIPS | Consulta de antecedentes personales {% endblock  %}
+
+{% block title_content_block %}<strong>Consulta de antecedentes personales</strong>{% endblock %}
+
+{% block css_block %}
+
+    <!-- Select2 -->
+    {{ form.media.css }}
+    <link rel="stylesheet" href="{% static 'css/css_personalizados.css' %}">
+
+    <style>
+
+        #btn-buscar {
+            margin: 25px 0px;
+        }
+
+    </style>
+
+{% endblock %}
+
+{% block content_body_block %}
+<form role="form" method="POST"> {% csrf_token %}
+    <div class="box-body">
+        <div class="form-group">
+
+            <div class="row">
+                <div class="col-md-5 col-md-offset-1">
+                    {% bootstrap_field form.paciente layout="vertical" %}
+                </div>
+                <div class="col-md-2">
+                    <button type="button" class="btn btn-info" id="btn-buscar">Buscar</button>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-10 col-md-offset-1">
+                    {% bootstrap_field form.farmacologicos layout="vertical" %}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-10 col-md-offset-1">
+                    {% bootstrap_field form.alergicos layout="vertical" %}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-10 col-md-offset-1">
+                    {% bootstrap_field form.patologicos layout="vertical" %}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-10 col-md-offset-1">
+                    {% bootstrap_field form.toxicos layout="vertical" %}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-10 col-md-offset-1">
+                    {% bootstrap_field form.quirurgicos layout="vertical" %}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-10 col-md-offset-1">
+                    {% bootstrap_field form.prescripcion_medica layout="vertical" %}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-10 col-md-offset-1">
+                    {% bootstrap_field form.esquema_vacunacion layout="vertical" %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+</form>
+{% endblock %}
+
+{% block js_block %}
+
+    {{ form.media.js }}
+
+    <script>
+
+        function limpiar_campos(){
+            $('#farmacologicos').val("");
+            $('#alergicos').val("");
+            $('#patologicos').val("");
+            $('#toxicos').val("");
+            $('#quirurgicos').val("");
+            $('#prescripcion_medica').val("");
+            $('#esquema_vacunacion').val("");
+        }
+
+        $('#btn-buscar').on("click", function(){
+            limpiar_campos();
+
+            var id_paciente = $('#paciente').val();
+
+            if(id_paciente == ""){
+                alert("Seleccione un paciente");
+            }else{
+                $.ajax({
+                    data: {'id_paciente': id_paciente},
+                    url: "{% url 'get_antecedente_personal_ajax' %}",
+                    success: function(data){
+                        if(data !== ""){
+                            var json = JSON.parse(data)
+                            $('#farmacologicos').val(json.farmacologicos);
+                            $('#alergicos').val(json.alergicos);
+                            $('#patologicos').val(json.patologicos);
+                            $('#toxicos').val(json.toxicos);
+                            $('#quirurgicos').val(json.quirurgicos);
+                            $('#prescripcion_medica').val(json.prescripcion_medica);
+                            $('#esquema_vacunacion').val(json.esquema_vacunacion);
+                        }else{
+                            alert("No hay antecedentes");
+                        }
+                    },
+                    dataType: "json",
+                    error: function () {
+                        alert("Ocurrió un error al conectar con el servidor");
+                    }
+
+                });
+            }
+        });
+    </script>
+
+{% endblock %}
+
+{% block footer_content_block %}
+
+
+{% endblock  %}

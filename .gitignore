@@ -4,6 +4,8 @@ __pycache__/
 **/migrations
 .idea/
 venv
-
+*.pdf
+*.png
+*.jpg
 
 
