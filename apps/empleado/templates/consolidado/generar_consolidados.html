@@ -1,0 +1,46 @@
+{% extends 'base/base.html' %}
+{% load bootstrap3 %}
+{% load staticfiles %}
+
+{% block titulo_block %} BloomIPS | Generar consolidados{% endblock %}
+
+{% block title_content_block %}<strong>Generar consolidados</strong>{% endblock %}
+
+{% block css_block %}
+
+    <!-- Select2 -->
+    {{ form.media.css }}
+    <!-- daterange picker -->
+    <link rel="stylesheet" href="{% static 'bower_components/bootstrap-daterangepicker/daterangepicker.css' %}">
+
+
+    <link rel="stylesheet" href="{% static 'css/css_personalizados.css' %}">
+    <style>
+        #btn-buscar {
+            margin: 25px 0px;
+        }
+
+        #id_descripcion {
+            text-align: justify
+        }
+
+
+    </style>
+
+{% endblock %}
+
+{% block content_body_block %}
+    <form method="post">
+        <button type="submit" class="btn btn-primary col-md-offset-1" data-target="#modal-default" type="button">Generar</button>
+    </form>
+
+{% endblock %}
+
+
+{% block js_block %}
+    {{ form.media.js }}
+    <!-- date-range-picker -->
+    <script src="{% static 'bower_components/moment/min/moment.min.js' %}"></script>
+    <script src="{% static 'bower_components/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+{% endblock %}
+

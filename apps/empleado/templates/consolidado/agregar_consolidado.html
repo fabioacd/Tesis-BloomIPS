@@ -1,0 +1,200 @@
+{% extends 'base/base_tables.html' %}
+{% load bootstrap3 %}
+{% load staticfiles %}
+
+
+{% block titulo_block %} BloomIPS | Registrar consolidado{% endblock %}
+
+{% block title_content_block %}<strong>Registro de consolidado</strong>{% endblock %}
+
+{% block css_block %}
+
+    <style>
+        .consolidado-menu{
+            position: relative !important;
+        }
+    </style>
+
+    {{ form.media.css }}
+    <!-- daterange picker -->
+    <link rel="stylesheet" href="{% static 'bower_components/bootstrap-daterangepicker/daterangepicker.css' %}">
+    <link rel="stylesheet"
+          href="{% static 'bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.css' %}">
+    {{ block.super }}
+
+
+{% endblock %}
+
+{% block content_body_block %}
+    <div class="row">
+        <div class="box-body">
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-sm-4 col-sm-offset-1">
+                        <div class="form-group">
+                            <label>Seleccione rango de Fechas:</label>
+
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <input type="text" class="form-control pull-right" id="rango_fecha">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <button type="button" style="margin: 25px 0px;" class="btn btn-info" id="btn-buscar"
+                                onclick="obtener_pacientes_informe();">Buscar
+                        </button>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+        <div class="col-md-10 col-md-offset-1 div_table">
+            <div class="table-responsive">
+                <table id="tabla_pacientes_resumen" class="table table-bordered table-striped my_datatable">
+                    <thead>
+                    <tr>
+                        <th style="width: 20% !important">Paciente</th>
+                        {% for titulo in titulos %}
+                            <th>{{ titulo }}</th>
+                        {% endfor %}
+                        <th>Exportar</th>
+                    </tr>
+                    </thead>
+                    <tbody id="table_body">
+
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <th style="width: 20% !important">Paciente</th>
+                        {% for titulo in titulos %}
+                            <th>{{ titulo }}</th>
+                        {% endfor %}
+                        <th>Exportar</th>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block js_block %}
+    {{ form.media.js }}
+    <!-- date-range-picker -->
+    <script src="{% static 'bower_components/moment/min/moment-with-locales.min.js' %}"></script>
+    <script src="{% static 'bower_components/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+    <!-- bootstrap datepicker -->
+    <script src="{% static 'bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+    {{ block.super }}
+    <script src="{% static 'bower_components/bootstrap-datepicker/js/locales/bootstrap-datepicker.es.js' %}"
+            charset="UTF-8"></script>
+    <script>
+
+        function obtener_pacientes_informe() {
+            var fecha = $('#rango_fecha').val();
+
+            $.ajax({
+                url: "{% url 'consultar_informe_paciente_consolidado_ajax' %}",
+                data: {'fecha': fecha},
+                dataType: 'json',
+                success: function (backend_data) {
+
+
+                    if (backend_data.status) {
+
+
+                        var datos = backend_data.datos;
+                        var areas = backend_data.areas;
+
+
+                        tabla = $("#tabla_pacientes_resumen").DataTable();
+                        tabla.clear().draw();
+
+                        $.each(datos, function (indexTotal, fila) {
+                            var filas = [];
+                            var datos_paciente = fila['paciente'].split(" - ");
+                            var id_paciente = datos_paciente[0];
+                            $.each(fila, function (key, dato) {
+                                if (key != 'paciente') {
+                                    if (dato == "Revisado") {
+                                        filas.push("<div style='text-align: center; width: 100%;'> <span class='label label-success text-center' style='font-size: 12px'>" + "Revisado" + "</span></div>")
+                                    } else if (dato == "Sin revisar") {
+                                        filas.push("<div style='text-align: center; width: 100%;'> <span class='label label-danger text-center' style='font-size: 12px'>" + "Sin revisar" + "</span></div>")
+                                    } else {
+                                        filas.push("<div style='text-align: center; width: 100%;'> <span class='label label-primary text-center' style='font-size: 12px'>" + "N/A" + "</span></div>")
+                                    }
+                                } else {
+                                    filas.push(dato);
+                                }
+
+
+                            });
+                            filas.push("<div style='text-align: center; width: 100%'>" +
+                                "<div class='btn-group'>" +
+                                "<button type='button' class='btn btn-info btn-xs'>PDF</button>" +
+                                "<button type='button' class='btn btn-info btn-xs dropdown-toggle' data-toggle='dropdown'>" +
+                                "<span class='caret'></span>" +
+                                "<span class='sr-only'>Toggle Dropdown</span>" +
+                                "</button>" +
+                                "<ul class='dropdown-menu consolidado-menu' style='position:relative;' role='menu'>" +
+                                "<li><a href='/empleado/generar_consolidado/" + id_paciente + "/" + fecha + "/Pos" + "' target='blank'>Áreas pos</a></li>" +
+                                "<li><a href='/empleado/generar_consolidado/" + id_paciente + "/" + fecha + "/No pos" +"' target='blank'>Áreas no pos</a></li>" +
+                                "<li><a href='/empleado/generar_consolidado/" + id_paciente + "/" + fecha + "/Todas" + "' >Todas</a></li>" +
+                                "</ul>" +
+                                "</div>" +
+                                "</div>");
+                            tabla.row.add(filas).draw();
+                        });
+                    }
+                    else {
+                        mensaje_toastr('error', 'Seleccione una fecha válida.');
+                    }
+
+                },
+                error: function (backend_data) {
+                    mensaje_toastr('error', 'Ocurrió un error en el servidor. Por favor, intente de nuevo.');
+
+                }
+            });
+        }
+
+        $(function () {
+             $("#tabla_pacientes_resumen").DataTable({
+                dom: 'lBfrtip',
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Spanish.json"
+                },
+                 buttons: [
+                    {
+                        extend: 'colvis',
+                        className: 'btn-sm btn-primary custom_white_letters',
+                        text: 'Columnas visibles',
+                    }
+                ],
+            });
+             
+            //Date range picker
+            $('#rango_fecha').datepicker({
+                language: "es",
+                format: "mm-yyyy",
+                viewMode: "months",
+                minViewMode: "months",
+                autoclose: true,
+                endDate: new Date(),
+            });
+
+        });
+    </script>
+
+{% endblock %}
+
+{% block footer_content_block %}
+
+
+{% endblock  %}

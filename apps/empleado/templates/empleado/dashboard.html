@@ -1,0 +1,48 @@
+{% extends 'base/base.html' %}
+{% load staticfiles %}
+{% load bootstrap3 %}
+
+{% block titulo_block %} BloomIPS | Dashboard{% endblock %}
+
+{% block title_content_block %}<strong>Dashboard</strong>{% endblock %}
+
+{% block css_block %}
+
+    <!-- Select2 -->
+    {{ form.media.css }}
+    <link rel="stylesheet" href="{% static 'css/css_personalizados.css' %}">
+
+    <style>
+
+        li > ul > li > a:hover {
+            color: grey !important;
+        }
+
+    .color_text {
+        color: #717171 !important;
+    }
+
+    </style>
+
+{% endblock %}
+
+{% block content_body_block %}
+
+    <div class="row">
+        {% include "menus_dashboard/menu_dashboard_base.html" %}
+    </div>
+
+{% endblock %}
+
+{% block js_block %}
+    {{ form.media.js }}
+
+    <script>
+
+    </script>
+{% endblock %}
+
+{% block footer_content_block %}
+
+
+{% endblock  %}

@@ -15,6 +15,10 @@
     <!-- Dropify -->
     <link rel="stylesheet" href="{% static 'dropify/css/dropify.css' %}">
 
+    <!-- bootstrap datepicker -->
+    <link rel="stylesheet"
+          href="{% static 'bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css' %}">
+
     <style>
 
     </style>
@@ -37,13 +41,10 @@
 
                 <div class="row">
                     <div class="col-sm-3 col-md-offset-1">
-                        <label class="control-label">Imagen</label>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-sm-3 col-md-offset-1">
                         {% bootstrap_field form.imagen layout="vertical" %}
+                    </div>
+                    <div class="col-sm-5 col-md-offset-2">
+                        {% bootstrap_field form.firma layout="vertical" %}
                     </div>
                 </div>
 
@@ -102,8 +103,16 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-md-10 col-md-offset-1">
+                    <div class="col-md-5 col-md-offset-1">
                         {% bootstrap_field form.username layout="vertical" %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-5 col-md-offset-1">
+                        {% bootstrap_field form.password1 layout="vertical" %}
+                    </div>
+                    <div class="col-md-5">
+                        {% bootstrap_field form.password2 layout="vertical" %}
                     </div>
                 </div>
             </div>
@@ -147,8 +156,32 @@
 
     <!-- Dropify -->
     <script src="{% static 'dropify/js/dropify.js' %}"></script>
+    <!-- bootstrap datepicker -->
+    <script src="{% static 'bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
 
     <script>
+        var opciones = [];
+
+        $("#id_cargo").change(function () {
+            $("#id_area").empty()
+            if ($("#id_cargo").val() == 'Terapeuta') {
+                for (i = 0; i < opciones.length; i++) {
+                    if (opciones[i].texto != 'Administrativa') {
+                        var newOption = new Option(opciones[i].texto, opciones[i].valor, false, false);
+                        $('#id_area').append(newOption).trigger('change');
+                        $("#id_area").prop('disabled', false);
+                    }
+                }
+            } else {
+                for (i = 0; i < opciones.length; i++) {
+                    if (opciones[i].texto == 'Administrativa') {
+                        var newOption = new Option(opciones[i].texto, opciones[i].valor, true, true);
+                        $('#id_area').append(newOption).trigger('change');
+                    }
+                }
+            }
+        });
+
         function setText() {
             //Información a mostrar
             document.getElementById("info_mostrar").innerHTML = "¿Está seguro que desea modificar el empleado?"
@@ -160,11 +193,47 @@
         }
 
 
-
         //Js del dropify
         $(document).ready(function () {
-            $dropify = $('.dropify').dropify();
+            $dropify = $('#id_imagen').dropify({
+                    defaultFile: '{% static 'logos/default-image.png' %}'
+                }
+            );
+            $dropify = $('#id_firma').dropify({
+                    defaultFile: '{% static 'logos/default-firm.png' %}'
+                }
+            );
+            $('#id_fecha_nacimiento').datepicker({
+                format: "dd/mm/yyyy",
+                autoclose: true
+            })
+
+            $("#id_area option").each(function () {
+                var dupla = {texto: $(this).text(), valor: $(this).val()};
+                opciones.push(dupla);
+            });
+
+            if ($("#id_area option:selected").text() == 'Administrativa') {
+                $("#id_area option").each(function () {
+                    if ($(this).text() != 'Administrativa') {
+                        $(this).remove()
+                    }
+                });
+            } else {
+                //$("#id_area").empty()
+                $("#id_area option").each(function () {
+                    if ($(this).text() == 'Administrativa') {
+                        $(this).remove()
+                    }
+                });
+            }
+
         });
 
     </script>
+{% endblock %}
+
+{% block footer_content_block %}
+
+
 {% endblock %}

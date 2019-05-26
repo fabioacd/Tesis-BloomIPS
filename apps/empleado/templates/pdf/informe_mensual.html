@@ -1,0 +1,53 @@
+{% extends 'base/base_pdf.html' %}
+
+{% block css_block %}
+    <style>
+        #info_cabecera {
+            border: 1px solid black;
+            border-radius: 8px;
+        }
+
+        #titulo {
+            text-align: center;
+        }
+
+        p {
+            font-size: 14px;
+        }
+    </style>
+{% endblock %}
+
+{% block title_block %}
+    <h1 id="titulo">INFORME MENSUAL</h1>
+    <div id="info_cabecera">
+        <div>
+            <strong>Fecha: </strong> {{ fecha }}
+            <br>
+            <strong>Nombre del terapeuta: </strong> {{ resumen.empleado.first_name }} {{ resumen.empleado.last_name }}
+            <br>
+            <strong>Paciente: </strong> {{ resumen.paciente }}
+            <strong>Área: </strong> {{ resumen.area }}
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block content_block %}
+
+    <table>
+        <thead>
+        <th> Descripción</th>
+        </thead>
+        <tbody>
+        <tr>
+            <td style="text-align: justify">
+
+                {{ resumen.descripcion | striptags |safe }}
+            </td>
+        </tr>
+        </tbody>
+
+
+    </table>
+
+{% endblock %}

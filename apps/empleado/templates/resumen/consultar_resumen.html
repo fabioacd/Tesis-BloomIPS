@@ -1,12 +1,11 @@
-{% extends 'base/base.html' %}
+{% extends 'base/base_tables.html' %}
 {% load bootstrap3 %}
 {% load staticfiles %}
 
 {% block titulo_block %} BloomIPS | Consultar informe mensual{% endblock %}
 
 {% block css_block %}
-
-    <link rel="stylesheet" href="{% static 'bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css' %}">
+    {{ block.super }}
 
 {% endblock %}
 
@@ -17,46 +16,27 @@
     <div class="row">
         <div class="col-md-10 col-md-offset-1">
             <div class="table-responsive">
-                <table id="example1" class="table table-bordered table-striped">
+                <table id="example1" class="table table-bordered table-striped my_datatable">
                     <thead>
                     <tr>
                         <th>Escrito por</th>
                         <th>Paciente</th>
-                        <th>Fecha</th>
-                        <th>Hora</th>
-                        <th>Descripción</th>
-                        <th>Modificar</th>
+                        <th class="search-date">Fecha</th>
+                        <th class="search-select">Área</th>
+                        <th class="search-select">Estado</th>
+                        <th class="no_search">Acciones</th>
                     </tr>
                     </thead>
                     <tbody>
-
-                    {% for resumen in resumenes %}
-                        <tr>
-                            <td> {{ resumen.empleado }}</td>
-                            <td> {{ resumen.paciente }}</td>
-                            <td> {{ resumen.fecha }}</td>
-                            <td> {{ resumen.hora }}</td>
-                            <td style="text-align:justify"> {{ resumen.descripcion }}</td>
-                            <td style="text-align:center">
-                                {% if resumen.revisado == False %}
-                                    <a href="{% url 'modificar_resumen' resumen.id %}"
-                                    class="btn btn-block btn-primary">Modificar</a>
-                                {% else %}
-                                    REVISADO
-                                {% endif %}
-                            </td>
-                        </tr>
-                    {% endfor %}
-
                     </tbody>
                     <tfoot>
                     <tr>
                         <th>Escrito por</th>
                         <th>Paciente</th>
-                        <th>Fecha</th>
-                        <th>Hora</th>
-                        <th>Descripción</th>
-                        <th>Modificar</th>
+                        <th>Mes</th>
+                        <th>Área</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
                     </tr>
                     </tfoot>
                 </table>
@@ -68,22 +48,43 @@
 {% endblock %}
 
 {% block js_block %}
-
-    <!-- DataTables -->
-    <script src="{% static 'bower_components/datatables.net/js/jquery.dataTables.min.js' %}"></script>
-    <script src="{% static 'bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
+    {{ block.super }}
 
     <script>
-         $(function () {
-            $('#example1').DataTable(
-                {
-                    "language": {
-                        "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Spanish.json"
-                    }
+        function procesar_datos(json) {
+            for (var i = 0; i < json.data.length; i++) {
+                var contenido = "";
+                var temporal = json.data[i][5];
+                if (temporal[0].opcion === 'modificar_resumen') {
+                    contenido += '<a href="' + temporal[0].url + '"class="btn-sm btn-block btn-primary" style="text-align: center">Modificar</a>'
                 }
-            );
+                if (temporal[0].opcion === 'ver_resumen') {
+                    contenido += '<a href="' + temporal[0].url + '"class="btn-sm btn-block btn-primary" style="text-align: center">Ver</a>'
+                }
+                json.data[i][5] = contenido;
+            }
+            return json.data
+        }
 
+        function obtener_datos(data) {
+            data.csrfmiddlewaretoken = '{{ csrf_token }}'
+
+        }
+
+        $(function () {
+            $('#rango_fecha').attr("autocomplete", "off");
+            iniciar_datatable("{% url 'ajax_filtro_consultar_resumen' %}", {
+                'actualizar_datos': obtener_datos,
+                'funcion_ajax': procesar_datos,
+                'tipo_peticion': 'POST'
             });
+            agregar_busqueda_columnas();
+        });
     </script>
+
+{% endblock %}
+
+{% block footer_content_block %}
+
 
 {% endblock %}
