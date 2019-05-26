@@ -1,4 +1,4 @@
-{% extends 'base/base.html' %}
+{% extends 'base/base_tables.html' %}
 {% load bootstrap3 %}
 {% load staticfiles %}
 
@@ -7,9 +7,12 @@
 {% block title_content_block %}<strong>Consultar paciente</strong>{% endblock %}
 
 {% block css_block %}
-
-    <link rel="stylesheet" href="{% static 'bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css' %}">
-
+    {{ block.super }}
+    <style>
+        #example1 {
+            width: 100% !important;
+        }
+    </style>
 {% endblock %}
 
 {% block content_body_block %}
@@ -24,34 +27,13 @@
                         <th>Nombres</th>
                         <th>Apellidos</th>
                         <th>Email</th>
-                        <th>Teléfono</th>
                         <th>Celular</th>
-                        <th>Dirección</th>
-                        <th>EPS</th>
-                        <th style="vertical-align: middle">Acciones</th>
+                        <th class="search-select">EPS</th>
+                        <th class="search-select">Estado</th>
+                        <th class="no_search" style="vertical-align: middle">Acciones</th>
                     </tr>
                     </thead>
                     <tbody>
-
-                    {% for paciente in pacientes %}
-                        <tr>
-                            <td> {{ paciente.identificacion }}</td>
-                            <td> {{ paciente.nombre }}</td>
-                            <td> {{ paciente.apellido }}</td>
-                            <td> {{ paciente.email }}</td>
-                            <td> {{ paciente.telefono }}</td>
-                            <td> {{ paciente.celular }}</td>
-                            <td> {{ paciente.direccion }}</td>
-                            <td> {{ paciente.eps }}</td>
-                            <td>
-                                <a  href="{% url 'ver_paciente' paciente.identificacion %}"
-                                   class="btn-sm btn-block bg-olive" style="text-align: center">Ver</a>
-                                <a href="{% url 'modificar_paciente' paciente.identificacion %}"
-                                   class="btn-sm btn-block btn-primary" style="text-align: center">Modificar</a>
-                            </td>
-                        </tr>
-                    {% endfor %}
-
                     </tbody>
                     <tfoot>
                     <tr>
@@ -59,10 +41,9 @@
                         <th>Nombres</th>
                         <th>Apellidos</th>
                         <th>Email</th>
-                        <th>Teléfono</th>
                         <th>Celular</th>
-                        <th>Dirección</th>
                         <th>EPS</th>
+                        <th>Estado</th>
                         <th>Acciones</th>
                     </tr>
                     </tfoot>
@@ -70,33 +51,45 @@
             </div>
         </div>
     </div><!--final div-->
-    <!--</div><!--box-body div-->
+    <!--</div>--><!--box-body div-->
 
 {% endblock %}
 
 {% block js_block %}
+    {{ block.super }}
     <!-- DataTables -->
-<script src="{% static 'bower_components/datatables.net/js/jquery.dataTables.min.js' %}"></script>
-<script src="{% static 'bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
+    <script src="{% static 'bower_components/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
 
-<script >
- $(function () {
-    $('#example1').DataTable(
-        {
-            "language": {
-                "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Spanish.json"
+    <script>
+        function procesar_datos(json) {
+            for (var i = 0; i < json.data.length; i++) {
+                var objs_botones = json.data[i][7];
+                var botones = '';
+                for (var j = 0; j < objs_botones.length; j++) {
+                    var btn_actual = objs_botones[j];
+                    botones += `<a href="${btn_actual.url}" class="btn-sm btn-block ${btn_actual.color}" style="text-align: center">${btn_actual.texto_boton}</a>`
+                }
+                json.data[i][7] = botones;
             }
+            return json.data
         }
-    );
 
-  });
-</script>
+        function obtener_datos(data) {
+            data.csrfmiddlewaretoken = '{{ csrf_token }}'
+        }
+
+        $(function () {
+            iniciar_datatable("{% url 'ajax_filtro_consultar_paciente' %}", {
+                'actualizar_datos': obtener_datos,
+                'funcion_ajax': procesar_datos,
+                'tipo_peticion': 'POST'
+            });
+            agregar_busqueda_columnas();
+        });
+    </script>
 
 {% endblock %}
 
-
-
 {% block footer_content_block %}
-
-
 {% endblock %}

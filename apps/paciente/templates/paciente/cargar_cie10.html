@@ -1,0 +1,42 @@
+{% extends 'base/base.html'%}
+{% load bootstrap3 %}
+{% load staticfiles %}
+
+{% block titulo_block %} BloomIPS | Carga masiva de diagnósticos cie10 {% endblock  %}
+
+{% block title_content_block %}<strong>Carga masiva de diagnósticos cie10</strong>{% endblock %}
+
+{% block css_block %}
+
+    <!-- Select2 -->
+    {{ form.media.css }}
+    <link rel="stylesheet" href="{% static 'css/css_personalizados.css' %}">
+
+{% endblock %}
+
+{% block content_body_block %}
+<form role="form" method="POST" enctype="multipart/form-data"> {% csrf_token %}
+    <div class="box-body">
+        <div class="form-group">
+            <div class="row">
+                <div class="col-xs-offset-1 col-md-offset-4">
+                    {% bootstrap_field form.carga_cie10 %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="box-footer">
+        <div class="row">
+            <div class="col-md-offset-5">
+                <button type="submit" class="btn btn-primary" id="upload_csv_btn">Cargar</button>
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock %}
+
+{% block js_block %}
+{% endblock %}
+
+{% block footer_content_block %}
+{% endblock %}

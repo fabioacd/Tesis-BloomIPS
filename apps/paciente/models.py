@@ -1,7 +1,9 @@
 from datetime import date, datetime
+from django.core.validators import FileExtensionValidator
 
 from django.db import models
 
+from utils.utils import directorio_archivos_paciente, directorio_archivos_extra_paciente
 # Create your models here.
 
 
@@ -18,7 +20,6 @@ class Eps(models.Model):
 class DiagnosticoCie10(models.Model):
     id_diagnostico = models.CharField(max_length=10, primary_key=True)
     descripcion = models.CharField(max_length=400)
-    grupo = models.CharField(max_length=200, blank=True)
 
     def __str__(self):
         nombre = self.id_diagnostico + ' - ' + self.descripcion
@@ -59,7 +60,7 @@ class Paciente(models.Model):
         ('Activo', 'Activo'),
     )
 
-    identificacion = models.CharField(max_length=11, primary_key=True)
+    identificacion = models.CharField(max_length=11, unique=True)
     eps = models.ForeignKey(Eps, on_delete=models.CASCADE)  # FORANEA
     nombre = models.CharField(max_length=50)
     apellido = models.CharField(max_length=50)
@@ -83,15 +84,24 @@ class Paciente(models.Model):
     diagnosticador = models.CharField(max_length=100)  # Especialista que diagnosticó
     ips_atencion = models.CharField(max_length=50)
     enfermedad_actual = models.CharField(max_length=1000)
-    nombre_responsable = models.CharField(max_length=50)
+    nombre_responsable = models.CharField(max_length=100)
     parentesco_responsable = models.CharField(max_length=30)
-    telefono_responsable = models.CharField(max_length=15)
-    evaluacion_inicial = models.CharField(max_length=1000, blank=True)
-    diagnosticos_cie10 = models.ManyToManyField(DiagnosticoCie10)
-    estado = models.CharField(max_length=30, choices=ESTADOS_PACIENTE_CHOICES)
+    telefono_responsable = models.CharField(max_length=10)
+    evaluacion_inicial = models.FileField(upload_to=directorio_archivos_paciente,
+                                          validators=[FileExtensionValidator(allowed_extensions=['pdf'])])
+    diagnosticos_cie10 = models.ManyToManyField(DiagnosticoCie10, related_name='diagnosticos_paciente', blank=True)
+    estado = models.CharField(max_length=30, choices=ESTADOS_PACIENTE_CHOICES, default='Activo')
 
     def __str__(self):
-        return self.identificacion
+        paciente = self.identificacion + ' - ' + self.nombre + ' ' + self.apellido
+        return paciente
+
+
+class ArchivosPaciente(models.Model):
+    descripcion = models.CharField(max_length=1000)
+    paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)  # FORANEA
+    archivo = models.FileField(upload_to=directorio_archivos_extra_paciente,
+                               validators=[FileExtensionValidator(allowed_extensions=['jpg', 'png', 'jpeg', 'pdf'])])
 
 
 class Familiar(models.Model):
@@ -119,8 +129,10 @@ class InformacionPadres(models.Model):
 
 
 class Entrada(models.Model):
-    empleado = models.ForeignKey('empleado.Empleado', on_delete=models.CASCADE)  # FORANEA
-    paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)  # FORANEA
-    fecha = models.DateField(default=date.today)
-    hora = models.TimeField(default=datetime.now())
+    empleado = models.ForeignKey('empleado.Empleado', on_delete=models.CASCADE, related_name='entradas_empleado')  # FORANEA
+    paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE, related_name='entradas_paciente')  # FORANEA
+    area = models.ForeignKey('empleado.Area', on_delete=models.CASCADE, related_name='entradas_area')  # FORANEA
+    fecha = models.DateField()
+    hora = models.TimeField()
     descripcion = models.CharField(max_length=3000)
+
