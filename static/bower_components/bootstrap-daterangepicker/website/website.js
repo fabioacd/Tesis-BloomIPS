@@ -72,14 +72,14 @@ $(document).ready(function() {
         options.locale = {
           format: 'MM/DD/YYYY',
           separator: ' - ',
-          applyLabel: 'Apply',
-          cancelLabel: 'Cancel',
-          fromLabel: 'From',
-          toLabel: 'To',
+          applyLabel: 'Aplicar',
+          cancelLabel: 'Cancelar',
+          fromLabel: 'Desde',
+          toLabel: 'Hasta',
           customRangeLabel: 'Custom',
           weekLabel: 'W',
-          daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr','Sa'],
-          monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+          daysOfWeek: ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie','Sab'],
+          monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
           firstDay: 1
         };
       }

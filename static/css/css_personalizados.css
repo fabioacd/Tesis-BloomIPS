@@ -1,4 +1,4 @@
-.select2 {
+.select2, table {
     width: 100% !important;
 }
 
@@ -32,4 +32,13 @@
 
 #id_ul_seguimientos{
     background-color: #3c8dbc !important;
+}
+
+.custom_white_letters{
+    background-color: #3c8dbc;
+    color: white;
+}
+
+.centrado{
+    text-align: center;
 }
