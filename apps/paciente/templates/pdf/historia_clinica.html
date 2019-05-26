@@ -1,0 +1,58 @@
+{% extends 'base/base_pdf.html' %}
+
+{% block css_block %}
+    <style>
+        #info_cabecera {
+            border: 1px solid black;
+            border-radius: 8px;
+        }
+
+        #titulo {
+            text-align: center;
+        }
+    </style>
+{% endblock %}
+
+{% block title_block %}
+    <h1 id="titulo">HISTORIA CLÍNICA</h1>
+    <div id="info_cabecera">
+        <div><strong>Nombre del paciente: </strong> {{ paciente.nombre }} {{ paciente.apellido }}
+            <br>
+            <strong>Identificación: </strong> {{ paciente.identificacion }}
+            <strong>Sexo: </strong> {{ paciente.genero }}
+            <strong>Edad: </strong> {{ edad_paciente }}
+            <br>
+            <strong>Enfermedad actual: </strong> {{ paciente.enfermedad_actual }}
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block content_block %}
+
+    <table>
+        <thead>
+        <th> Evolución</th>
+        <tbody>
+
+        {% for  entrada in entradas_paciente %}
+            <tr>
+                <td>
+
+                    {{ entrada.hora }} - {{ entrada.fecha }}
+
+                    <div>
+                        <strong>  {{ entrada.area }}: </strong>
+                        {{ entrada.descripcion |safe }}
+                        <img src="{{ entrada.empleado.firma }}" width="150" height="50">
+                        <h6>{{ entrada.empleado.first_name | upper }} {{ entrada.empleado.last_name | upper }}</h6>
+                    </div>
+                </td>
+            </tr>
+
+        {% endfor %}
+        </tbody>
+        </thead>
+
+    </table>
+{% endblock %}

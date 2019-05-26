@@ -1,0 +1,126 @@
+{% extends 'base/base_tables.html' %}
+{% load bootstrap3 %}
+{% load staticfiles %}
+
+{% block titulo_block %} BloomIPS | Agregar archivos paciente {% endblock %}
+
+{% block title_content_block %}<strong>Agregar archivos paciente </strong>{% endblock %}
+
+{% block css_block %}
+    {{ block.super }}
+    {{ form.media.css }}
+    <link rel="stylesheet" href="{% static 'css/css_personalizados.css' %}">
+
+    <style>
+
+        #btn_guardar {
+            margin: 25px 0px;
+        }
+    </style>
+
+{% endblock %}
+
+{% block content_body_block %}
+
+    <form role="form" method="POST" enctype="multipart/form-data"> {% csrf_token %}
+        <div class="box-body">
+            <div class="form-group">
+
+                <div class="row">
+                    <div class="col-md-5 col-md-offset-1">
+                        {% bootstrap_field form.paciente layout="vertical" %}
+                    </div>
+
+                    <div class="col-md-5 div_archivo">
+                        {% bootstrap_field form.archivo layout="vertical" %}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-8 col-md-offset-1 div_nombre_archivo">
+                        {% bootstrap_field form.descripcion layout="vertical" %}
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+        <div class="box-footer">
+            <button id="btn_guardar" type="submit" class="btn btn-primary"> Guardar</button>
+        </div>
+
+    </form>
+    <br>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table-responsive">
+                <table id="tabla_archivos_paciente" class="table table-bordered table-striped">
+                    <thead>
+                    <tr>
+                        <th style="text-align: center">Descripción</th>
+                        <th style="vertical-align: middle;text-align: center">Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody id="body_tabla_archivos">
+
+                    <tr>
+                        <td style="text-align: center"> Seleccione un paciente para visualizar sus archivos
+                        </td>
+                        <td>
+
+                        </td>
+                    </tr>
+
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <th style="text-align: center">Descripción</th>
+                        <th style="vertical-align: middle;text-align: center">Acciones</th>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal-default">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Eliminar archivo paciente</h4>
+                </div>
+                <div class="modal-body">
+                    <p id="info_mostrar"> &hellip;</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cerrar</button>
+                    <button type="button" id="btn_eliminar_archivo" class="btn btn-primary">Guardar Cambios</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+{% endblock %}
+
+{% block footer_content_block %}
+{% endblock %}
+
+
+{% block js_block %}
+    {{ form.media.js }}
+    {{ block.super }}
+
+    <!-- CK Editor -->
+    <script src="{% static 'bower_components/ckeditor/ckeditor.js' %}"></script>
+
+    <script>
+
+        //Se obtienen los archivos desde el back y se envían a la variable global contenida en ArchivosPaciente
+        var archivos = {{ archivos|safe }};
+
+        ArchivosPaciente.init(archivos);
+    </script>
+{% endblock %}
