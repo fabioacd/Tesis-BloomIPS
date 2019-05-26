@@ -1,4 +1,4 @@
-{% extends 'base/base.html' %}
+{% extends 'base/base_tables.html' %}
 {% load bootstrap3 %}
 {% load staticfiles %}
 
@@ -8,11 +8,7 @@
 {% block title_content_block %}<strong>Consultar evento adverso</strong>{% endblock %}
 
 
-{% block css_block %}
 
-    <link rel="stylesheet" href="{% static 'bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css' %}">
-
-{% endblock %}
 
 
 {% block content_body_block %}
@@ -24,52 +20,13 @@
                 <tr>
                     <th style="text-align:justify" style="width: 5%">Implicado</th>
                     <th style="text-align:justify" style="width: 10%">Tipo de evento</th>
-                    <th style="text-align:center" style="width: 2%">Fecha</th>
+                    <th class="search-date" style="text-align:center" style="width: 2%">Fecha</th>
                     <th style="text-align:center" style="width: 30%">Lugar</th>
                     <th style="width: 30%">Descripción</th>
-                    <th style="vertical-align: middle">Acciones</th>
+                    <th class="no_search" style="vertical-align: middle">Acciones</th>
                 </tr>
                 </thead>
                 <tbody>
-
-                {% for evento in eventos %}
-                    <tr>
-                        <td> {{ evento.implicado }}</td>
-
-                        <td>
-                            <ul>
-                                {% for  tipos in evento.tipos_evento.all %}
-                                    <li>  {{ tipos.nombre }} </li>
-
-                                {% endfor %}
-                            </ul>
-
-                        </td>
-                        <td style="text-align:center"> {{ evento.fecha_ocurrencia }}</td>
-                        <td style="text-align:justify"> {{ evento.lugar }}</td>
-                        <td style="text-align:justify">  {{ evento.descripcion }}</td>
-                        <td>
-                            <a href="{% url 'modificar_evento' evento.id %}"
-                               class="btn-sm btn-block btn-primary" style="text-align: center"> Modificar </a>
-                            <a href="{% url 'agregar_seguimiento' evento.id %}"
-                               class="btn-sm btn-block bg-olive" style="text-align: center">Seguimiento </a>
-
-                            {% if evento.protocolo_londres %}
-
-                                <a href="{% url 'visualizar_protocolo' evento.id %}"
-                                   class="btn-sm btn-block bg-olive" style="text-align: center">Protocolo </a>
-
-                            {% else %}
-
-                                <a href="{% url 'registrar_protocolo' evento.id %}"
-                                   class="btn-sm btn-block bg-olive" style="text-align: center">Protocolo </a>
-                            {% endif %}
-                        </td>
-
-
-                    </tr>
-                {% endfor %}
-
                 </tbody>
                 <tfoot>
                 <tr>
@@ -86,24 +43,50 @@
     </div>
 
 {% endblock %}
-block
+
 {% block js_block %}
-
+    {{ block.super }}
     <!-- DataTables -->
-<script src="{% static 'bower_components/datatables.net/js/jquery.dataTables.min.js' %}"></script>
-<script src="{% static 'bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
+    <script src="{% static 'bower_components/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
 
-<script >
- $(function () {
-    $('#example1').DataTable(
-        {
-            "language": {
-                "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Spanish.json"
+    <script>
+        function procesar_datos(json) {
+            for (var i = 0; i < json.data.length; i++) {
+                var objs_botones = json.data[i][5];
+                var lista_tipos_evento = json.data[i][1];
+                var botones = '';
+                var tipos_evento = '<ul>';
+                for (var j = 0; j < lista_tipos_evento.length; j++) {
+                    var tipo_actual = lista_tipos_evento[j];
+                    tipos_evento += `<li>${tipo_actual}</li>`;
+                }
+                for (var k = 0; k < objs_botones.length; k++) {
+                    var btn_actual = objs_botones[k];
+                    botones += `<a href="${btn_actual.url}" class="btn-sm btn-block ${btn_actual.color}" style="text-align: center">${btn_actual.texto_boton}</a>`
+                }
+                tipos_evento += '</ul>';
+                json.data[i][1] = tipos_evento;
+                json.data[i][5] = botones;
             }
+            return json.data
         }
-    );
 
-  });
-</script>
+        function obtener_datos(data) {
+            data.csrfmiddlewaretoken = '{{ csrf_token }}'
+        }
 
+        $(function () {
+            iniciar_datatable("{% url 'ajax_filtro_consultar_evento' %}", {
+                'actualizar_datos': obtener_datos,
+                'funcion_ajax': procesar_datos,
+                'tipo_peticion': 'POST'
+            });
+            agregar_busqueda_columnas();
+        });
+    </script>
+
+{% endblock %}
+
+{% block footer_content_block %}
 {% endblock %}

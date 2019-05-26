@@ -2,14 +2,14 @@
 {% load bootstrap3 %}
 {% load staticfiles %}
 
-{% block titulo_block %} BloomIPS | Modificar evento adverso{% endblock %}
+{% block titulo_block %} BloomIPS | Registro de protocolo de Londres{% endblock %}
 
-{% block title_content_block %}<strong>Modificar evento adverso</strong>{% endblock %}
+{% block title_content_block %}<strong>Registro de protocolo de Londres</strong>{% endblock %}
 
 {% block css_block %}
 
     <!-- Select2 -->
-    {{ form.media.css }}
+    {{ form_protocolo.media.css }}
     <!-- bootstrap datepicker -->
     <link rel="stylesheet"
           href="{% static 'bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css' %}">
@@ -26,8 +26,14 @@
             <div class="form-group">
 
                 <div class="row">
-                    <div class="col-md-5 col-md-offset-1">
-                        <h4>Implicado al evento</h4>
+                    <div class="col-md-10 col-md-offset-1">
+                        {% bootstrap_field form_protocolo.clase_evento layout="vertical" %}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
+                        <h4>Proceso de investigación</h4>
                     </div>
                     <div class="col-md-10 col-md-offset-1">
                         <hr/>
@@ -35,48 +41,21 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-md-5 col-md-offset-1">
-                        {% bootstrap_field form.implicado layout="vertical" %}
-                    </div>
-
-
-                </div>
-
-                <div class="row">
-                    <div class="col-md-5 col-md-offset-1">
-                        <h4>Momento de la ocurrencia</h4>
-                    </div>
                     <div class="col-md-10 col-md-offset-1">
-                        <hr/>
+                        {% bootstrap_field form_protocolo.cronologia layout="vertical" %}
                     </div>
                 </div>
 
-
                 <div class="row">
-                    <div class="col-md-5 col-md-offset-1">
-                        <!-- time Picker -->
-                        <div class="bootstrap-timepicker">
-
-                            {% bootstrap_field form.hora layout="vertical" %}
-
-                        </div>
-                    </div>
-                    <div class="col-md-5">
-                        {% bootstrap_field form.fecha_ocurrencia layout="vertical" %}
-                        <!--</div>-->
+                    <div class="col-md-10 col-md-offset-1">
+                        {% bootstrap_field form_protocolo.acciones_inseguras layout="vertical" %}
                     </div>
                 </div>
 
-                {#                <div class= "row">#}
-                {#                    <div class="col-md-5 col-md-offset-1">#}
-                {#                        {% bootstrap_field form_evento_adverso.fecha_reporte layout="vertical" %}#}
-                {#                    </div>#}
-                {##}
-                {#                </div>#}
-
                 <div class="row">
-                    <div class="col-md-5 col-md-offset-1">
-                        <h4>Información del evento</h4>
+                    <div class="col-md-10 col-md-offset-1">
+                        <h4>Factores contributivos (Revise los factores que contribuyeron a la presencia de la acción
+                            insegura del incidente)</h4>
                     </div>
                     <div class="col-md-10 col-md-offset-1">
                         <hr/>
@@ -84,50 +63,74 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-md-5 col-md-offset-1">
-                        {% bootstrap_field form.clase_evento layout="vertical" %}
-                    </div>
-                    <div class=" col-md-5">
-                        {% bootstrap_field form.lugar layout="vertical" %}
+                    <div class="col-md-10 col-md-offset-1">
+                        {% bootstrap_field form_protocolo.factores_paciente layout="vertical" %}
                     </div>
                 </div>
-
                 <div class="row">
-                    <div class="col-md-5 col-md-offset-1">
-                        {% bootstrap_field form.tipos_evento layout="vertical" %}
+                    <div class="col-md-10 col-md-offset-1">
+                        {% bootstrap_field form_protocolo.factores_tecnologia layout="vertical" %}
                     </div>
-                    <div class=" col-md-5 ">
-                        {% bootstrap_field form.otro_tipo_evento layout="vertical" %}
+                </div>
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
+                        {% bootstrap_field form_protocolo.factores_individuo layout="vertical" %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
+                        {% bootstrap_field form_protocolo.factores_equipo layout="vertical" %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
+                        {% bootstrap_field form_protocolo.factores_ambiental layout="vertical" %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
+                        {% bootstrap_field form_protocolo.factores_organizacion layout="vertical" %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
+                        {% bootstrap_field form_protocolo.factores_institucional layout="vertical" %}
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-md-10 col-md-offset-1">
-                        {% bootstrap_field form.causa layout="vertical" %}
+                        <h4>Soluciones propuestas (¿Cómo reduciría la posibilidad de que este defecto se repita?)</h4>
                     </div>
-
+                    <div class="col-md-10 col-md-offset-1">
+                        <hr/>
+                    </div>
                 </div>
 
                 <div class="row">
                     <div class="col-md-10 col-md-offset-1">
-                        {% bootstrap_field form.descripcion layout="vertical" %}
+                        {% bootstrap_field form_protocolo.actividades layout="vertical" %}
                     </div>
-
                 </div>
 
                 <div class="row">
                     <div class="col-md-10 col-md-offset-1">
-                        {% bootstrap_field form.acciones_realizadas layout="vertical" %}
+                        {% bootstrap_field form_protocolo.seguimiento layout="vertical" %}
                     </div>
+                </div>
 
+                <div class="row">
+                    <div class="col-md-5 col-md-offset-1 hidden">
+                        {% bootstrap_field form_protocolo.responsable layout="vertical" %}
+                    </div>
                 </div>
 
                 <div class="box-footer">
                     <button type="button" class="btn btn-primary" data-target="#modal-default" onclick="setText()"
-                    >Modificar</button>
+                    >Guardar
+                    </button>
 
                 </div>
-
 
                 <!-- Modal -->
                 <div class="modal fade" id="modal-default">
@@ -136,7 +139,7 @@
                             <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span></button>
-                                <h4 class="modal-title">Modificar evento adverso</h4>
+                                <h4 class="modal-title">Registrar protocolo de Londres</h4>
                             </div>
                             <div class="modal-body">
                                 <p id="info_mostrar"> &hellip;</p>
@@ -144,13 +147,14 @@
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cerrar
                                 </button>
-                                <button type="submit" class="btn btn-primary" >Modificar</button>
+                                <button type="submit" class="btn btn-primary" onclick="cerrarModal()">Registrar</button>
                             </div>
                         </div>
                         <!-- /.modal-content -->
                     </div>
                     <!-- /.modal-dialog -->
                 </div>
+
 
             </div>
         </div>
@@ -160,37 +164,33 @@
 
 {% block js_block %}
 
-
     <!-- bootstrap datepicker -->
     <script src="{% static 'bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
     <!-- bootstrap time picker -->
     <script src="{% static 'plugins/timepicker/bootstrap-timepicker.min.js' %}"></script>
-    {{ form.media.js }}
+    {{ form_protocolo.media.js }}
+
     <script>
-        //Date picker
-        $('#id_fecha_ocurrencia').datepicker({
-            format: "dd/mm/yyyy",
-            autoclose: true
-        })
 
-        //Timepicker
-        $('#id_hora').timepicker({
-            showInputs: false,
-            minuteStep: 1,
-            secondStep: 1,
-            showMeridian: false,
-        })
-
-
+        //Inicialmente se esconde el botón de volver
+        //document.getElementById("btn-volver").style.display = "show";
 
         function setText() {
             //Información a mostrar
             {#document.getElementById("info_mostrar").innerHTML = "¿Está seguro que desea registrar el implicado?"#}
-            document.getElementById("info_mostrar").innerHTML = "¿Está seguro que desea modificar el evento adverso?"
+            document.getElementById("info_mostrar").innerHTML = "¿Está seguro que desea registrar el protocolo del evento?"
 
             $("#modal-default").modal('toggle');
         }
 
+        function cerrarModal() {
+            $("#modal-default .close").click()
+        }
+
+        $(function setEmpleado() {
+            var empleado = '{{ user.id }}'
+            $("#id_responsable").val(empleado)
+        });
 
 
     </script>

@@ -153,7 +153,10 @@
 {% block js_block %}
 
     <!-- bootstrap datepicker -->
+    <script src="{% static 'bower_components/moment/min/moment-with-locales.min.js' %}"></script>
     <script src="{% static 'bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+    <script src="{% static 'bower_components/bootstrap-datepicker/js/locales/bootstrap-datepicker.es.js' %}"
+            charset="UTF-8"></script>
     <!-- bootstrap time picker -->
     <script src="{% static 'plugins/timepicker/bootstrap-timepicker.min.js' %}"></script>
     {{ form_evento_adverso.media.js }}
@@ -162,20 +165,18 @@
         //Date picker
         $('#id_fecha_ocurrencia').datepicker({
             format: "dd/mm/yyyy",
-            autoclose: true
-        })
+            autoclose: true,
+            language: "es",
+            endDate: new Date()
+        });
 
         //Timepicker
         $('#id_hora').timepicker({
             showInputs: false,
             minuteStep: 1,
             secondStep: 1,
-            showMeridian: false,
-        })
-
-        {#//Poner invisible el empleadoo#}
-        {#$("#id_empleado").hide();#}
-
+            showMeridian: false
+        });
         function setDefaultDate() {
             var date = new Date();
 
@@ -193,18 +194,18 @@
 
         function setText() {
             //Información a mostrar
-            document.getElementById("info_mostrar").innerHTML = "¿Está seguro que desea registrar el evento adverso?"
+            document.getElementById("info_mostrar").innerHTML = "¿Está seguro que desea registrar el evento adverso?";
             $("#modal-default").modal('toggle');
         }
 
         function cerrarModal(){
-            $("#id_empleado").show()
-            $("#modal-default .close").click()
+            $("#id_empleado").show();
+            $("#modal-default .close").click();
         }
         
         $(function setEmpleado() {
-            var empleado = '{{ user.id }}'
-            $("#id_empleado").val(empleado)
+            var empleado = '{{ user.id }}';
+            $("#id_empleado").val(empleado);
         });
         
 
@@ -214,4 +215,9 @@
     </script>
 
 {% endblock %}
+
+{% block footer_content_block %}
+
+
+{% endblock  %}
 

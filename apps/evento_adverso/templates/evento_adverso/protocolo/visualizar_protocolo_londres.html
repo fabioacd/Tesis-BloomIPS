@@ -26,8 +26,23 @@
             <div class="form-group">
 
                 <div class="row">
-                    <div class="col-md-5 col-md-offset-1">
+                    <div class="col-md-10 col-md-offset-1">
                         <h4>Visualización de protocolo de Londres</h4>
+                    </div>
+                    <div class="col-md-10 col-md-offset-1">
+                        <hr/>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
+                        {% bootstrap_field form_protocolo.clase_evento layout="vertical" %}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
+                        <h4>Proceso de investigación</h4>
                     </div>
                     <div class="col-md-10 col-md-offset-1">
                         <hr/>
@@ -45,6 +60,16 @@
                         {% bootstrap_field form_protocolo.acciones_inseguras layout="vertical" %}
                     </div>
                 </div>
+
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
+                        <h4>Factores contributivos (Revise los factores que contribuyeron a la presencia de la acción insegura del incidente)</h4>
+                    </div>
+                    <div class="col-md-10 col-md-offset-1">
+                        <hr/>
+                    </div>
+                </div>
+
                 <div class="row">
                     <div class="col-md-10 col-md-offset-1">
                         {% bootstrap_field form_protocolo.factores_paciente layout="vertical" %}
@@ -81,11 +106,46 @@
                     </div>
                 </div>
 
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
+                        <h4>Soluciones propuestas (¿Cómo reduciría la posibilidad de que este defecto se repita?)</h4>
+                    </div>
+                    <div class="col-md-10 col-md-offset-1">
+                        <hr/>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-5 col-md-offset-1">
+                        {% bootstrap_field form_protocolo.responsable layout="vertical" %}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-5 col-md-offset-1">
+                        {% bootstrap_field form_protocolo.fecha_solucion layout="vertical" %}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
+                        {% bootstrap_field form_protocolo.actividades layout="vertical" %}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
+                        {% bootstrap_field form_protocolo.seguimiento layout="vertical" %}
+                    </div>
+                </div>
+
+
+
 
                 <div class="box-footer">
-                    <button type="submit" class="btn btn-primary" data-target="#modal-default" onclick="setText()"
+                    <a type="button" class="btn btn-primary" data-target="#modal-default" href="/evento_adverso/consultar_evento_adverso/"
                     >Volver
-                    </button>
+                    </a>
 
                 </div>
 
@@ -108,9 +168,12 @@
 
     <script>
 
-        console.log("Entré al visualizar")
-
     </script>
 
 {% endblock %}
+
+{% block footer_content_block %}
+
+
+{% endblock  %}
 

@@ -27,6 +27,21 @@
 
                 <div class="row">
                     <div class="col-md-10 col-md-offset-1">
+                        {% bootstrap_field form_protocolo.clase_evento layout="vertical" %}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
+                        <h4>Proceso de investigación</h4>
+                    </div>
+                    <div class="col-md-10 col-md-offset-1">
+                        <hr/>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
                         {% bootstrap_field form_protocolo.cronologia layout="vertical" %}
                     </div>
                 </div>
@@ -36,6 +51,17 @@
                         {% bootstrap_field form_protocolo.acciones_inseguras layout="vertical" %}
                     </div>
                 </div>
+
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
+                        <h4>Factores contributivos (Revise los factores que contribuyeron a la presencia de la acción
+                            insegura del incidente)</h4>
+                    </div>
+                    <div class="col-md-10 col-md-offset-1">
+                        <hr/>
+                    </div>
+                </div>
+
                 <div class="row">
                     <div class="col-md-10 col-md-offset-1">
                         {% bootstrap_field form_protocolo.factores_paciente layout="vertical" %}
@@ -72,6 +98,32 @@
                     </div>
                 </div>
 
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
+                        <h4>Soluciones propuestas (¿Cómo reduciría la posibilidad de que este defecto se repita?)</h4>
+                    </div>
+                    <div class="col-md-10 col-md-offset-1">
+                        <hr/>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
+                        {% bootstrap_field form_protocolo.actividades layout="vertical" %}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
+                        {% bootstrap_field form_protocolo.seguimiento layout="vertical" %}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-5 col-md-offset-1 hidden">
+                        {% bootstrap_field form_protocolo.responsable layout="vertical" %}
+                    </div>
+                </div>
 
                 <div class="box-footer">
                     <button type="button" class="btn btn-primary" data-target="#modal-default" onclick="setText()"
@@ -87,7 +139,7 @@
                             <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span></button>
-                                <h4 class="modal-title">Registrar protocolo de Londres</h4>
+                                <h4 class="modal-title">Modificar protocolo de Londres</h4>
                             </div>
                             <div class="modal-body">
                                 <p id="info_mostrar"> &hellip;</p>
@@ -95,7 +147,7 @@
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cerrar
                                 </button>
-                                <button type="submit" class="btn btn-primary" onclick="cerrarModal()">Registrar</button>
+                                <button type="submit" class="btn btn-primary" onclick="cerrarModal()">Modificar</button>
                             </div>
                         </div>
                         <!-- /.modal-content -->
@@ -126,7 +178,7 @@
         function setText() {
             //Información a mostrar
             {#document.getElementById("info_mostrar").innerHTML = "¿Está seguro que desea registrar el implicado?"#}
-            document.getElementById("info_mostrar").innerHTML = "¿Está seguro que desea registrar el protocolo del evento?"
+            document.getElementById("info_mostrar").innerHTML = "¿Está seguro que desea modificar el protocolo?"
 
             $("#modal-default").modal('toggle');
         }
@@ -135,9 +187,18 @@
             $("#modal-default .close").click()
         }
 
-        console.log("Entré al registrar")
+        $(function setEmpleado() {
+            var empleado = '{{ user.id }}'
+            $("#id_responsable").val(empleado)
+        });
+
 
     </script>
 
 {% endblock %}
+
+{% block footer_content_block %}
+
+
+{% endblock  %}
 
