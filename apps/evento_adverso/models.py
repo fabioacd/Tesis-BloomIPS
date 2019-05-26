@@ -9,7 +9,7 @@ from apps.empleado.models import Empleado
 
 
 class ImplicadoEvento(models.Model):
-    id_implicado = models.CharField(max_length=11)  # La PK es autoincrementable
+    id_implicado = models.CharField(max_length=11, unique=True)  # La PK es autoincrementable
     nombre = models.CharField(max_length=50)
     seguridad_social = models.CharField(max_length=100)
     edad = models.IntegerField(
@@ -18,7 +18,7 @@ class ImplicadoEvento(models.Model):
      )
 
     def __str__(self):
-        return self.nombre
+        return self.nombre + ' - ' + self.id_implicado
 
 
 class ClaseEventoAdverso(models.Model):
@@ -43,7 +43,6 @@ class EventoAdverso(models.Model):
         ('EA prevenible', 'EA prevenible'),
         ('EA NO prevenible', 'EA NO prevenible'),
         ('Incidente', 'Incidente'),
-        ('Complicacion', 'Complicación'),
     )
 
     implicado = models.ForeignKey(ImplicadoEvento, on_delete=models.CASCADE)  # FORANEA
@@ -61,19 +60,6 @@ class EventoAdverso(models.Model):
 
 
 class ProtocoloLondres(models.Model):
-    '''
-
-    EN EL TEMPLATE
-    <ul class=dropdown....
-        {% if not evento.protocolo_londres %}
-            <li class=option>
-                <a href="{% url RUTA_CREAR_PROTOCOLO_LONDRES evento_id=evento.id %}">iniciar protocolo de londres<>
-            <li>
-        {% endif %}
-    </ul>
-    '''
-    def __str__(self):
-        return self.cronologia
 
     evento_adverso = models.OneToOneField(EventoAdverso, on_delete=models.CASCADE, related_name='protocolo_londres',
                                           primary_key=True)  # Solo un protocolo de Londres
@@ -87,6 +73,11 @@ class ProtocoloLondres(models.Model):
     factores_ambiental = models.CharField(max_length=2000)
     factores_organizacion = models.CharField(max_length=2000)
     factores_institucional = models.CharField(max_length=2000)
+
+    fecha_solucion = models.DateField(default=date.today, blank=True)
+    actividades = models.CharField(max_length=3000)
+    seguimiento = models.CharField(max_length=3000)
+    responsable = models.ForeignKey('empleado.Empleado', on_delete=models.CASCADE)  # FORANEA
 
 
 class SeguimientoEvento(models.Model):

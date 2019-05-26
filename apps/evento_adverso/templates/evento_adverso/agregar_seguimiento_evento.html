@@ -2,9 +2,9 @@
 {% load bootstrap3 %}
 {% load staticfiles %}
 
-{% block titulo_block %} BloomIPS | Registro de seguimiento a evento adverso{% endblock %}
+{% block titulo_block %} BloomIPS | Seguimiento a evento adverso{% endblock %}
 
-{% block title_content_block %}<strong>Registro de seguimiento a evento adverso</strong>{% endblock %}
+{% block title_content_block %}<strong>Seguimiento a evento adverso</strong>{% endblock %}
 
 {% block css_block %}
 
@@ -106,39 +106,56 @@
         <div class="box-body">
             <div class="form-group">
 
-                <div class="row">
-                    <div class="col-md-5" id="div-seguimientos">
-                        <ul class='timeline' id="ul-seguimientos">
+                {% if user.cargo == "Coordinador" or user.cargo == "Administrador" %}
+                    <div class="row">
+                        <div class="col-md-5" id="div-seguimientos">
+                            <ul class='timeline' id="ul-seguimientos">
 
 
-                        </ul>
-                    </div>
-                    <div class="col-md-7">
-
-                        <div class="row">
-                            <div class="col-md-5 col-md-offset-1" >
-                                <h4>Descripción del seguimiento</h4>
-                            </div>
-                            <div class="col-md-10 col-md-offset-1">
-                                <hr/>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-10 col-md-offset-1">
-                                {% bootstrap_field form.descripcion layout="vertical" %}
-                                {% bootstrap_field form.fecha layout="vertical" %}
-                            </div>
+                            </ul>
                         </div>
 
+                        <div class="col-md-7">
+
+                            <div class="row">
+                                <div class="col-md-5 col-md-offset-1">
+                                    <h4>Descripción del seguimiento</h4>
+                                </div>
+                                <div class="col-md-10 col-md-offset-1">
+                                    <hr/>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-10 col-md-offset-1">
+                                    {% bootstrap_field form.descripcion layout="vertical" %}
+                                    {% bootstrap_field form.fecha layout="vertical" %}
+                                </div>
+                            </div>
+
+                        </div>
                     </div>
-                </div>
 
 
-                <div class="box-footer" align="center">
-                    <button type="button" class="btn btn-primary" data-target="#modal-default" onclick="setText()">
-                        Registrar
-                    </button>
-                </div>
+                    <div class="box-footer" align="center">
+                        <button type="button" class="btn btn-primary" data-target="#modal-default" onclick="setText()">
+                            Registrar
+                        </button>
+                    </div>
+                {% else %}
+                    <div class="row">
+                        <div class="col-md-12" id="div-seguimientos">
+                            <ul class='timeline' id="ul-seguimientos">
+
+
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="box-footer" align="center">
+                        <a type="button" class="btn btn-primary"
+                           href="/evento_adverso/consultar_evento_adverso/">Volver</a>
+                    </div>
+                {% endif %}
+
 
                 <!-- Modal -->
                 <div class="modal fade" id="modal-default">
@@ -203,7 +220,7 @@
             //Se crea el ajax
             $.ajax({
 
-               type:"POST",
+                type: "POST",
                 data: {desc: myDescripcion, fecha: myFecha},
                 url: "{% url 'agregar_seguimientos_ajax'%}",
                 dataType: 'json',
@@ -216,7 +233,6 @@
         //Para traer todos los seguimientos realizados al mismo evento
         $(function () {
             id_evento = {{ evento.id }};
-            console.log("Es este el evento: " + id_evento);
 
             //Limpia el div
             $("#ul-seguimientos").append("")
@@ -228,7 +244,6 @@
                 success: function (data) {
                     var json = JSON.parse(data)
                     var json_size = Object.keys(json).length;
-                    console.log("Cantidad de seguimientos realizados: " + json_size)
 
                     //En caso de que hayan seguimientos..
 
@@ -312,5 +327,11 @@
     </script>
 
 {% endblock %}
+
+
+{% block footer_content_block %}
+
+
+{% endblock  %}
 
 
