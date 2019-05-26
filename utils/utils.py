@@ -9,7 +9,7 @@ import datetime, calendar
 from io import BytesIO
 from xhtml2pdf import pisa
 
-from bloomips.settings import MEDIA_URL, MEDIA_ROOT, BASE_DIR
+from bloom_tesis.settings import MEDIA_URL, MEDIA_ROOT, BASE_DIR
 
 
 def link_callback(uri, rel):
