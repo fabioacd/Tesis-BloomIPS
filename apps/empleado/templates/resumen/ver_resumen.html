@@ -1,0 +1,66 @@
+{% extends 'base/base.html' %}
+{% load bootstrap3 %}
+{% load staticfiles %}
+
+{% block titulo_block %} BloomIPS | Ver informe mensual{% endblock %}
+
+{% block title_content_block %}<strong>Ver informe mensual</strong>{% endblock %}
+
+{% block css_block %}
+    <!-- daterange picker -->
+    <link rel="stylesheet" href="{% static 'bower_components/bootstrap-daterangepicker/daterangepicker.css' %}">
+
+{% endblock %}
+
+{% block content_body_block %}
+    <form role="form" method="POST" enctype="multipart/form-data"> {% csrf_token %}
+        <div class="box-body">
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Mes: <span style="font-weight: normal;">{{ resumen.get_mes }}</span></label>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label>Paciente: <span style="font-weight: normal;">{{ resumen.paciente }}</span></label>
+                    </div>
+                    <div class="col-md-4">
+                        <label>Área: <span style="font-weight: normal;">{{ resumen.area }}</span></label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        {% bootstrap_field form.descripcion layout="vertical" %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+{% endblock %}
+
+{% block js_block %}
+    <!-- date-range-picker -->
+    <script src="{% static 'bower_components/moment/min/moment.min.js' %}"></script>
+    <script src="{% static 'bower_components/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+    <!-- bootstrap datepicker -->
+    <script src="{% static 'bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+    <!-- CK Editor -->
+    <script src="{% static 'bower_components/ckeditor/ckeditor.js' %}"></script>
+    <script>
+
+        $(function () {
+            // Replace the <textarea id="editor1"> with a CKEditor
+            // instance, using default configuration.
+            CKEDITOR.replace('editor1')
+        })
+
+
+    </script>
+
+{% endblock %}
+
+{% block footer_content_block %}
+
+
+{% endblock %}

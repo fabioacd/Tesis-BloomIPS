@@ -2,9 +2,9 @@
 {% load bootstrap3 %}
 {% load staticfiles %}
 
-{% block titulo_block %} BloomIPS | Modificar informe mensual{% endblock %}
+{% block titulo_block %} BloomIPS | Agregar informe mensual especifico{% endblock %}
 
-{% block title_content_block %}<strong>Modificar informe mensual</strong>{% endblock %}
+{% block title_content_block %}<strong>Agregar informe mensual especifico</strong>{% endblock %}
 
 {% block css_block %}
     {{ form.media.css }}
@@ -39,7 +39,7 @@
                                         <i class='fa fa-sticky-note-o bg-blue'></i>
                                         <div class='timeline-item'>
                                             <span class='time'><i class='fa fa-clock-o'></i> {{ entrada.hora }}</span>
-                                            <h3 class='timeline-header'><a href='#'>Entrada Numero 1</a></h3>
+                                            <h3 class='timeline-header'><a href='#'>Registrada por: {{ entrada.empleado }} - Área: {{ entrada.area }}</a></h3>
                                             <div class='timeline-body'>
                                                 {{ entrada.descripcion | safe }}
                                             </div>
@@ -53,24 +53,32 @@
 
                     </div>
                     <div class="col-md-6 ">
-                        <div class="row ">
+                        <div class="row">
                             <div class="col-md-6">
-                                <div class="">
-                                    <label>Creado por: <span
-                                            style="font-weight: normal;">{{ form.instance.empleado }} </span></label>
-                                </div>
+                                {% bootstrap_field form.empleado layout="vertical" %}
                             </div>
-                            <div class="col-md-6 form-group">
-                                <label>Área: <span style="font-weight: normal;">{{ form.instance.area }} </span></label>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Área: </label>
+                                    <br>
+                                    <span>{{ content_informe.area }} </span>
+                                </div>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6 form-group">
-                                <label>Paciente: <span style="font-weight: normal;">{{ paciente }} </span></label>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Paciente: </label>
+                                    <br>
+                                    <span>{{ content_informe.paciente }} </span>
+                                </div>
                             </div>
-                            <div class="col-md-6 form-group">
-                                <label>Mes: <span
-                                        style="font-weight: normal;">{{ form.instance.get_mes }} </span></label>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Mes: </label>
+                                    <br>
+                                    <span>{{ content_informe.mes }} </span>
+                                </div>
                             </div>
                         </div>
                         <div class="row">
@@ -90,7 +98,7 @@
             </div>
         </div>
         <div class="box-footer">
-            <button type="button" class="btn btn-primary" onclick="setText()">Modificar</button>
+            <button type="button" class="btn btn-primary" onclick="setText()">Guardar</button>
         </div>
 
 
@@ -108,7 +116,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cerrar</button>
-                        <button type="submit" class="btn btn-primary" onclick="cerrarModal()">Modificar</button>
+                        <button type="submit" class="btn btn-primary" onclick="cerrarModal()">Registrar</button>
                     </div>
                 </div>
                 <!-- /.modal-content -->
@@ -129,7 +137,7 @@
 
         function setText() {
             //Información a mostrar
-            document.getElementById("info_mostrar").innerHTML = "¿Está seguro que desea modificar el informe mensual?"
+            document.getElementById("info_mostrar").innerHTML = "¿Está seguro que desea registrar el informe mensual?"
             $("#modal-default").modal('toggle');
         }
 

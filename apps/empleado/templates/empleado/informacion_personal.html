@@ -1,16 +1,20 @@
 {% extends 'base/base.html' %}
-{% load bootstrap3 %}
 {% load staticfiles %}
+{% load bootstrap3 %}
 
-{% block titulo_block %} BloomIPS | Registrar empleado{% endblock %}
+{% block titulo_block %} BloomIPS | Empleado{% endblock %}
 
-{% block title_content_block %}<strong>Registrar empleado</strong>{% endblock %}
+{% block title_content_block %}<strong>Informacion personal</strong>{% endblock %}
 
 {% block css_block %}
 
     <!-- Select2 -->
     {{ form.media.css }}
     <link rel="stylesheet" href="{% static 'css/css_personalizados.css' %}">
+
+    <!-- bootstrap datepicker -->
+    <link rel="stylesheet"
+          href="{% static 'bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css' %}">
 
     <!-- Dropify -->
     <link rel="stylesheet" href="{% static 'dropify/css/dropify.css' %}">
@@ -21,87 +25,64 @@
 
 {% endblock %}
 
-
 {% block content_body_block %}
     <form role="form" method="POST" enctype="multipart/form-data"> {% csrf_token %}
         <div class="box-body">
             <div class="form-group">
 
-                <div class="row">
-                    <div class="col-md-5 col-md-offset-1">
-                        <h4> Informacion personal</h4>
+                <div class="row ">
+                    <div class="col-md-4 col-md-offset-4">
+                        {% bootstrap_field form.imagen layout="vertical" %}
                     </div>
+                </div>
+                <div class="row">
                     <div class="col-md-10 col-md-offset-1">
                         <hr/>
                     </div>
                 </div>
-
-                <div class="row">
-                    <div class="col-sm-3 col-md-offset-1">
-                        {% bootstrap_field form.imagen layout="vertical" %}
-                    </div>
-                    <div class="col-sm-5 col-md-offset-2">
-                        {% bootstrap_field form.firma layout="vertical" %}
-                    </div>
-                </div>
-
-                <div class="row">
+                <div class="row ">
                     <div class="col-md-5 col-md-offset-1">
                         {% bootstrap_field form.first_name layout="vertical" %}
                     </div>
-                    <div class="col-md-5">
+                    <div class="col-md-5 ">
                         {% bootstrap_field form.last_name layout="vertical" %}
                     </div>
                 </div>
-
-                <div class="row">
+                <div class="row ">
                     <div class="col-md-5 col-md-offset-1">
                         {% bootstrap_field form.fecha_nacimiento layout="vertical" %}
                     </div>
-                    <div class="col-md-5">
+                    <div class="col-md-5 ">
                         {% bootstrap_field form.direccion layout="vertical" %}
                     </div>
                 </div>
-
-                <div class="row">
+                <div class="row ">
                     <div class="col-md-5 col-md-offset-1">
                         {% bootstrap_field form.telefono layout="vertical" %}
                     </div>
-                    <div class="col-md-5">
+                    <div class="col-md-5 ">
                         {% bootstrap_field form.celular layout="vertical" %}
                     </div>
                 </div>
-
-                <div class="row">
-                    <div class="col-md-5 col-md-offset-1">
-                        {% bootstrap_field form.cargo layout="vertical" %}
-                    </div>
-                    <div class="col-md-5">
-                        {% bootstrap_field form.area layout="vertical" %}
-                    </div>
-                </div>
-
-                <div class="row">
+                <div class="row ">
                     <div class="col-md-5 col-md-offset-1">
                         {% bootstrap_field form.email layout="vertical" %}
                     </div>
                 </div>
-
                 <div class="row">
-                    <div class="col-md-5 col-md-offset-1">
-                        <h4> Información de inicio de sesion</h4>
-                    </div>
                     <div class="col-md-10 col-md-offset-1">
                         <hr/>
                     </div>
-                </div>
+                    <div class="col-md-5 col-md-offset-1">
+                        <h4> Modificacion de contraseña</h4><br>
+                    </div>
 
+                </div>
                 <div class="row">
                     <div class="col-md-5 col-md-offset-1">
-                        {% bootstrap_field form.username layout="vertical" %}
+                        {% bootstrap_field form.pass_actual layout="vertical" %}
                     </div>
                 </div>
-
                 <div class="row">
                     <div class="col-md-5 col-md-offset-1">
                         {% bootstrap_field form.password1 layout="vertical" %}
@@ -114,11 +95,9 @@
         </div>
         <div class="box-footer">
             <button type="button" class="btn btn-primary" data-target="#modal-default" onclick="setText()"
-                    type="button">Guardar
+                    type="button">Modificar
             </button>
         </div>
-
-
         <!-- Modal -->
         <div class="modal fade" id="modal-default">
             <div class="modal-dialog">
@@ -140,43 +119,23 @@
             </div>
             <!-- /.modal-dialog -->
         </div>
-
     </form>
 {% endblock %}
-
 
 {% block js_block %}
     {{ form.media.js }}
 
+
+
     <!-- Dropify -->
     <script src="{% static 'dropify/js/dropify.js' %}"></script>
-
+    <!-- bootstrap datepicker -->
+    <script src="{% static 'bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
     <script>
-        var opciones = []; //Variable para almacenar las opciones del select de areas
-        $("#id_cargo").change(function () {
-            $("#id_area").empty()
-            if ($("#id_cargo").val() == 'Terapeuta') {
-                for (i = 0; i < opciones.length; i++) {
-                    if (opciones[i].texto != 'Administrativa') {
-                        var newOption = new Option(opciones[i].texto, opciones[i].valor, false, false);
-                        $('#id_area').append(newOption).trigger('change');
-                        $("#id_area").prop('disabled', false);
-                    }
-                }
-            } else if($("#id_cargo").val()) {
-                for (i = 0; i < opciones.length; i++) {
-                    if (opciones[i].texto == 'Administrativa') {
-                        var newOption = new Option(opciones[i].texto, opciones[i].valor, true, true);
-                        $('#id_area').append(newOption).trigger('change');
-                        $("#id_area").prop('disabled', false);
-                    }
-                }
-            }
-        });
-
+        //Date picker
         function setText() {
             //Información a mostrar
-            document.getElementById("info_mostrar").innerHTML = "¿Está seguro que desea registrar el empleado?"
+            document.getElementById("info_mostrar").innerHTML = "¿Está seguro que desea modificar su informacion?"
             $("#modal-default").modal('toggle');
         }
 
@@ -184,24 +143,16 @@
             $("#modal-default .close").click()
         }
 
-
-        //Js del dropify
         $(document).ready(function () {
-            $dropify = $('#id_imagen').dropify({
-                        defaultFile: '{% static 'logos/default-image.png' %}'
-                }
-            );
-            $dropify = $('#id_firma').dropify({
-                        defaultFile: '{% static 'logos/default-firm.png' %}'
-                }
-            );
-            $("#id_area option").each(function () {
-                var dupla = {texto: $(this).text(), valor: $(this).val()};
-                opciones.push(dupla);
+            $dropify = $('.dropify').dropify({
+                    defaultFile: '{% static 'logos/default-image.png' %}'
+                });
+
+            $('#id_fecha_nacimiento').datepicker({
+                format: "dd/mm/yyyy",
+                autoclose: true
             })
         });
-
-
     </script>
 {% endblock %}
 
@@ -209,4 +160,3 @@
 
 
 {% endblock  %}
-

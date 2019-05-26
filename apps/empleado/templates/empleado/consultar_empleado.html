@@ -1,4 +1,4 @@
-{% extends 'base/base.html' %}
+{% extends 'base/base_tables.html' %}
 {% load bootstrap3 %}
 {% load staticfiles %}
 
@@ -6,19 +6,13 @@
 
 {% block title_content_block %}<strong>Consultar empleado</strong>{% endblock %}
 
-{% block css_block %}
-
-    <link rel="stylesheet" href="{% static 'bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css' %}">
-
-{% endblock %}
-
 
 {% block content_body_block %}
 
     <div class="row">
         <div class="col-md-12 ">
             <div class="table-responsive">
-                <table id="example1" class="table table-bordered table-striped">
+                <table id="example1" class="table table-bordered table-striped my_datatable">
                     <thead>
                     <tr>
                         <th>Identificación</th>
@@ -27,30 +21,10 @@
                         <th>Cargo</th>
                         <th>Área</th>
                         <th>Email</th>
-                        <th>Teléfono</th>
-                        <th>Celular</th>
-                        <th>Dirección</th>
-                        <th>Modificar</th>
+                        <th class="no_search">Modificar</th>
                     </tr>
                     </thead>
                     <tbody>
-
-                    {% for empleado in empleados %}
-                        <tr>
-                            <td> {{ empleado.username }}</td>
-                            <td> {{ empleado.first_name }}</td>
-                            <td> {{ empleado.last_name }}</td>
-                            <td> {{ empleado.cargo }}</td>
-                            <td> {{ empleado.area }}</td>
-                            <td> {{ empleado.email }}</td>
-                            <td> {{ empleado.telefono }}</td>
-                            <td> {{ empleado.celular }}</td>
-                            <td> {{ empleado.direccion }}</td>
-                            <td><a href="{% url 'modificar_empleado' empleado.username %}"
-                                   class="btn btn-block btn-primary">Modificar</a></td>
-                        </tr>
-                    {% endfor %}
-
                     </tbody>
                     <tfoot>
                     <tr>
@@ -60,9 +34,6 @@
                         <th>Cargo</th>
                         <th>Área</th>
                         <th>Email</th>
-                        <th>Teléfono</th>
-                        <th>Celular</th>
-                        <th>Dirección</th>
                         <th>Modificar</th>
                     </tr>
                     </tfoot>
@@ -75,22 +46,47 @@
 {% endblock %}
 
 {% block js_block %}
-
+    {{ block.super }}
     <!-- DataTables -->
     <script src="{% static 'bower_components/datatables.net/js/jquery.dataTables.min.js' %}"></script>
     <script src="{% static 'bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
 
     <script>
-         $(function () {
-            $('#example1').DataTable(
-                {
-                    "language": {
-                        "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Spanish.json"
-                    }
+        function procesar_datos(json) {
+            for (var i = 0; i < json.data.length; i++) {
+                var objs_botones = json.data[i][6];
+                var lista_area = json.data[i][4];
+                var botones = '';
+                var cargos = '<ul>';
+                for (var j = 0; j < lista_area.length; j++) {
+                    var area_actual = lista_area[j];
+                    cargos += `<li>${area_actual}</li>`
                 }
-            );
-
-            });
+                for (var k = 0; k < objs_botones.length; k++) {
+                    var btn_actual = objs_botones[k];
+                    botones += `<a href="${btn_actual.url}" class="btn-sm btn-block ${btn_actual.color}" style="text-align: center">${btn_actual.texto_boton}</a>`
+                }
+                cargos += '</ul>';
+                json.data[i][4] = cargos;
+                json.data[i][6] = botones;
+            }
+            return json.data
+        }
+        function obtener_datos(data) {
+            data.csrfmiddlewaretoken = '{{ csrf_token }}'
+        }
+        $(function () {
+            iniciar_datatable("{% url 'ajax_filtro_consultar_empleado' %}", {
+                'actualizar_datos': obtener_datos,
+                'funcion_ajax': procesar_datos,
+                'tipo_peticion': 'POST'
+            })
+        });
     </script>
 
 {% endblock %}
+
+{% block footer_content_block %}
+
+
+{% endblock  %}
