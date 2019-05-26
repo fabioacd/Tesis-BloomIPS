@@ -5,7 +5,8 @@ $(document).ready(function() {
 
         var reg = /[0-9]\b$/;
         texto = event.key;
-        if(texto == 'Tab' || texto =='Backspace'){
+        if(texto == 'Tab' || texto =='Backspace' || texto == 'ArrowLeft' || texto == 'ArrowRight' ||
+            texto == 'ArrowUp' || texto == 'ArrowDown'){
             return;
         }
         if(reg.test(texto)){
@@ -36,5 +37,16 @@ $(document).ready(function() {
             event.preventDefault();
         }
     });
+
 });
+
+function mensaje_toastr (tag, message) {
+    toastr.options = {
+        "closeButton": true,
+        "progressBar": true,
+        "showEasing": "swing",
+        "timeOut": 10000
+    }
+    toastr [tag](message)
+};
 
