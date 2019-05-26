@@ -105,7 +105,7 @@
             var id_paciente = $('#paciente').val();
 
             if(id_paciente == ""){
-                alert("Seleccione un paciente");
+                mensaje_toastr('warning', 'Por favor, seleccione un paciente.');
             }else{
                 $.ajax({
                     data: {'id_paciente': id_paciente},
@@ -121,12 +121,12 @@
                             $('#prescripcion_medica').val(json.prescripcion_medica);
                             $('#esquema_vacunacion').val(json.esquema_vacunacion);
                         }else{
-                            alert("No hay antecedentes");
+                            mensaje_toastr('warning', 'No hay antecedentes.');
                         }
                     },
                     dataType: "json",
                     error: function () {
-                        alert("Ocurrió un error al conectar con el servidor");
+                        mensaje_toastr('error', 'Ocurrió un error al conectar con el servidor.');
                     }
 
                 });

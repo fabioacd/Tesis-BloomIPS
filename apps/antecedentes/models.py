@@ -5,7 +5,8 @@ from django.core.validators import MinValueValidator
 
 
 class AntecedentesPersonales(models.Model):
-    paciente = models.OneToOneField('paciente.Paciente', on_delete=models.CASCADE, primary_key=True)
+    paciente = models.OneToOneField('paciente.Paciente', on_delete=models.CASCADE, related_name='paciente_personal',
+                                    primary_key=True)
     farmacologicos = models.CharField(max_length=1000)
     alergicos = models.CharField(max_length=1000, blank=True)
     patologicos = models.CharField(max_length=1000)
@@ -21,11 +22,6 @@ class TipoVivienda(models.Model):
 
     def __str__(self):
         return self.tipo
-    '''Propia
-        Alquiler
-        Familiar
-        Otro
-    '''
 
 
 class AntecedentesPsicosociales(models.Model):
@@ -41,7 +37,8 @@ class AntecedentesPsicosociales(models.Model):
         ('Urbano', 'Urbano')
     )
 
-    paciente = models.OneToOneField('paciente.Paciente', on_delete=models.CASCADE, primary_key=True)
+    paciente = models.OneToOneField('paciente.Paciente', on_delete=models.CASCADE, related_name='paciente_psicosocial',
+                                    primary_key=True)
     numero_habitantes = models.PositiveIntegerField()
     num_integrantes_laboran = models.PositiveIntegerField()
     lugar_entre_hermanos = models.CharField(max_length=50)
@@ -59,25 +56,32 @@ class AntecedentesPsicosociales(models.Model):
     energia = models.BooleanField()
 
 
+class Familiar(models.Model):
+    identificacion_familiar = models.CharField(max_length=11, unique=True)  # La PK es serial.
+    antecedente = models.ForeignKey(AntecedentesPsicosociales, on_delete=models.CASCADE)  # FORANEA
+    nombre = models.CharField(max_length=50)
+    ocupacion = models.CharField(max_length=50)
+    escolaridad = models.CharField(max_length=20)
+    edad = models.PositiveIntegerField()
+    relacion = models.CharField(max_length=30)  # Parentezco con el paciente
+    
+
 class TipoConsumo(models.Model):
     tipo = models.CharField(max_length=50)
     descripcion = models.CharField(max_length=250)
 
     def __str__(self):
         return self.tipo
-    '''Alcohol
-        Tabaco
-        Otro
-    '''
 
 
 class AntecedentesGestacionales(models.Model):
-    paciente = models.OneToOneField('paciente.Paciente', on_delete=models.CASCADE, primary_key=True)
+    paciente = models.OneToOneField('paciente.Paciente', on_delete=models.CASCADE, related_name='paciente_gestacional',
+                                    primary_key=True)
     planeado = models.BooleanField()
     deseado = models.BooleanField()
     gemelar = models.BooleanField()
     controlado = models.BooleanField()
-    consumo_embarazo = models.ForeignKey(TipoConsumo, on_delete=models.CASCADE)  # FORANEA
+    consumo_embarazo = models.ManyToManyField(TipoConsumo)  # FORANEA
     otro_consumo = models.CharField(max_length=50, blank=True)
     semanas_gestacion = models.PositiveIntegerField()
     parto_termino = models.BooleanField()
@@ -96,7 +100,8 @@ class AntecedentesGestacionales(models.Model):
 
 
 class AntecedentesFamiliares(models.Model):
-    paciente = models.OneToOneField('paciente.Paciente', on_delete=models.CASCADE, primary_key=True)
+    paciente = models.OneToOneField('paciente.Paciente', on_delete=models.CASCADE, related_name='paciente_familiar',
+                                    primary_key=True)
     enfermedad_madre = models.CharField(max_length=1000)
     enfermedad_padre = models.CharField(max_length=1000)
     enfermedad_hermanos = models.CharField(max_length=1000)

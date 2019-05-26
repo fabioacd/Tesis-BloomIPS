@@ -1,73 +1,110 @@
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
-from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.core.serializers import serialize
+from django.db import transaction, IntegrityError
+from django.forms import formset_factory, modelformset_factory
+from django.http import JsonResponse, HttpResponse, Http404
+from django.shortcuts import render, redirect, get_object_or_404
 import json
-from .forms import RegistrarModificarAntecedentesPersonalesForm, RegistrarModificarAntecedentesPsicosocialesForm, \
-                    RegistrarModificarAntecedentesGestacionalesForm, RegistrarModificarAntecedenteFamiliaresForm, \
-                    VerAntecedentesPersonalesForm, VerAntecedentesGestacionalesForm, VerAntecedenteFamiliaresForm, \
-                    VerAntecedentesPsicosocialesForm
+
+from utils.utils import check_cargos
+from .forms import ModificarAntecedentesPersonalesForm, RegistrarAntecedentesPsicosocialesForm, \
+    ModificarAntecedentesGestacionalesForm, ModificarAntecedentesFamiliaresForm, \
+    VerAntecedentesPersonalesForm, VerAntecedentesGestacionalesForm, VerAntecedenteFamiliaresForm, \
+    VerAntecedentesPsicosocialesForm, ModificarAntecedentesPsicosocialesForm, \
+    RegistrarAntecedentesPersonalesForm, RegistrarAntecedentesFamiliaresForm, \
+    RegistrarAntecedentesGestacionalesForm, RegistrarFamiliarForm
 from django.contrib import messages
-from .models import AntecedentesPersonales, AntecedentesFamiliares, AntecedentesGestacionales, AntecedentesPsicosociales
+from .models import AntecedentesPersonales, AntecedentesFamiliares, AntecedentesGestacionales, \
+    AntecedentesPsicosociales, Familiar
 from apps.paciente.models import Paciente
+
+
 # Create your views here.
+
 
 @login_required
 def registrar_antecedentes_personales(request):
-    form = RegistrarModificarAntecedentesPersonalesForm()
+    form = RegistrarAntecedentesPersonalesForm()
 
     if request.method == 'POST':
-        form = RegistrarModificarAntecedentesPersonalesForm(request.POST)
+        form = RegistrarAntecedentesPersonalesForm(request.POST)
         if form.is_valid():
             form.save()
-            form = RegistrarModificarAntecedentesPersonalesForm()
+            form = RegistrarAntecedentesPersonalesForm()
             messages.success(request, 'Antecedentes registrados')
+            if request.POST.get("save_and_records"):
+                return redirect(registrar_antecedentes_psicosociales)
         else:
             messages.error(request, 'No se han podido registrar los antecedentes')
 
     contexto = {'form': form}
     return render(request, 'antecedentes/agregar_antecedentes_personales.html', contexto)
 
+
 @login_required
 def registrar_antecedentes_psicosociales(request):
-    form = RegistrarModificarAntecedentesPsicosocialesForm()
-
+    form = RegistrarAntecedentesPsicosocialesForm(prefix='antecedentePsicosocial')
+    formset = modelformset_factory(Familiar, form=RegistrarFamiliarForm, extra=1)
+    formset_familiar = formset(prefix='familiar', queryset=Familiar.objects.none())
     if request.method == 'POST':
-        form = RegistrarModificarAntecedentesPsicosocialesForm(request.POST)
+        form = RegistrarAntecedentesPsicosocialesForm(request.POST, prefix='antecedentePsicosocial')
+        formset_familiar = formset(request.POST, prefix='familiar')
         if form.is_valid():
-            form.save()
-            form = RegistrarModificarAntecedentesPsicosocialesForm()
-            messages.success(request, 'Antecedentes registrados')
+            if formset_familiar.is_valid():
+                try:
+                    with transaction.atomic():
+                        antecedente = form.save(commit=False)
+                        antecedente.save()
+                        instancias = formset_familiar.save(commit=False)
+                        for familiar in instancias:
+                            familiar.antecedente = antecedente
+                            familiar.save()
+                        messages.success(request, 'Antecedentes registrados')
+                except IntegrityError as e:
+                    messages.error(request,
+                                   'No se han podido registrar los antecedentes debido a un error en la base de datos')
+
+                if request.POST.get("save_and_records"):
+                    return redirect(registrar_antecedentes_familiares)
+                else:
+                    return redirect('registrar_antecedentes_psicosociales')
+            else:
+                messages.error(request, 'No se han podido guardar los familiares')
         else:
             messages.error(request, 'No se han podido registrar los antecedentes')
 
-    contexto = {'form': form}
+    contexto = {'form': form, 'formset_familiar': formset_familiar}
     return render(request, 'antecedentes/agregar_antecedentes_psicosociales.html', contexto)
+
 
 @login_required
 def registrar_antecedentes_gestacionales(request):
-    form = RegistrarModificarAntecedentesGestacionalesForm()
+    form = RegistrarAntecedentesGestacionalesForm()
 
     if request.method == 'POST':
-        form = RegistrarModificarAntecedentesGestacionalesForm(request.POST)
+        form = RegistrarAntecedentesGestacionalesForm(request.POST)
         if form.is_valid():
             form.save()
-            form = RegistrarModificarAntecedentesGestacionalesForm()
+            form = RegistrarAntecedentesGestacionalesForm()
             messages.success(request, 'Antecedentes registrados')
+            if request.POST.get("save_and_records"):
+                return redirect(registrar_antecedentes_personales)
         else:
             messages.error(request, 'No se han podido registrar los antecedentes')
 
     contexto = {'form': form}
     return render(request, 'antecedentes/agregar_antecedentes_gestacionales.html', contexto)
 
+
 @login_required
 def registrar_antecedentes_familiares(request):
-    form = RegistrarModificarAntecedenteFamiliaresForm()
+    form = RegistrarAntecedentesFamiliaresForm()
 
     if request.method == 'POST':
-        form = RegistrarModificarAntecedenteFamiliaresForm(request.POST)
+        form = RegistrarAntecedentesFamiliaresForm(request.POST)
         if form.is_valid():
             form.save()
-            form = RegistrarModificarAntecedenteFamiliaresForm()
+            form = RegistrarAntecedentesFamiliaresForm()
             messages.success(request, 'Antecedentes registrados')
         else:
             messages.error(request, 'No se han podido registrar los antecedentes')
@@ -75,42 +112,45 @@ def registrar_antecedentes_familiares(request):
     contexto = {'form': form}
     return render(request, 'antecedentes/agregar_antecedentes_familiares.html', contexto)
 
+
 @login_required
 def consultar_antecedentes_personales(request):
     contexto = {'form': VerAntecedentesPersonalesForm()}
     return render(request, 'antecedentes/consultar_antecedentes_personales.html', contexto)
+
 
 @login_required
 def consultar_antecedentes_gestacionales(request):
     contexto = {'form': VerAntecedentesGestacionalesForm()}
     return render(request, 'antecedentes/consultar_antecedentes_gestacionales.html', contexto)
 
+
 @login_required
 def consultar_antecedentes_familiares(request):
     contexto = {'form': VerAntecedenteFamiliaresForm()}
     return render(request, 'antecedentes/consultar_antecedentes_familiares.html', contexto)
 
+
 @login_required
 def consultar_antecedentes_psicosociales(request):
-    contexto = {'form': VerAntecedentesPsicosocialesForm()}
+    formset = modelformset_factory(Familiar, form=RegistrarFamiliarForm, extra=1)
+    formset_familiar = formset(prefix='familiar', queryset=Familiar.objects.none())
+    contexto = {'form': VerAntecedentesPsicosocialesForm(), 'formset': formset_familiar}
     return render(request, 'antecedentes/consultar_antecedentes_psicosociales.html', contexto)
 
 
+@login_required
+@user_passes_test(check_cargos(['Administrador', 'Coordinador', 'Auxiliar administrativo']))
 def modificar_antecedentes_gestacionales(request):
-    form = RegistrarModificarAntecedentesGestacionalesForm()
+    form = ModificarAntecedentesGestacionalesForm()
 
     if request.method == 'POST':
-        antecedente = None
+        antecedente = get_object_or_404(AntecedentesGestacionales, pk=request.POST.get('antecedente'))
 
-        try:
-            antecedente = AntecedentesGestacionales.objects.get(pk=request.POST.get('antecedente'))
-        except AntecedentesGestacionales.DoesNotExist:
-            pass
-
-        form = RegistrarModificarAntecedentesGestacionalesForm(request.POST, instance=antecedente)
+        form = ModificarAntecedentesGestacionalesForm(request.POST, instance=antecedente)
         if form.is_valid():
             form.save()
-            form = RegistrarModificarAntecedentesGestacionalesForm()
+            form = ModificarAntecedentesGestacionalesForm()
             messages.success(request, 'Cambios guardados con éxito')
         else:
             messages.error(request, 'No se han podido guardar los cambios')
@@ -118,23 +158,19 @@ def modificar_antecedentes_gestacionales(request):
     contexto = {'form': form}
     return render(request, 'antecedentes/modificar_antecedentes_gestacionales.html', contexto)
 
-@login_required
-def modificar_antecedentes_familiares(request):
 
-    form = RegistrarModificarAntecedenteFamiliaresForm()
+@login_required
+@user_passes_test(check_cargos(['Administrador', 'Coordinador', 'Auxiliar administrativo']))
+def modificar_antecedentes_familiares(request):
+    form = ModificarAntecedentesFamiliaresForm()
 
     if request.method == 'POST':
-        antecedente = None
+        antecedente = get_object_or_404(AntecedentesFamiliares, pk=request.POST.get('antecedente'))
 
-        try:
-            antecedente = AntecedentesFamiliares.objects.get(pk=request.POST.get('antecedente'))
-        except AntecedentesFamiliares.DoesNotExist:
-            pass
-
-        form = RegistrarModificarAntecedenteFamiliaresForm(request.POST, instance=antecedente)
+        form = ModificarAntecedentesFamiliaresForm(request.POST, instance=antecedente)
         if form.is_valid():
             form.save()
-            form = RegistrarModificarAntecedenteFamiliaresForm()
+            form = ModificarAntecedentesFamiliaresForm()
             messages.success(request, 'Cambios guardados con éxito')
         else:
             messages.error(request, 'No se han podido guardar los cambios')
@@ -142,22 +178,19 @@ def modificar_antecedentes_familiares(request):
     contexto = {'form': form}
     return render(request, 'antecedentes/modificar_antecedentes_familiares.html', contexto)
 
+
 @login_required
+@user_passes_test(check_cargos(['Administrador', 'Coordinador', 'Auxiliar administrativo']))
 def modificar_antecedentes_personales(request):
-    form = RegistrarModificarAntecedentesPersonalesForm()
+    form = ModificarAntecedentesPersonalesForm()
 
     if request.method == 'POST':
-        antecedente = None
+        antecedente = get_object_or_404(AntecedentesPersonales, pk=request.POST.get('antecedente'))
 
-        try:
-            antecedente = AntecedentesPersonales.objects.get(pk=request.POST.get('antecedente'))
-        except AntecedentesPersonales.DoesNotExist:
-            pass
-
-        form = RegistrarModificarAntecedentesPersonalesForm(request.POST, instance=antecedente)
+        form = ModificarAntecedentesPersonalesForm(request.POST, instance=antecedente)
         if form.is_valid():
             form.save()
-            form = RegistrarModificarAntecedentesPersonalesForm()
+            form = ModificarAntecedentesPersonalesForm()
             messages.success(request, 'Cambios guardados con éxito')
         else:
             messages.error(request, 'No se han podido guardar los cambios')
@@ -165,38 +198,48 @@ def modificar_antecedentes_personales(request):
     contexto = {'form': form}
     return render(request, 'antecedentes/modificar_antecedentes_personales.html', contexto)
 
+
 @login_required
+@user_passes_test(check_cargos(['Administrador', 'Coordinador', 'Auxiliar administrativo']))
 def modificar_antecedentes_psicosociales(request):
-    form = RegistrarModificarAntecedentesPsicosocialesForm()
-
+    form = ModificarAntecedentesPsicosocialesForm()
+    formset = modelformset_factory(Familiar, form=RegistrarFamiliarForm, can_delete=True)
+    formset_familiar = formset(prefix='familiar', queryset=Familiar.objects.none())
+    error_formset = False
     if request.method == 'POST':
-        antecedente = None
-
-        try:
-            antecedente = AntecedentesPsicosociales.objects.get(pk=request.POST.get('antecedente'))
-        except AntecedentesPsicosociales.DoesNotExist:
-            pass
-
-        form = RegistrarModificarAntecedentesPsicosocialesForm(request.POST, instance=antecedente)
+        antecedente = get_object_or_404(AntecedentesPsicosociales, pk=request.POST.get('antecedente'))
+        form = ModificarAntecedentesPsicosocialesForm(request.POST, instance=antecedente)
+        formset_familiar = formset(request.POST, prefix='familiar', queryset=Familiar.objects.filter(antecedente=antecedente))
         if form.is_valid():
-            form.save()
-            form = RegistrarModificarAntecedentesPsicosocialesForm()
-            messages.success(request, 'Cambios guardados con éxito')
+            if formset_familiar.is_valid():
+                try:
+                    with transaction.atomic():
+                        antecedente = form.save()
+                        instancias = formset_familiar.save(commit=False)
+                        for obj in formset_familiar.deleted_objects:
+                            obj.delete()
+                        for familiar in instancias:
+                            familiar.antecedente = antecedente
+                            familiar.save()
+                        messages.success(request, 'Antecedentes registrados')
+                except IntegrityError as e:
+                    messages.error(request,
+                                   'No se han podido modificar los antecedentes debido a un error en la base de datos')
+                return redirect('modificar_antecedentes_psicosociales')
+            else:
+                error_formset = True
+                messages.error(request, 'No se han podido guardar los familiares')
         else:
-            messages.error(request, 'No se han podido guardar los cambios')
-
-    contexto = {'form': form}
+            messages.error(request, 'No se han podido modificar los antecedentes')
+    contexto = {'form': form, 'formset_familiar': formset_familiar, 'error_formset': error_formset}
     return render(request, 'antecedentes/modificar_antecedentes_psicosociales.html', contexto)
+
 
 @login_required
 def get_antecedente_personal_ajax(request):
-
     id_paciente = request.GET.get('id_paciente')
-    paciente = Paciente.objects.get(identificacion=id_paciente)
-    try:
-        antecedentes_personales = AntecedentesPersonales.objects.get(paciente=paciente)
-    except AntecedentesPersonales.DoesNotExist:
-        antecedentes_personales = None
+    paciente = get_object_or_404(Paciente, id=id_paciente)
+    antecedentes_personales = get_object_or_404(AntecedentesPersonales, paciente=paciente)
 
     if antecedentes_personales is not None:
 
@@ -215,15 +258,12 @@ def get_antecedente_personal_ajax(request):
     else:
         return JsonResponse("", safe=False)
 
+
 @login_required
 def get_antecedente_gestacional_ajax(request):
-
     id_paciente = request.GET.get('id_paciente')
-    paciente = Paciente.objects.get(identificacion=id_paciente)
-    try:
-        antecedentes_gestacionales = AntecedentesGestacionales.objects.get(paciente=paciente)
-    except AntecedentesGestacionales.DoesNotExist:
-        antecedentes_gestacionales = None
+    paciente = get_object_or_404(Paciente, id=id_paciente)
+    antecedentes_gestacionales = get_object_or_404(AntecedentesGestacionales, paciente=paciente)
 
     if antecedentes_gestacionales is not None:
 
@@ -233,7 +273,7 @@ def get_antecedente_gestacional_ajax(request):
             'deseado': antecedentes_gestacionales.deseado,
             'controlado': antecedentes_gestacionales.controlado,
             'semanas_gestacion': antecedentes_gestacionales.semanas_gestacion,
-            'consumo_embarazo': antecedentes_gestacionales.consumo_embarazo.id,
+            'consumo_embarazo': list(antecedentes_gestacionales.consumo_embarazo.all().values('id')),
             'otro_consumo': antecedentes_gestacionales.otro_consumo,
             'gemelar': antecedentes_gestacionales.gemelar,
             'parto_termino': antecedentes_gestacionales.parto_termino,
@@ -255,15 +295,12 @@ def get_antecedente_gestacional_ajax(request):
     else:
         return JsonResponse("", safe=False)
 
+
 @login_required
 def get_antecedente_familiar_ajax(request):
-
     id_paciente = request.GET.get('id_paciente')
-    paciente = Paciente.objects.get(identificacion=id_paciente)
-    try:
-        antecedentes_familiares = AntecedentesFamiliares.objects.get(paciente=paciente)
-    except AntecedentesFamiliares.DoesNotExist:
-        antecedentes_familiares = None
+    paciente = get_object_or_404(Paciente, id=id_paciente)
+    antecedentes_familiares = get_object_or_404(AntecedentesFamiliares, paciente=paciente)
 
     if antecedentes_familiares is not None:
 
@@ -280,13 +317,25 @@ def get_antecedente_familiar_ajax(request):
     else:
         return JsonResponse("", safe=False)
 
+
 @login_required
 def get_antecedentes_psicosocial_ajax(request):
-
     id_paciente = request.GET.get('id_paciente')
-    paciente = Paciente.objects.get(identificacion=id_paciente)
+    paciente = get_object_or_404(Paciente, id=id_paciente)
     try:
         antecedentes_psicosociales = AntecedentesPsicosociales.objects.get(paciente=paciente)
+        familiares_queryset = Familiar.objects.filter(antecedente=antecedentes_psicosociales)
+        familiares = []
+        for familiar in familiares_queryset:
+            temp = []
+            temp.append(familiar.identificacion_familiar)
+            temp.append(familiar.nombre)
+            temp.append(familiar.ocupacion)
+            temp.append(familiar.escolaridad)
+            temp.append(familiar.edad)
+            temp.append(familiar.relacion)
+            temp.append(str(familiar.id))
+            familiares.append(temp)
     except AntecedentesPsicosociales.DoesNotExist:
         antecedentes_psicosociales = None
 
@@ -309,6 +358,7 @@ def get_antecedentes_psicosocial_ajax(request):
             'observaciones_vivienda': antecedentes_psicosociales.observaciones_vivienda,
             'observacion_servicios': antecedentes_psicosociales.observacion_servicios,
             'gmfcs': antecedentes_psicosociales.gmfcs,
+            'familiares': familiares
         }
         datos_json = json.dumps(antecedentes)
         return JsonResponse(datos_json, safe=False)
