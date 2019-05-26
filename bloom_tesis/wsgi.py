@@ -1,5 +1,5 @@
 """
-WSGI config for bloomips project.
+WSGI config for bloom_tesis project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
