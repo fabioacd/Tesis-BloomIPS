@@ -1,0 +1,240 @@
+<div class="col-md-3">
+    <!-- /.box-header -->
+    <div class="box-body">
+        <div class="box-group" id="accordion">
+            <!-- we are adding the .panel class so bootstrap.js collapse plugin detects it -->
+            <div class="panel box box-primary">
+                <ul class="sidebar-menu" data-widget="tree">
+                    <div id="collapseOne" class="panel-collapse collapse in">
+                        <div class="box-body">
+                            <li class="treeview">
+                                <a href="#" class="color_text">
+                                    <i class="fa fa-clone"></i> <span>Consolidado</span>
+                                    <span class="pull-right-container"></span>
+                                </a>
+                                <ul class="treeview-menu">
+                                    <li>
+                                        <a href="{% url 'agregar_consolidado' %}">
+                                            <i class="fa fa-plus-square">
+                                            </i> Agregar consolidado</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </div>
+                    </div>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-3">
+    <div class="box-body">
+        <div class="box-group" id="accordion">
+            <div class="panel box box-primary">
+                <ul class="sidebar-menu" data-widget="tree">
+                    <div id="collapseOne" class="panel-collapse collapse in">
+                        <div class="box-body">
+                            <li class="treeview">
+                                <a href="#" class="color_text">
+                                    <i class="fa fa-exclamation-circle"></i> <span>Evento adverso</span>
+                                    <span class="pull-right-container"></span>
+                                </a>
+                                <ul class="treeview-menu">
+                                    <li>
+                                        <a href="{% url 'agregar_implicado_evento_adverso' %}">
+                                            <i class="fa fa-user-plus">
+                                            </i> Agregar implicado</a>
+                                    </li>
+                                    <li>
+                                        <a href="{% url 'consultar_implicados_evento_adverso' %}">
+                                            <i class="fa fa-file-o">
+                                            </i> Consultar implicado </a>
+                                    </li>
+                                    <li>
+                                        <a href="{% url 'agregar_evento_adverso' %}">
+                                            <i class="fa fa-plus-square">
+                                            </i> Agregar evento adverso </a>
+                                    </li>
+                                    <li>
+                                        <a href="{% url 'consultar_evento' %}">
+                                            <i class="fa fa-file-o">
+                                            </i> Consultar evento adverso </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </div>
+                    </div>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-3">
+    <div class="box-body">
+        <div class="box-group" id="accordion">
+            <div class="panel box box-primary">
+                <ul class="sidebar-menu" data-widget="tree">
+                    <div id="collapseOne" class="panel-collapse collapse in">
+                        <div class="box-body">
+                            <li class="treeview">
+                                <a href="#" class="color_text">
+                                    <i class="fa fa-male"></i> <span>Paciente</span>
+                                    <span class="pull-right-container"></span>
+                                </a>
+                                <ul class="treeview-menu">
+                                    <li>
+                                        <a href="{% url 'registrar_paciente' %}">
+                                            <i class="fa fa-user-plus">
+                                            </i> Registrar paciente </a>
+                                    </li>
+                                    <li>
+                                        <a href="{% url 'consultar_paciente' %}">
+                                            <i class="fa fa-table">
+                                            </i> Consultar paciente </a>
+                                    </li>
+                                    <li>
+                                        <a href="{% url 'consultar_evolucion_diaria' %}">
+                                            <i class="fa fa-search">
+                                            </i> Consultar evolución diaria </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </div>
+                    </div>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-3">
+    <!-- /.box-header -->
+    <div class="box-body">
+        <div class="box-group" id="accordion">
+            <!-- we are adding the .panel class so bootstrap.js collapse plugin detects it -->
+            <div class="panel box box-primary">
+                <ul class="sidebar-menu" data-widget="tree">
+                    <div id="collapseOne" class="panel-collapse collapse in">
+                        <div class="box-body">
+                            <li class="treeview">
+                                <a href="#" class="color_text">
+                                    <i class="fa fa-clipboard"></i> <span>Antecedentes</span>
+                                    <span class="pull-right-container"></span>
+                                </a>
+                                <ul class="treeview-menu">
+                                    <li class="treeview">
+                                        <a href="#">
+                                            <i class="fa fa-clipboard"></i> <span>Gestacionales</span>
+                                            <span class="pull-right-container">
+                                                <i class="fa fa-angle-left pull-right"></i>
+                                            </span>
+                                        </a>
+                                        <ul class="treeview-menu">
+                                            <li>
+                                                <a href="{% url 'registrar_antecedentes_gestacionales' %}">
+                                                    <i class="fa fa-plus-square">
+                                                    </i> Registrar </a>
+                                            </li>
+                                            <li>
+                                                <a href="{% url 'consultar_antecedentes_gestacionales' %}">
+                                                    <i class="fa fa-file-o">
+                                                    </i> Consultar </a>
+                                            </li>
+                                            <li>
+                                                <a href="{% url 'modificar_antecedentes_gestacionales' %}">
+                                                    <i class="fa fa-edit">
+                                                    </i> Modificar </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li class="treeview">
+                                        <a href="#">
+                                            <i class="fa fa-user"></i> <span>Personales</span>
+                                            <span class="pull-right-container">
+                                                <i class="fa fa-angle-left pull-right"></i>
+                                            </span>
+                                        </a>
+                                        <ul class="treeview-menu">
+                                            <li>
+                                                <a href="{% url 'registrar_antecedentes_personales' %}">
+                                                    <i class="fa fa-plus-square">
+                                                    </i> Registrar </a>
+                                            </li>
+                                            <li>
+                                                <a href="{% url 'consultar_antecedentes_personales' %}">
+                                                    <i class="fa fa-file-o">
+                                                    </i> Consultar </a>
+                                            </li>
+                                            <li>
+                                                <a href="{% url 'modificar_antecedentes_personales' %}">
+                                                    <i class="fa fa-edit">
+                                                    </i> Modificar </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li class="treeview">
+                                        <a href="#">
+                                            <i class="fa fa-clipboard"></i> <span>Psicosociales</span>
+                                            <span class="pull-right-container">
+                                                <i class="fa fa-angle-left pull-right"></i>
+                                            </span>
+                                        </a>
+                                        <ul class="treeview-menu">
+                                            <li>
+                                                <a href="{% url 'registrar_antecedentes_psicosociales' %}">
+                                                    <i class="fa fa-plus-square">
+                                                    </i> Registrar </a>
+                                            </li>
+                                            <li>
+                                                <a href="{% url 'consultar_antecedentes_psicosociales' %}">
+                                                    <i class="fa fa-file-o">
+                                                    </i> Consultar </a>
+                                            </li>
+                                            <li>
+                                                <a href="{% url 'modificar_antecedentes_psicosociales' %}">
+                                                    <i class="fa fa-edit">
+                                                    </i> Modificar </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li class="treeview">
+                                        <a href="#">
+                                            <i class="fa fa-users"></i> <span>Familiares</span>
+                                            <span class="pull-right-container">
+                                                <i class="fa fa-angle-left pull-right"></i>
+                                            </span>
+                                        </a>
+                                        <ul class="treeview-menu">
+                                            <li>
+                                                <a href="{% url 'registrar_antecedentes_familiares' %}">
+                                                    <i class="fa fa-plus-square">
+                                                    </i> Registrar </a>
+                                            </li>
+                                            <li>
+                                                <a href="{% url 'consultar_antecedentes_familiares' %}">
+                                                    <i class="fa fa-file-o">
+                                                    </i> Consultar </a>
+                                            </li>
+                                            <li>
+                                                <a href="{% url 'modificar_antecedentes_familiares' %}">
+                                                    <i class="fa fa-edit">
+                                                    </i> Modificar </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                        </div>
+                    </div>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+

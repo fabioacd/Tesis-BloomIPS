@@ -19,50 +19,6 @@
     </ul>
 </li>
 
-<li class="treeview {% if 'empleado/modificar_area/' in request.path or 'empleado/agregar_area' in request.path or 'empleado/consultar_area' in request.path %} active {% else %} disabled {% endif %}">
-    <a href="#">
-        <i class="fa  fa-circle"></i> <span>Area</span>
-        <span class="pull-right-container">
-            <i class="fa fa-angle-left pull-right"></i>
-        </span>
-    </a>
-    <ul class="treeview-menu">
-        <li class="{% if 'empleado/agregar_area' in request.path %} active {% else %} disabled {% endif %}">
-            <a href="{% url 'agregar_area' %}">
-                <i class="fa  fa-plus-square">
-                </i> Agregar area </a>
-        </li>
-        <li class="{% if 'empleado/consultar_area' in request.path %} active {% else %} disabled {% endif %}">
-            <a href="{% url 'consultar_area' %}">
-                <i class="fa fa-th-large">
-                </i> Consultar area </a>
-        </li>
-    </ul>
-</li>
-
-<li class="treeview {% if 'agregar_eps' in request.path or 'consultar_eps' in request.path or 'modificar_eps' in request.path %}
-    active {% else %} disabled {% endif %}">
-    <a href="#">
-        <i class="fa fa-hospital-o"></i> <span>Eps</span>
-        <span class="pull-right-container">
-                <i class="fa fa-angle-left pull-right"></i>
-        </span>
-    </a>
-    <ul class="treeview-menu">
-        <li class="{% if 'agregar_eps' in request.path %} active {% else %} disabled {% endif %}">
-            <a href="{% url 'agregar_eps' %}">
-                <i class="fa fa-plus-square">
-                </i> Agregar Eps</a>
-        </li>
-        <li class="{% if 'consultar_eps' in request.path %} active {% else %} disabled {% endif %}">
-            <a href="{% url 'consultar_eps' %}">
-                <i class="fa fa-table">
-                </i> Consultar Eps </a>
-        </li>
-    </ul>
-</li>
-
-
 <li class="treeview {% if 'empleado/consultar_resumen' in request.path or 'empleado/agregar_resumen' in request.path or 'empleado/consultar_informe_area' in request.path  or 'empleado/consultar_informe_paciente' in request.path or 'empleado/agregar_resumen' in request.path %} active {% else %} disabled {% endif %}">
     <a href="#">
         <i class="fa fa-file-text-o"></i> <span>Informe mensual</span>
@@ -81,7 +37,6 @@
                 <i class="fa fa-table">
                 </i> Consultar informe mensual</a>
         </li>
-
         <li class="{% if 'empleado/consultar_informe_area' in request.path %} active {% else %} disabled {% endif %}">
             <a href="{% url 'consultar_informe_area' %}">
                 <i class="fa fa-clipboard">
@@ -95,8 +50,6 @@
         </li>
     </ul>
 </li>
-
-
 <li class="treeview {% if 'empleado/agregar_consolidado' in request.path or 'empleado/generar_consolidados' in request.path %} active {% else %} disabled {% endif %}">
     <a href="#">
         <i class="fa fa-clone"></i> <span>Consolidado</span>
@@ -105,6 +58,7 @@
         </span>
     </a>
     <ul class="treeview-menu">
+
         <li class="{% if 'agregar_consolidado' in request.path %} active {% else %} disabled {% endif %}">
             <a href="{% url 'agregar_consolidado' %}">
                 <i class="fa fa-plus-square">
@@ -112,7 +66,6 @@
         </li>
     </ul>
 </li>
-
 
 <li class="treeview {% if 'evento_adverso/' in request.path or 'evento_adverso/agregar_implicado_evento' in request.path %} active {% else %} disabled {% endif %}">
     <a href="#">
@@ -145,9 +98,7 @@
     </ul>
 </li>
 
-
-<li class="treeview {% if 'paciente/agregar_archivo_paciente' in request.path or 'paciente/registrar_paciente' in request.path or 'paciente/consultar_paciente' in request.path or 'paciente/consultar_evolucion_diaria' in request.path or 'paciente/agregar_evolucion_diaria' in request.path %} active {% else %} disabled {% endif %}">
-
+<li class="treeview {% if 'agregar_archivo_paciente' in request.path or 'registrar_paciente' in request.path or 'consultar_paciente' in request.path or 'agregar_evolucion_diaria' in request.path or 'consultar_evolucion_diaria' in request.path %} active {% else %} disabled {% endif %}">
     <a href="#">
         <i class="fa fa-male"></i> <span>Paciente</span>
         <span class="pull-right-container">
@@ -293,18 +244,3 @@
         </li>
     </ul>
 </li>
-
-<li class="{% if 'carga_cie10' in request.path %} active {% else %} disabled {% endif %}">
-    <a href="{% url 'carga_cie10' %}">
-        <i class="fa fa-upload"></i> <span>Carga masiva cie10</span>
-        <span class="pull-right-container">
-        </span>
-    </a>
-</li>
-
-{#<li class="">#}
-{#    <a href="{% url 'reportes' %}">#}
-{#        <i class="fa fa-bar-chart">#}
-{#        </i> Reportes </a>#}
-{#</li>#}
-

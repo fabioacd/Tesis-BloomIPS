@@ -1,0 +1,34 @@
+[
+    {
+        "model": "antecedentes.tipovivienda",
+        "pk": "1",
+        "fields": {
+            "tipo": "Propia",
+            "descripcion": "Vivienda propia"
+        }
+    },
+    {
+        "model": "antecedentes.tipovivienda",
+        "pk": "2",
+        "fields": {
+            "tipo": "Alquiler",
+            "descripcion": "Vivienda arrendada"
+        }
+    },
+    {
+        "model": "antecedentes.tipovivienda",
+        "pk": "3",
+        "fields": {
+            "tipo": "Familiar",
+            "descripcion": "Vivienda familiar"
+        }
+    },
+    {
+        "model": "antecedentes.tipovivienda",
+        "pk": "4",
+        "fields": {
+            "tipo": "Otro",
+            "descripcion": "Otro tipo de vivienda"
+        }
+    }
+]
