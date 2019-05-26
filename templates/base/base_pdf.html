@@ -5,8 +5,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Prueba de PDF</title>
+    <title>Consolidado</title>
     <link rel="stylesheet" href="{% static 'css/css_pdf.css' %}">
+     {% block css_block %}{% endblock %}
 </head>
 <body>
         <!-- Content for Static Frame 'header_frame' -->
@@ -16,12 +17,12 @@
 
     <!-- Content for Static Frame 'footer_frame' -->
     <div id="footer_content">
-        <p><strong> Calle 33 No. 63 A - 28 ° PBX: 448 30 24 ° Email: gerencia@bloomips.com ° www.bloomips.com  pagina <pdf:pagenumber> de <pdf:pagecount> </strong></p>
+        <img src="{% static 'logos/pie-de-pagina.png' %}" class="img-responsive" alt="Bloom IPS">
     </div>
 
     <div class="texto_centrado">
         <br>
-        <h1> {% block title_block %}{% endblock %} </h1>
+        {% block title_block %}{% endblock %}
         <br>
     </div>
     {% block content_block %}

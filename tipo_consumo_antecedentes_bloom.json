@@ -1,0 +1,42 @@
+[
+    {
+        "model": "antecedentes.tipoconsumo",
+        "pk": 1,
+        "fields": {
+            "tipo": "Alcohol",
+            "descripcion": "Consumo de alcohol"
+        }
+    },
+    {
+        "model": "antecedentes.tipoconsumo",
+        "pk": 2,
+        "fields": {
+            "tipo": "Tabaco",
+            "descripcion": "Consumo de tabaco"
+        }
+    },
+    {
+        "model": "antecedentes.tipoconsumo",
+        "pk": 3,
+        "fields": {
+            "tipo": "Sustancias Psicoactivas",
+            "descripcion": "Consumo de psicoactivas"
+        }
+    },
+    {
+        "model": "antecedentes.tipoconsumo",
+        "pk": 4,
+        "fields": {
+            "tipo": "Ninguno",
+            "descripcion": "Ningún consumo"
+        }
+    },
+    {
+        "model": "antecedentes.tipoconsumo",
+        "pk": 5,
+        "fields": {
+            "tipo": "Otro",
+            "descripcion": "Otro tipo de consumo"
+        }
+    }
+]

@@ -1,0 +1,44 @@
+{% if user.get_cargo == 'Coordinador'%}
+
+    {% include "menus_dashboard/menu_dashboard_coordinador.html" %}
+
+{% endif %}
+
+{% if user.get_cargo == 'Terapeuta' %}
+
+    {% include "menus_dashboard/menu_dashboard_terapeuta.html" %}
+
+{% endif %}
+
+{% if user.get_cargo == 'Auxiliar administrativo' %}
+
+    {% include "menus_dashboard/menu_dashboard_auxiliar.html" %}
+
+{% endif %}
+
+
+{% if user.get_cargo ==  'Administrador' %}
+
+    {% include "menus_dashboard/menu_dashboard_administrador.html" %}
+
+{% endif %}
+
+
+<!--
+<div class="col-md-3">
+    <div class="box-body">
+        <div class="box-group" id="accordion">
+            <div class="panel box box-primary">
+                <ul class="sidebar-menu" data-widget="tree">
+                    <div id="collapseOne" class="panel-collapse collapse in">
+                        <div class="box-body">
+
+
+                        </div>
+                    </div>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+-->
