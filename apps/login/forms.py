@@ -10,11 +10,3 @@ class LoginForm(forms.Form):
         super(LoginForm, self).__init__(*args, **kwargs)
         self.fields['username'].widget.attrs['placeholder'] = "Identificacion"
         self.fields['password'].widget.attrs['placeholder'] = "Contraseña"
-
-class BloqueoForm(forms.Form):
-    #username = forms.CharField(required=True, label=False, )
-    password = forms.CharField(required=True, label=False, widget=forms.PasswordInput())
-
-    def __init__(self, *args, **kwargs):
-        super(BloqueoForm, self).__init__(*args, **kwargs)
-        self.fields['password'].widget.attrs['placeholder'] = "Contraseña"
