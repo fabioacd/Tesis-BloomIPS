@@ -182,12 +182,13 @@
             var id_paciente = $('#id_paciente').val();
 
             if(id_paciente == ""){
-                alert("Seleccione un paciente");
+                mensaje_toastr('warning', 'Por favor, seleccione un paciente.');
             }else{
                 $.ajax({
                     data: {'id_paciente': id_paciente},
                     url: "{% url 'get_antecedente_gestacional_ajax' %}",
                     success: function(data){
+                        var selected_values_consumo = [];
                         if(data !== ""){
                             var json = JSON.parse(data);
                             if(json.planeado == true){
@@ -239,16 +240,20 @@
                                 $('#id_forceps').prop('checked', true);
                             }
                             $('#id_semanas_gestacion').val(json.semanas_gestacion);
-                            $('#id_consumo_embarazo').val(json.consumo_embarazo);
+
+                            for(var j = 0; j < json.consumo_embarazo.length; j++){
+                                selected_values_consumo.push(String(json.consumo_embarazo[j].id));
+                            }
+                            $('#id_consumo_embarazo').val(selected_values_consumo).change();
                             $('#id_otro_consumo').val(json.otro_consumo);
                             $('#id_otro_sintoma').val(json.otro_sintoma);
                         }else{
-                            alert("No hay antecedentes");
+                            mensaje_toastr('warning', 'No hay antecedentes.');
                         }
                     },
                     dataType: "json",
                     error: function () {
-                        alert("Ocurrió un error al conectar con el servidor");
+                        mensaje_toastr('error', 'Ocurrió un error al conectar con el servidor.');
                     }
 
                 });

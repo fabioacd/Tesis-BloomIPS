@@ -1,8 +1,8 @@
-{% extends 'base/base.html'%}
+{% extends 'base/base.html' %}
 {% load bootstrap3 %}
 {% load staticfiles %}
 
-{% block titulo_block %} BloomIPS | Modificar antecedentes psicosociales {% endblock  %}
+{% block titulo_block %} BloomIPS | Modificar antecedentes psicosociales {% endblock %}
 
 {% block title_content_block %}<strong>Modificar antecedentes psicosociales</strong>{% endblock %}
 
@@ -23,147 +23,269 @@
 {% endblock %}
 
 {% block content_body_block %}
-<form role="form" method="POST"> {% csrf_token %}
-    <div class="box-body">
-        <div class="form-group">
+    <form role="form" method="POST"> {% csrf_token %}
+        {{ formset_familiar.management_form }}
+        <div class="box-body">
+            <div class="form-group">
 
-            {% bootstrap_field form.antecedente layout="vertical" %}
+                {% bootstrap_field form.antecedente layout="vertical" %}
 
-            <div class="row">
-                <div class="col-md-5 col-md-offset-1">
-                    {% bootstrap_field form.paciente layout="vertical" %}
+                <div class="row">
+                    <div class="col-md-5 col-md-offset-1">
+                        {% bootstrap_field form.paciente layout="vertical" %}
+                    </div>
+                    <div class="col-md-2">
+                        <button type="button" class="btn btn-info" id="btn-buscar">Buscar</button>
+                    </div>
                 </div>
-                <div class="col-md-2">
-                    <button type="button" class="btn btn-info" id="btn-buscar">Buscar</button>
+
+                <div class="row">
+                    <div class="col-md-5 col-md-offset-1">
+                        {% bootstrap_field form.numero_habitantes layout="vertical" %}
+                    </div>
+
+                    <div class="col-md-5">
+                        {% bootstrap_field form.num_integrantes_laboran layout="vertical" %}
+                    </div>
                 </div>
+
+                <div class="row">
+                    <div class="col-md-5 col-md-offset-1">
+                        {% bootstrap_field form.num_hermanos layout="vertical" %}
+                    </div>
+                    <div class="col-md-5">
+                        {% bootstrap_field form.lugar_entre_hermanos layout="vertical" %}
+                    </div>
+                </div>
+
+                <div class="row" id="div-tabla">
+                    <div class="row">
+                        <div class="col-md-5 col-md-offset-1">
+                            <h5 style="font-weight: bold;">
+                                Personas que viven con el paciente
+                            </h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-10 col-md-offset-1">
+                            <div class="table-responsive" id="div_tabla_inner">
+                                <table id="example1" class="table table-bordered table-striped my_datatable"
+                                       {% if error_formset %}data-error-formset="true"{% endif %}>
+                                    <thead>
+                                    <tr>
+                                        <th>Identificación</th>
+                                        <th>Nombre</th>
+                                        <th>Ocupación</th>
+                                        <th>Escolaridad</th>
+                                        <th>Edad</th>
+                                        <th>Relación</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    {% for form in formset_familiar %}
+                                        <tr class="tr-formset">
+                                            <td>
+                                                {% for hidden in form.hidden_fields %}
+                                                    {{ hidden }}
+                                                {% endfor %}
+                                                {{ form.DELETE }}
+                                                {% bootstrap_field form.identificacion_familiar layout="inline" %}
+                                            </td>
+                                            <td> {% bootstrap_field form.nombre layout="inline" %}</td>
+                                            <td> {% bootstrap_field form.ocupacion layout="inline" %}</td>
+                                            <td> {% bootstrap_field form.escolaridad layout="inline" %}</td>
+                                            <td> {% bootstrap_field form.edad layout="inline" %}</td>
+                                            <td> {% bootstrap_field form.relacion layout="inline" %}</td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div><!--final div-->
+                </div>
+
+                <div class="row">
+                    <div class="col-md-5 col-md-offset-1">
+                        {% bootstrap_field form.total_ingresos layout="vertical" %}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-5 col-md-offset-1">
+                        {% bootstrap_field form.tipo_vivienda layout="vertical" %}
+                    </div>
+                    <div class="col-md-5">
+                        {% bootstrap_field form.otro_tipo_vivienda layout="vertical" %}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-5 col-md-offset-1">
+                        {% bootstrap_field form.sector_vivienda layout="vertical" %}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
+                        {% bootstrap_field form.observaciones_vivienda layout="vertical" %}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-2 col-md-offset-1">
+                        <h5 style="font-weight: bold;">
+                            Servicios públicos
+                        </h5>
+                    </div>
+                    <div class="col-md-2">
+                        {% bootstrap_field form.agua layout="vertical" %}
+                    </div>
+                    <div class="col-md-2">
+                        {% bootstrap_field form.energia layout="vertical" %}
+                    </div>
+                    <div class="col-md-2">
+                        {% bootstrap_field form.gas layout="vertical" %}
+                    </div>
+                    <div class="col-md-2">
+                        {% bootstrap_field form.internet layout="vertical" %}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
+                        {% bootstrap_field form.observacion_servicios layout="vertical" %}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
+                        {% bootstrap_field form.gmfcs layout="vertical" %}
+                    </div>
+                </div>
+
             </div>
-
-            <div class="row">
-                <div class="col-md-5 col-md-offset-1">
-                    {% bootstrap_field form.numero_habitantes layout="vertical" %}
-                </div>
-
-                <div class="col-md-5">
-                    {% bootstrap_field form.num_integrantes_laboran layout="vertical" %}
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-5 col-md-offset-1">
-                    {% bootstrap_field form.num_hermanos layout="vertical" %}
-                </div>
-                <div class="col-md-5">
-                    {% bootstrap_field form.lugar_entre_hermanos layout="vertical" %}
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-5 col-md-offset-1">
-                    {% bootstrap_field form.total_ingresos layout="vertical" %}
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-5 col-md-offset-1">
-                    {% bootstrap_field form.tipo_vivienda layout="vertical" %}
-                </div>
-                <div class="col-md-5">
-                    {% bootstrap_field form.otro_tipo_vivienda layout="vertical" %}
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-5 col-md-offset-1">
-                    {% bootstrap_field form.sector_vivienda layout="vertical" %}
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-10 col-md-offset-1">
-                    {% bootstrap_field form.observaciones_vivienda layout="vertical" %}
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-2 col-md-offset-1">
-                    <h5 style="font-weight: bold;">
-                        Servicios públicos
-                    </h5>
-                </div>
-                <div class="col-md-2">
-                    {% bootstrap_field form.gas layout="vertical" %}
-                </div>
-                <div class="col-md-2">
-                    {% bootstrap_field form.internet layout="vertical" %}
-                </div>
-                <div class="col-md-2">
-                    {% bootstrap_field form.agua layout="vertical" %}
-                </div>
-                <div class="col-md-2">
-                    {% bootstrap_field form.energia layout="vertical" %}
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-10 col-md-offset-1">
-                    {% bootstrap_field form.observacion_servicios layout="vertical" %}
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-10 col-md-offset-1">
-                    {% bootstrap_field form.gmfcs layout="vertical" %}
-                </div>
-            </div>
-
         </div>
-    </div>
-    <div class="box-footer">
-        <button type="button" class="btn btn-primary" data-target="#modal-default" onclick="setText()"
-                type="button">Guardar</button>
-    </div>
-     <!-- Modal -->
-    <div class="modal fade" id="modal-default">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Modificar antecedentes psicosociales</h4>
-                </div>
-                <div class="modal-body" id="mostrar-alerta">
-                    <p id="info_mostrar"> &hellip;</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cerrar</button>
-                    <button type="submit" class="btn btn-primary" onclick="cerrarModal()">Guardar</button>
-                </div>
-            </div>
-            <!-- /.modal-content -->
+        <div class="box-footer">
+            <button type="button" class="btn btn-primary" data-target="#modal-default" onclick="setText()"
+                    type="button">Guardar
+            </button>
         </div>
-        <!-- /.modal-dialog -->
-    </div>
-</form>
+        <!-- Modal -->
+        <div class="modal fade" id="modal-default">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Modificar antecedentes psicosociales</h4>
+                    </div>
+                    <div class="modal-body" id="mostrar-alerta">
+                        <p id="info_mostrar"> &hellip;</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-primary" onclick="cerrarModal()">Guardar</button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+    </form>
 {% endblock %}
 
 {% block js_block %}
 
     {{ form.media.js }}
+    <script src="{% static 'js/django-dynamic-formset/django-dynamic-formset-master/src/jquery.formset.js' %}"></script>
 
     <script>
-        $(document).ready(function(){
+        //var tr_principal = $("#example1 tbody tr:first");
+        var tr_principal = null;
+        $(document).ready(function () {
 
-            $('#tipo_vivienda').on('click', function(){
+            $('.tr-formset').formset({
+                prefix: '{{ formset_familiar.prefix }}',
+                addText: 'Agregar familiar',
+                addCssClass: 'btn btn-success btn-xs',
+                deleteText: 'Remover familiar',
+                deleteCssClass: 'btn btn-danger btn-xs'
+            });
+
+            $('#div-tabla').hide();
+            if ($('#example1').data('error-formset')) {
+                tr_principal = $('#example1 tbody tr:first').clone(true);
+                tr_principal.find('div.form-group').each(function () {
+                    $(this).removeClass('has-success');
+                    $(this).removeClass('has-error');
+
+                });
+                tr_principal.find(':input').each(function () {
+                    $(this).attr('value', "");
+                });
+                $('#div-tabla').show();
+            } else {
+                tr_principal = $('#example1 tbody tr:first').detach();
+                $('.tr-formset').find('div.form-group').each(function () {
+                    $(this).removeClass('has-success');
+                    $(this).removeClass('has-error');
+                });
+                $('#div-tabla').hide();
+            }
+            $('#tipo_vivienda').on('click', function () {
 
                 var selected_value = $('#tipo_vivienda option:selected').text();
 
-                if(selected_value == "Otro"){
+                if (selected_value == "Otro") {
                     $('#otro_tipo_vivienda').prop('disabled', false);
-                }else {
+                } else {
                     $('#otro_tipo_vivienda').prop('disabled', true);
                 }
             });
         });
+
+        function agregarFamiliares(familiares) {
+            var i = 0;
+            var trs = [];
+            while (i < familiares.length) {
+                var tr_clone = tr_principal.clone(true);
+                tr_clone.addClass('dynamic-form');
+                tr_clone.find(':input').each(function () {
+                    var name = $(this).attr('name').replace('-0-', '-' + i + '-');
+                    var id = 'id_' + name;
+                    $(this).attr({'name': name, 'id': id});
+                });
+                tr_clone.find('label').each(function () {
+                    var newFor = $(this).attr('for').replace('-0-', '-' + i + '-');
+                    $(this).attr('for', newFor);
+                });
+                trs.push(tr_clone);
+                i += 1;
+            }
+            var newNum = familiares.length;
+            $('#id_familiar-TOTAL_FORMS').attr('value', newNum);
+            $('#id_familiar-INITIAL_FORMS').attr('value', newNum);
+            for (var j = 0; j < familiares.length; j++) {
+                var identificacion = familiares[j][0];
+                var nombre = familiares[j][1];
+                var ocupacion = familiares[j][2];
+                var escolaridad = familiares[j][3];
+                var edad = familiares[j][4];
+                var relacion = familiares[j][5];
+                var id = familiares[j][6]
+                $('#example1 tbody tr:last').before(trs[j]);
+                $('#id_familiar-' + j + '-identificacion_familiar').attr('value', identificacion);
+                $('#id_familiar-' + j + '-nombre').attr('value', nombre);
+                $('#id_familiar-' + j + '-ocupacion').attr('value', ocupacion);
+                $('#id_familiar-' + j + '-escolaridad').attr('value', escolaridad);
+                $('#id_familiar-' + j + '-edad').attr('value', edad);
+                $('#id_familiar-' + j + '-relacion').attr('value', relacion);
+                $('#id_familiar-' + j + '-id').val(id);
+                $('#id_familiar-' + j + '-DELETE').val('');
+            }
+        }
 
         function setText() {
             //Información a mostrar
@@ -175,7 +297,7 @@
             $("#modal-default .close").click()
         }
 
-        function limpiar_campos(){
+        function limpiar_campos() {
             $("#id_numero_habitantes").val("");
             $("#id_num_integrantes_laboran").val("");
             $("#id_num_hermanos").val("");
@@ -193,30 +315,30 @@
             $('#id_energia').prop('checked', false);
         }
 
-        $('#btn-buscar').on("click", function(){
+        $('#btn-buscar').on("click", function () {
             limpiar_campos();
 
             var id_paciente = $('#id_paciente').val();
 
-            if(id_paciente == ""){
-                alert("Seleccione un paciente");
-            }else{
+            if (id_paciente == "") {
+                mensaje_toastr('warning', 'Por favor, seleccione un paciente.');
+            } else {
                 $.ajax({
                     data: {'id_paciente': id_paciente},
                     url: "{% url 'get_antecedentes_psicosocial_ajax' %}",
-                    success: function(data){
-                        if(data !== ""){
+                    success: function (data) {
+                        if (data !== "") {
                             var json = JSON.parse(data);
-                            if(json.gas == true){
+                            if (json.gas == true) {
                                 $('#id_gas').prop('checked', true);
                             }
-                            if(json.internet == true){
+                            if (json.internet == true) {
                                 $('#id_internet').prop('checked', true);
                             }
-                            if(json.agua == true){
+                            if (json.agua == true) {
                                 $('#id_agua').prop('checked', true);
                             }
-                            if(json.energia == true){
+                            if (json.energia == true) {
                                 $('#id_energia').prop('checked', true);
                             }
                             $("#id_numero_habitantes").val(json.numero_habitantes);
@@ -230,14 +352,33 @@
                             $("#id_observaciones_vivienda").val(json.observaciones_vivienda);
                             $("#id_observacion_servicios").val(json.observacion_servicios);
                             $("#id_gmfcs").val(json.gmfcs);
-                            $("#id_antecedente").val(json.id_antecedente)
-                        }else{
-                            alert("No hay antecedentes");
+                            $("#id_antecedente").val(json.id_antecedente);
+
+                            var familiares = json.familiares;
+                            if (familiares.length != 0) {
+
+                                $('#example1 tbody tr').each(function () {
+                                    if (!$(this).hasClass('dynamic-form-add')) {
+                                        $(this).remove();
+                                    }
+                                });
+                                $('#id_familiar-TOTAL_FORMS').attr('value', 0);
+                                $('form').find('.has-success').each(function () {
+                                    $(this).removeClass('has-success')
+                                });
+                                $('form').find('.has-error').each(function () {
+                                    $(this).removeClass('has-error')
+                                });
+                                agregarFamiliares(familiares);
+                                $('#div-tabla').show();
+                            }
+                        } else {
+                            mensaje_toastr('warning', 'No hay antecedentes.');
                         }
                     },
                     dataType: "json",
                     error: function () {
-                        alert("Ocurrió un error al conectar con el servidor");
+                        mensaje_toastr('error', 'Ocurrió un error al conectar con el servidor.');
                     }
 
                 });
@@ -250,4 +391,4 @@
 {% block footer_content_block %}
 
 
-{% endblock  %}
+{% endblock %}

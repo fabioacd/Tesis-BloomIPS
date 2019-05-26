@@ -149,8 +149,17 @@
                     <p id="info_mostrar"> &hellip;</p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cerrar</button>
-                    <button type="submit" class="btn btn-primary" onclick="cerrarModal()">Registrar</button>
+                    <div class="row">
+                        <div class="col-md-2 col-sm-2">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                        </div>
+                        <div class="col-md-6 col-md-offset-1 col-sm-6 col-sm-offset-1">
+                            <button type="submit" name="save_and_records" value="1" class="btn btn-primary" onclick="cerrarModal()">Registrar y continuar con antecedentes personales</button>
+                        </div>
+                        <div class="col-md-2 col-sm-2 col-sm-offset-1">
+                            <button type="submit" name="save" value="1" class="btn btn-primary" onclick="cerrarModal()">Registrar</button>
+                        </div>
+                    </div>
                 </div>
             </div>
             <!-- /.modal-content -->
@@ -168,14 +177,24 @@
 
         $(document).ready(function(){
 
-            $('#id_consumo_embarazo').on('click', function(){
+            $('#id_consumo_embarazo').on('select2:select', function(e){
 
-                var selected_value = $('#id_consumo_embarazo option:selected').text();
+                var selected_value = e.params.data;
 
-                if(selected_value == "Otro"){
-                    $('#id_otro_consumo').prop('disabled', false);
+                if(selected_value.text == "Otro"){
+                    $('#id_otro_consumo').prop('readonly', false);
                 }else {
-                    $('#id_otro_consumo').prop('disabled', true);
+                    $('#id_otro_consumo').prop('readonly', true);
+                }
+            });
+
+            $('#id_consumo_embarazo').on('select2:unselect', function(e){
+
+                var selected_value = e.params.data;
+
+                if(selected_value.text == "Otro"){
+                    $('#id_otro_consumo').prop('readonly', true);
+                    $('#id_otro_consumo').val('');
                 }
             });
         });

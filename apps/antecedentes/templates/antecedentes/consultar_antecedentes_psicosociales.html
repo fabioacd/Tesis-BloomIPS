@@ -55,6 +55,34 @@
                 </div>
             </div>
 
+            <div class="row" id="div-tabla">
+
+                <div class="col-md-6 col-md-offset-1">
+                    <label style="font-weight: bold;">
+                        Personas que viven con el paciente
+                    </label>
+                </div>
+                <div class="col-md-10 col-md-offset-1">
+                        <div class="table-responsive">
+                            <table id="example1" class="table table-bordered table-striped my_datatable">
+                                <thead>
+                                <tr>
+                                    <th>Identificación</th>
+                                    <th>Nombre</th>
+                                    <th>Ocupación</th>
+                                    <th>Escolaridad</th>
+                                    <th>Edad</th>
+                                    <th>Relación</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                
+                                </tbody>
+                            </table>
+                        </div>
+                </div>
+            </div>
+
             <div class="row">
                 <div class="col-md-5 col-md-offset-1">
                     {% bootstrap_field form.total_ingresos layout="vertical" %}
@@ -89,16 +117,16 @@
                     </h5>
                 </div>
                 <div class="col-md-2">
-                    {% bootstrap_field form.gas layout="vertical" %}
-                </div>
-                <div class="col-md-2">
-                    {% bootstrap_field form.internet layout="vertical" %}
-                </div>
-                <div class="col-md-2">
                     {% bootstrap_field form.agua layout="vertical" %}
                 </div>
                 <div class="col-md-2">
                     {% bootstrap_field form.energia layout="vertical" %}
+                </div>
+                <div class="col-md-2">
+                    {% bootstrap_field form.gas layout="vertical" %}
+                </div>
+                <div class="col-md-2">
+                    {% bootstrap_field form.internet layout="vertical" %}
                 </div>
             </div>
 
@@ -124,6 +152,9 @@
     {{ form.media.js }}
 
     <script>
+    $(function() {
+        $("#div-tabla").hide();
+    });
 
         function limpiar_campos(){
             $("#id_numero_habitantes").val("");
@@ -149,13 +180,15 @@
             var id_paciente = $('#id_paciente').val();
 
             if(id_paciente == ""){
-                alert("Seleccione un paciente");
+                mensaje_toastr('warning', 'Por favor, seleccione un paciente.');
             }else{
                 $.ajax({
                     data: {'id_paciente': id_paciente},
                     url: "{% url 'get_antecedentes_psicosocial_ajax' %}",
                     success: function(data){
                         if(data !== ""){
+                            $("#example1 tbody").empty();
+                            $("#div-tabla").hide()
                             var json = JSON.parse(data);
                             if(json.gas == true){
                                 $('#id_gas').prop('checked', true);
@@ -180,13 +213,28 @@
                             $("#id_observaciones_vivienda").val(json.observaciones_vivienda);
                             $("#id_observacion_servicios").val(json.observacion_servicios);
                             $("#id_gmfcs").val(json.gmfcs);
+                            var familiares = json.familiares;
+                            if( familiares.length != 0){
+                                var td_info = "";
+                                for(var i=0;i<familiares.length;i++){
+                                    td_info += "<tr><td>" + familiares[i][0] + "</td>" +
+                                            "<td>" + familiares[i][1] + "</td>" +
+                                            "<td>" + familiares[i][2] + "</td>" +
+                                            "<td>" + familiares[i][3] + "</td>" +
+                                            "<td>" + familiares[i][4] + "</td>" +
+                                            "<td>" + familiares[i][5] + "</td> </tr>"
+                                }
+                            $("#example1 tbody").append(td_info)
+                            $("#div-tabla").show()
+                            }
+
                         }else{
-                            alert("No hay antecedentes");
+                            mensaje_toastr('warning', 'No hay antecedentes.');
                         }
                     },
                     dataType: "json",
                     error: function () {
-                        alert("Ocurrió un error al conectar con el servidor");
+                        mensaje_toastr('error', 'Ocurrió un error al conectar con el servidor.');
                     }
 
                 });
