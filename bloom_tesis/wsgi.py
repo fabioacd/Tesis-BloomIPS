@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "bloomips.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "bloom_tesis.settings")
 
 application = get_wsgi_application()
