@@ -1,0 +1,32 @@
+{% load bootstrap3 %}
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Consolidado</title>
+    <link rel="stylesheet" href="{% static 'css/css_pdf.css' %}">
+     {% block css_block %}{% endblock %}
+</head>
+<body>
+        <!-- Content for Static Frame 'header_frame' -->
+    <div id="header_content">
+        <img src="{% static 'logos/logo_pdf.png' %}" class="img-responsive" alt="Bloom IPS">
+    </div>
+
+    <!-- Content for Static Frame 'footer_frame' -->
+    <div id="footer_content">
+        <img src="{% static 'logos/pie-de-pagina.png' %}" class="img-responsive" alt="Bloom IPS">
+    </div>
+
+    <div class="texto_centrado">
+        <br>
+        {% block title_block %}{% endblock %}
+        <br>
+    </div>
+    {% block content_block %}
+    {% endblock %}
+
+</body>
+</html>

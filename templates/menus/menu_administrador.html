@@ -1,0 +1,310 @@
+<li class="treeview {% if 'empleado/modificar_empleado/' in request.path or 'empleado/agregar_empleado' in request.path or 'empleado/consultar_empleado' in request.path %} active {% else %} disabled {% endif %}">
+    <a href="#">
+        <i class="fa fa-user"></i> <span>Empleado</span>
+        <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right"></i>
+        </span>
+    </a>
+    <ul class="treeview-menu">
+        <li class="{% if 'empleado/agregar_empleado' in request.path %} active {% else %} disabled {% endif %}">
+            <a href="{% url 'agregar_empleado' %}">
+                <i class="fa fa-user-plus">
+                </i> Agregar empleado </a>
+        </li>
+        <li class="{% if 'empleado/consultar_empleado' in request.path %} active {% else %} disabled {% endif %}">
+            <a href="{% url 'consultar_empleado' %}">
+                <i class="fa fa-users">
+                </i> Consultar empleado </a>
+        </li>
+    </ul>
+</li>
+
+<li class="treeview {% if 'empleado/modificar_area/' in request.path or 'empleado/agregar_area' in request.path or 'empleado/consultar_area' in request.path %} active {% else %} disabled {% endif %}">
+    <a href="#">
+        <i class="fa  fa-circle"></i> <span>Area</span>
+        <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right"></i>
+        </span>
+    </a>
+    <ul class="treeview-menu">
+        <li class="{% if 'empleado/agregar_area' in request.path %} active {% else %} disabled {% endif %}">
+            <a href="{% url 'agregar_area' %}">
+                <i class="fa  fa-plus-square">
+                </i> Agregar area </a>
+        </li>
+        <li class="{% if 'empleado/consultar_area' in request.path %} active {% else %} disabled {% endif %}">
+            <a href="{% url 'consultar_area' %}">
+                <i class="fa fa-th-large">
+                </i> Consultar area </a>
+        </li>
+    </ul>
+</li>
+
+<li class="treeview {% if 'agregar_eps' in request.path or 'consultar_eps' in request.path or 'modificar_eps' in request.path %}
+    active {% else %} disabled {% endif %}">
+    <a href="#">
+        <i class="fa fa-hospital-o"></i> <span>Eps</span>
+        <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+        </span>
+    </a>
+    <ul class="treeview-menu">
+        <li class="{% if 'agregar_eps' in request.path %} active {% else %} disabled {% endif %}">
+            <a href="{% url 'agregar_eps' %}">
+                <i class="fa fa-plus-square">
+                </i> Agregar Eps</a>
+        </li>
+        <li class="{% if 'consultar_eps' in request.path %} active {% else %} disabled {% endif %}">
+            <a href="{% url 'consultar_eps' %}">
+                <i class="fa fa-table">
+                </i> Consultar Eps </a>
+        </li>
+    </ul>
+</li>
+
+
+<li class="treeview {% if 'empleado/consultar_resumen' in request.path or 'empleado/agregar_resumen' in request.path or 'empleado/consultar_informe_area' in request.path  or 'empleado/consultar_informe_paciente' in request.path or 'empleado/agregar_resumen' in request.path %} active {% else %} disabled {% endif %}">
+    <a href="#">
+        <i class="fa fa-file-text-o"></i> <span>Informe mensual</span>
+        <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right"></i>
+        </span>
+    </a>
+    <ul class="treeview-menu">
+        <li class="{% if 'empleado/agregar_resumen' in request.path %} active {% else %} disabled {% endif %}">
+            <a href="{% url 'agregar_resumen' %}">
+                <i class="fa fa-plus-square">
+                </i> Agregar informe mensual</a>
+        </li>
+        <li class="{% if 'empleado/consultar_resumen' in request.path %} active {% else %} disabled {% endif %}">
+            <a href="{% url 'consultar_resumen' %}">
+                <i class="fa fa-table">
+                </i> Consultar informe mensual</a>
+        </li>
+
+        <li class="{% if 'empleado/consultar_informe_area' in request.path %} active {% else %} disabled {% endif %}">
+            <a href="{% url 'consultar_informe_area' %}">
+                <i class="fa fa-clipboard">
+                </i> Consultar informe por área</a>
+        </li>
+
+        <li class="{% if 'empleado/consultar_informe_paciente' in request.path %} active {% else %} disabled {% endif %}">
+            <a href="{% url 'consultar_informe_paciente' %}">
+                <i class="fa fa-clipboard">
+                </i> Consultar estado informe </a>
+        </li>
+    </ul>
+</li>
+
+
+<li class="treeview {% if 'empleado/agregar_consolidado' in request.path or 'empleado/generar_consolidados' in request.path %} active {% else %} disabled {% endif %}">
+    <a href="#">
+        <i class="fa fa-clone"></i> <span>Consolidado</span>
+        <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right"></i>
+        </span>
+    </a>
+    <ul class="treeview-menu">
+        <li class="{% if 'agregar_consolidado' in request.path %} active {% else %} disabled {% endif %}">
+            <a href="{% url 'agregar_consolidado' %}">
+                <i class="fa fa-plus-square">
+                </i> Agregar consolidado</a>
+        </li>
+    </ul>
+</li>
+
+
+<li class="treeview {% if 'evento_adverso/' in request.path or 'evento_adverso/agregar_implicado_evento' in request.path %} active {% else %} disabled {% endif %}">
+    <a href="#">
+        <i class="fa fa-exclamation-circle"></i> <span>Evento adverso</span>
+        <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right"></i>
+        </span>
+    </a>
+    <ul class="treeview-menu">
+        <li class="{% if 'evento_adverso/agregar_implicado_evento' in request.path %} active {% else %} disabled {% endif %}">
+            <a href="{% url 'agregar_implicado_evento_adverso' %}">
+                <i class="fa fa-user-plus">
+                </i> Agregar implicado</a>
+        </li>
+        <li class="{% if 'evento_adverso/consultar_implicados_evento' in request.path %} active {% else %} disabled {% endif %}">
+            <a href="{% url 'consultar_implicados_evento_adverso' %}">
+                <i class="fa fa-file-o">
+                </i> Consultar implicado </a>
+        </li>
+        <li class="{% if 'evento_adverso/agregar_evento_adverso' in request.path %} active {% else %} disabled {% endif %}">
+            <a href="{% url 'agregar_evento_adverso' %}">
+                <i class="fa fa-plus-square">
+                </i> Agregar evento adverso </a>
+        </li>
+        <li class="{% if 'evento_adverso/consultar_evento_adverso' in request.path %} active {% else %} disabled {% endif %}">
+            <a href="{% url 'consultar_evento' %}">
+                <i class="fa fa-file-o">
+                </i> Consultar evento adverso </a>
+        </li>
+    </ul>
+</li>
+
+
+<li class="treeview {% if 'paciente/agregar_archivo_paciente' in request.path or 'paciente/registrar_paciente' in request.path or 'paciente/consultar_paciente' in request.path or 'paciente/consultar_evolucion_diaria' in request.path or 'paciente/agregar_evolucion_diaria' in request.path %} active {% else %} disabled {% endif %}">
+
+    <a href="#">
+        <i class="fa fa-male"></i> <span>Paciente</span>
+        <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+        </span>
+    </a>
+    <ul class="treeview-menu">
+        <li class="{% if 'registrar_paciente' in request.path %} active {% else %} disabled {% endif %}">
+            <a href="{% url 'registrar_paciente' %}">
+                <i class="fa fa-user-plus">
+                </i> Registrar paciente </a>
+        </li>
+        <li class="{% if 'consultar_paciente' in request.path %} active {% else %} disabled {% endif %}">
+            <a href="{% url 'consultar_paciente' %}">
+                <i class="fa fa-table">
+                </i> Consultar paciente </a>
+        </li>
+        <li class="{% if 'agregar_evolucion_diaria' in request.path %} active {% else %} disabled {% endif %}">
+            <a href="{% url 'agregar_evolucion_diaria' %}">
+                <i class="fa fa-plus-square">
+                </i> Agregar evolución diaria </a>
+        </li>
+        <li class="{% if 'consultar_evolucion_diaria' in request.path %} active {% else %} disabled {% endif %}">
+            <a href="{% url 'consultar_evolucion_diaria' %}">
+                <i class="fa fa-search">
+                </i> Consultar evolución diaria </a>
+        </li>
+        <li class="{% if 'agregar_archivo_paciente' in request.path %} active {% else %} disabled {% endif %}">
+            <a href="{% url 'agregar_archivo_paciente' %}">
+                <i class="fa fa-file-text-o">
+                </i> Agregar archivo paciente </a>
+        </li>
+    </ul>
+</li>
+
+<li class="treeview {% if 'antecedentes/' in request.path %} active {% else %} disabled {% endif %}">
+    <a href="#">
+        <i class="fa fa-clipboard"></i> <span>Antecedentes</span>
+        <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+        </span>
+    </a>
+    <ul class="treeview-menu">
+        <li class="treeview {% if 'gestacionales' in request.path %} active {% else %} disabled {% endif %}">
+            <a href="#">
+                <i class="fa fa-clipboard"></i> <span>Gestacionales</span>
+                <span class="pull-right-container">
+                    <i class="fa fa-angle-left pull-right"></i>
+                </span>
+            </a>
+            <ul class="treeview-menu">
+                <li class="{% if 'registrar_antecedentes_gestacionales' in request.path %} active {% else %} disabled {% endif %}">
+                    <a href="{% url 'registrar_antecedentes_gestacionales' %}">
+                        <i class="fa fa-plus-square">
+                        </i> Registrar </a>
+                </li>
+                <li class="{% if 'consultar_antecedentes_gestacionales' in request.path %} active {% else %} disabled {% endif %}">
+                    <a href="{% url 'consultar_antecedentes_gestacionales' %}">
+                        <i class="fa fa-file-o">
+                        </i> Consultar </a>
+                </li>
+                <li class="{% if 'modificar_antecedentes_gestacionales' in request.path %} active {% else %} disabled {% endif %}">
+                    <a href="{% url 'modificar_antecedentes_gestacionales' %}">
+                        <i class="fa fa-edit">
+                        </i> Modificar </a>
+                </li>
+            </ul>
+        </li>
+        <li class="treeview {% if 'personales' in request.path %} active {% else %} disabled {% endif %}">
+            <a href="#">
+                <i class="fa fa-user"></i> <span>Personales</span>
+                <span class="pull-right-container">
+                    <i class="fa fa-angle-left pull-right"></i>
+                </span>
+            </a>
+            <ul class="treeview-menu">
+                <li class="{% if 'registrar_antecedentes_personales' in request.path %} active {% else %} disabled {% endif %}">
+                    <a href="{% url 'registrar_antecedentes_personales' %}">
+                        <i class="fa fa-plus-square">
+                        </i> Registrar </a>
+                </li>
+                <li class="{% if 'consultar_antecedentes_personales' in request.path %} active {% else %} disabled {% endif %}">
+                    <a href="{% url 'consultar_antecedentes_personales' %}">
+                        <i class="fa fa-file-o">
+                        </i> Consultar </a>
+                </li>
+                <li class="{% if 'modificar_antecedentes_personales' in request.path %} active {% else %} disabled {% endif %}">
+                    <a href="{% url 'modificar_antecedentes_personales' %}">
+                        <i class="fa fa-edit">
+                        </i> Modificar </a>
+                </li>
+            </ul>
+        </li>
+        <li class="treeview {% if 'psicosociales' in request.path %} active {% else %} disabled {% endif %}">
+            <a href="#">
+                <i class="fa fa-clipboard"></i> <span>Psicosociales</span>
+                <span class="pull-right-container">
+                    <i class="fa fa-angle-left pull-right"></i>
+                </span>
+            </a>
+            <ul class="treeview-menu">
+                <li class="{% if 'registrar_antecedentes_psicosociales' in request.path %} active {% else %} disabled {% endif %}">
+                    <a href="{% url 'registrar_antecedentes_psicosociales' %}">
+                        <i class="fa fa-plus-square">
+                        </i> Registrar </a>
+                </li>
+                <li class="{% if 'consultar_antecedentes_psicosociales' in request.path %} active {% else %} disabled {% endif %}">
+                    <a href="{% url 'consultar_antecedentes_psicosociales' %}">
+                        <i class="fa fa-file-o">
+                        </i> Consultar </a>
+                </li>
+                <li class="{% if 'modificar_antecedentes_psicosociales' in request.path %} active {% else %} disabled {% endif %}">
+                    <a href="{% url 'modificar_antecedentes_psicosociales' %}">
+                        <i class="fa fa-edit">
+                        </i> Modificar </a>
+                </li>
+            </ul>
+        </li>
+        <li class="treeview {% if 'familiares' in request.path %} active {% else %} disabled {% endif %}">
+            <a href="#">
+                <i class="fa fa-users"></i> <span>Familiares</span>
+                <span class="pull-right-container">
+                    <i class="fa fa-angle-left pull-right"></i>
+                </span>
+            </a>
+            <ul class="treeview-menu">
+                <li class="{% if 'registrar_antecedentes_familiares' in request.path %} active {% else %} disabled {% endif %}">
+                    <a href="{% url 'registrar_antecedentes_familiares' %}">
+                        <i class="fa fa-plus-square">
+                        </i> Registrar </a>
+                </li>
+                <li class="{% if 'consultar_antecedentes_familiares' in request.path %} active {% else %} disabled {% endif %}">
+                    <a href="{% url 'consultar_antecedentes_familiares' %}">
+                        <i class="fa fa-file-o">
+                        </i> Consultar </a>
+                </li>
+                <li class="{% if 'modificar_antecedentes_familiares' in request.path %} active {% else %} disabled {% endif %}">
+                    <a href="{% url 'modificar_antecedentes_familiares' %}">
+                        <i class="fa fa-edit">
+                        </i> Modificar </a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</li>
+
+<li class="{% if 'carga_cie10' in request.path %} active {% else %} disabled {% endif %}">
+    <a href="{% url 'carga_cie10' %}">
+        <i class="fa fa-upload"></i> <span>Carga masiva cie10</span>
+        <span class="pull-right-container">
+        </span>
+    </a>
+</li>
+
+{#<li class="">#}
+{#    <a href="{% url 'reportes' %}">#}
+{#        <i class="fa fa-bar-chart">#}
+{#        </i> Reportes </a>#}
+{#</li>#}
+

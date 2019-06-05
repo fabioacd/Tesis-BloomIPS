@@ -1,0 +1,50 @@
+{% extends 'base/base_pdf.html' %}
+
+{% block css_block %}
+    <style>
+        #info_paciente {
+            border: 1px solid black;
+            border-radius: 8px;
+        }
+
+        #titulo {
+            text-align: center;
+        }
+
+    </style>
+{% endblock %}
+{% block title_block %}
+    <h1 id="titulo">EVOLUCIÓN INTERDISCIPLINARIA</h1>
+    <div id="info_paciente">
+        <p><strong>Paciente: </strong>{{ paciente.nombre }} {{ info.paciente.apellido }}
+            <strong>Identificacion: </strong> {{ paciente.identificacion }}
+            <strong>Sexo: </strong> {{ paciente.genero }}
+            <strong>Fecha de Nacimiento: </strong> {{ paciente.fecha_nacimiento }}
+            <strong>Eps: </strong> {{ paciente.eps }}
+            <strong>Diagnostico Clinico: </strong> {{ paciente.enfermedad_actual }}
+            {% if info.paciente.tipo_paciente == 'Infante' %}
+                <strong>Responsable: </strong> {{ paciente.nombre_responsable }}
+                <strong>Parentesco: </strong> {{ paciente.parentesco_responsable }}
+            {% endif %}
+            <strong>Dirección: </strong> {{ paciente.direccion }}
+            <strong>Estrato: </strong> {{ paciente.estrato }}
+            <strong>Telefono: </strong> {{ paciente.telefono }}
+            <strong>Celular: </strong> {{ paciente.celular }}
+            <strong>Atención: </strong> {% for resumen in resumenes %}
+                {{ resumen.area }},
+            {% endfor %}
+            <strong>Fecha Atención: </strong> Del {{ fecha_inicio |date:"d M Y" }} hasta {{ fecha_fin |date:"d M Y" }}
+        </p>
+    </div>
+{% endblock %}
+
+{% block content_block %}
+    <div>
+         {% for resumen in resumenes %}
+            <h5>{{ resumen.area }}:</h5>
+            {{ resumen.descripcion | safe }}
+            <img src="{{ resumen.empleado.firma }}" width="150" height="50">
+            <h6>{{ resumen.empleado.first_name | upper }} {{ resumen.empleado.last_name | upper }}</h6>
+        {% endfor %}
+    </div>
+{% endblock %}

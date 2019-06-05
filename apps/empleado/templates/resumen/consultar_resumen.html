@@ -1,0 +1,90 @@
+{% extends 'base/base_tables.html' %}
+{% load bootstrap3 %}
+{% load staticfiles %}
+
+{% block titulo_block %} BloomIPS | Consultar informe mensual{% endblock %}
+
+{% block css_block %}
+    {{ block.super }}
+
+{% endblock %}
+
+{% block title_content_block %}<strong>Consultar informe mensual</strong>{% endblock %}
+
+{% block content_body_block %}
+
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <div class="table-responsive">
+                <table id="example1" class="table table-bordered table-striped my_datatable">
+                    <thead>
+                    <tr>
+                        <th>Escrito por</th>
+                        <th>Paciente</th>
+                        <th class="search-date">Fecha</th>
+                        <th class="search-select">Área</th>
+                        <th class="search-select">Estado</th>
+                        <th class="no_search">Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <th>Escrito por</th>
+                        <th>Paciente</th>
+                        <th>Mes</th>
+                        <th>Área</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block js_block %}
+    {{ block.super }}
+
+    <script>
+        function procesar_datos(json) {
+            for (var i = 0; i < json.data.length; i++) {
+                var contenido = "";
+                var temporal = json.data[i][5];
+                if (temporal[0].opcion === 'modificar_resumen') {
+                    contenido += '<a href="' + temporal[0].url + '"class="btn-sm btn-block btn-primary" style="text-align: center">Modificar</a>'
+                }
+                if (temporal[0].opcion === 'ver_resumen') {
+                    contenido += '<a href="' + temporal[0].url + '"class="btn-sm btn-block btn-primary" style="text-align: center">Ver</a>'
+                }
+                json.data[i][5] = contenido;
+            }
+            return json.data
+        }
+
+        function obtener_datos(data) {
+            data.csrfmiddlewaretoken = '{{ csrf_token }}'
+
+        }
+
+        $(function () {
+            $('#rango_fecha').attr("autocomplete", "off");
+            iniciar_datatable("{% url 'ajax_filtro_consultar_resumen' %}", {
+                'actualizar_datos': obtener_datos,
+                'funcion_ajax': procesar_datos,
+                'tipo_peticion': 'POST'
+            });
+            agregar_busqueda_columnas();
+        });
+    </script>
+
+{% endblock %}
+
+{% block footer_content_block %}
+
+
+{% endblock %}

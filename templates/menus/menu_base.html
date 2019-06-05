@@ -10,9 +10,9 @@
 
 {% endif %}
 
-{% if user.get_cargo == 'Secretaria' %}
+{% if user.get_cargo == 'Auxiliar administrativo' %}
 
-    {% include "menus/menu_secretaria.html" %}
+    {% include "menus/menu_auxiliar.html" %}
 
 {% endif %}
 
@@ -22,13 +22,3 @@
     {% include "menus/menu_administrador.html" %}
 
 {% endif %}
-
-{% comment %}
-
-{% if user.is_anonymous if user.get_cargo == 'Administrador' %}
-
-    {% include "menus/menu_administrador.html" %}
-
-{% endif %}
-
-{% endcomment %}

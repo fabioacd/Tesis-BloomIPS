@@ -1459,7 +1459,10 @@ S2.define('select2/selection/base',[
 
         var $element = $this.data('element');
 
-        $element.select2('close');
+        if ($element) {
+          $element.select2('close');
+        }
+
       });
     });
   };

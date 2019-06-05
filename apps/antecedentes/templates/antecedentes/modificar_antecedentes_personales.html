@@ -1,0 +1,179 @@
+{% extends 'base/base.html'%}
+{% load bootstrap3 %}
+{% load staticfiles %}
+
+{% block titulo_block %} BloomIPS | Modificar antecedentes personales {% endblock  %}
+
+{% block title_content_block %}<strong>Modificar antecedentes personales</strong>{% endblock %}
+
+{% block css_block %}
+
+    <!-- Select2 -->
+    {{ form.media.css }}
+    <link rel="stylesheet" href="{% static 'css/css_personalizados.css' %}">
+
+    <style>
+
+        #btn-buscar {
+            margin: 25px 0px;
+        }
+
+    </style>
+
+{% endblock %}
+
+{% block content_body_block %}
+<form role="form" method="POST"> {% csrf_token %}
+    <div class="box-body">
+        <div class="form-group">
+
+            {% bootstrap_field form.antecedente layout="vertical" %}
+            <div class="row">
+                <div class="col-md-5 col-md-offset-1">
+                    {% bootstrap_field form.paciente layout="vertical" %}
+                </div>
+                <div class="col-md-2">
+                    <button type="button" class="btn btn-info" id="btn-buscar">Buscar</button>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-10 col-md-offset-1">
+                    {% bootstrap_field form.farmacologicos layout="vertical" %}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-10 col-md-offset-1">
+                    {% bootstrap_field form.alergicos layout="vertical" %}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-10 col-md-offset-1">
+                    {% bootstrap_field form.patologicos layout="vertical" %}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-10 col-md-offset-1">
+                    {% bootstrap_field form.toxicos layout="vertical" %}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-10 col-md-offset-1">
+                    {% bootstrap_field form.quirurgicos layout="vertical" %}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-10 col-md-offset-1">
+                    {% bootstrap_field form.prescripcion_medica layout="vertical" %}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-10 col-md-offset-1">
+                    {% bootstrap_field form.esquema_vacunacion layout="vertical" %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="box-footer">
+        <button type="button" class="btn btn-primary" data-target="#modal-default" onclick="setText()"
+                type="button">Guardar</button>
+    </div>
+     <!-- Modal -->
+    <div class="modal fade" id="modal-default">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Modificar antecedentes personales</h4>
+                </div>
+                <div class="modal-body" id="mostrar-alerta">
+                    <p id="info_mostrar"> &hellip;</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary" onclick="cerrarModal()">Guardar</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+</form>
+{% endblock %}
+
+{% block js_block %}
+
+    {{ form.media.js }}
+
+    <script>
+        function setText() {
+            //Información a mostrar
+            document.getElementById("info_mostrar").innerHTML = "¿Está seguro que desea guardar los cambios?"
+            $("#modal-default").modal('toggle');
+        }
+
+        function cerrarModal() {
+            $("#modal-default .close").click()
+        }
+
+        function limpiar_campos(){
+            $('#id_farmacologicos').val("");
+            $('#id_alergicos').val("");
+            $('#id_patologicos').val("");
+            $('#id_toxicos').val("");
+            $('#id_quirurgicos').val("");
+            $('#id_prescripcion_medica').val("");
+            $('#id_esquema_vacunacion').val("");
+        }
+
+        $('#btn-buscar').on("click", function(){
+            limpiar_campos();
+
+            var id_paciente = $('#id_paciente').val();
+
+            if(id_paciente == ""){
+                mensaje_toastr('warning', 'Por favor, seleccione un paciente.');
+            }else{
+                $.ajax({
+                    data: {'id_paciente': id_paciente},
+                    url: "{% url 'get_antecedente_personal_ajax' %}",
+                    success: function(data){
+                        if(data !== ""){
+                            var json = JSON.parse(data)
+                            $('#id_farmacologicos').val(json.farmacologicos);
+                            $('#id_alergicos').val(json.alergicos);
+                            $('#id_patologicos').val(json.patologicos);
+                            $('#id_toxicos').val(json.toxicos);
+                            $('#id_quirurgicos').val(json.quirurgicos);
+                            $('#id_prescripcion_medica').val(json.prescripcion_medica);
+                            $('#id_esquema_vacunacion').val(json.esquema_vacunacion);
+                            $('#id_antecedente').val(json.id_antecedente);
+
+                        }else{
+                            mensaje_toastr('warning', 'No hay antecedentes.');
+                        }
+                    },
+                    dataType: "json",
+                    error: function () {
+                        mensaje_toastr('error', 'Ocurrió un error al conectar con el servidor.');
+                    }
+
+                });
+            }
+        });
+    </script>
+
+{% endblock %}
+
+{% block footer_content_block %}
+
+
+{% endblock  %}

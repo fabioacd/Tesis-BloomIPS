@@ -1,0 +1,52 @@
+[
+    {
+        "model": "paciente.eps",
+        "pk": "1",
+        "fields": {
+            "nit": "123",
+            "nombre": "SURA",
+            "direccion": "Calle 23 # 54 - 65",
+            "telefono": "3286598"
+        }
+    },
+  {
+        "model": "paciente.eps",
+        "pk": "2",
+        "fields": {
+            "nit": "321",
+            "nombre": "Coomeva",
+            "direccion": "Calle 3 # 54 - 56",
+            "telefono": "3286598"
+        }
+    },
+  {
+        "model": "paciente.eps",
+        "pk": "3",
+        "fields": {
+            "nit": "456",
+            "nombre": "Nueva EPS",
+            "direccion": "Calle 2 # 5 - 65",
+            "telefono": "3286598"
+        }
+    },
+  {
+        "model": "paciente.eps",
+        "pk": "4",
+        "fields": {
+            "nit": "654",
+            "nombre": "Comfandi",
+            "direccion": "Calle 55 # 54 - 6",
+            "telefono": "3286598"
+        }
+    },
+    {
+          "model": "paciente.eps",
+          "pk": "5",
+          "fields": {
+              "nit": "965",
+              "nombre": "Sanitas",
+              "direccion": "Calle 69 # 54 - 6",
+              "telefono": "3566554"
+          }
+      }
+]

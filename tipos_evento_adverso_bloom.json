@@ -1,0 +1,66 @@
+[
+{
+    "model": "evento_adverso.tipoeventoadverso",
+    "pk": 1,
+    "fields": {
+        "nombre": "Ca\u00edda",
+        "descripcion": "Descripci\u00f3n de la caida"
+    }
+},
+{
+    "model": "evento_adverso.tipoeventoadverso",
+    "pk": 2,
+    "fields": {
+        "nombre": "Inatenci\u00f3n da\u00f1o de equipo",
+        "descripcion": "Descripci\u00f3n del tipo de evento"
+    }
+},
+{
+    "model": "evento_adverso.tipoeventoadverso",
+    "pk": 3,
+    "fields": {
+        "nombre": "Error identificaci\u00f3n paciente",
+        "descripcion": "Descripci\u00f3n del tipo de evento"
+    }
+},
+{
+    "model": "evento_adverso.tipoeventoadverso",
+    "pk": 4,
+    "fields": {
+        "nombre": "Procedimiento equivocado",
+        "descripcion": "Descripci\u00f3n del tipo de evento"
+    }
+},
+{
+    "model": "evento_adverso.tipoeventoadverso",
+    "pk": 5,
+    "fields": {
+        "nombre": "Quemadura",
+        "descripcion": "Descripci\u00f3n del tipo de evento"
+    }
+},
+{
+    "model": "evento_adverso.tipoeventoadverso",
+    "pk": 6,
+    "fields": {
+        "nombre": "Infecci\u00f3n",
+        "descripcion": "Descripci\u00f3n del tipo de evento"
+    }
+},
+{
+    "model": "evento_adverso.tipoeventoadverso",
+    "pk": 7,
+    "fields": {
+        "nombre": "Asfixia",
+        "descripcion": "Descripci\u00f3n del tipo de evento"
+    }
+},
+{
+    "model": "evento_adverso.tipoeventoadverso",
+    "pk": 8,
+    "fields": {
+        "nombre": "Otro",
+        "descripcion": "Descripci\u00f3n del tipo de evento"
+    }
+}
+]

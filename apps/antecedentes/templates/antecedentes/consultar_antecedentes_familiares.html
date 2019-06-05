@@ -1,0 +1,126 @@
+{% extends 'base/base.html'%}
+{% load bootstrap3 %}
+{% load staticfiles %}
+
+{% block titulo_block %} BloomIPS | Consulta de antecedentes familiares {% endblock  %}
+
+{% block title_content_block %}<strong>Consulta de antecedentes familiares</strong>{% endblock %}
+
+{% block css_block %}
+
+    <!-- Select2 -->
+    {{ form.media.css }}
+    <link rel="stylesheet" href="{% static 'css/css_personalizados.css' %}">
+
+    <style>
+
+        #btn-buscar {
+            margin: 25px 0px;
+        }
+
+    </style>
+
+{% endblock %}
+
+{% block content_body_block %}
+<form role="form" method="POST"> {% csrf_token %}
+    <div class="box-body">
+        <div class="form-group">
+
+            <div class="row">
+                <div class="col-md-5 col-md-offset-1">
+                    {% bootstrap_field form.paciente layout="vertical" %}
+                </div>
+                <div class="col-md-2">
+                    <button type="button" class="btn btn-info" id="btn-buscar">Buscar</button>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-10 col-md-offset-1">
+                    {% bootstrap_field form.enfermedad_madre layout="vertical" %}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-10 col-md-offset-1">
+                    {% bootstrap_field form.enfermedad_padre layout="vertical" %}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-10 col-md-offset-1">
+                    {% bootstrap_field form.enfermedad_hermanos layout="vertical" %}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-10 col-md-offset-1">
+                    {% bootstrap_field form.antecedentes_clinicos layout="vertical" %}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-10 col-md-offset-1">
+                    {% bootstrap_field form.otros_antecedentes layout="vertical" %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+</form>
+{% endblock %}
+
+{% block js_block %}
+
+    {{ form.media.js }}
+
+    <script>
+
+        function limpiar_campos(){
+            $('#id_enfermedad_madre').val("");
+            $('#id_enfermedad_padre').val("");
+            $('#id_enfermedad_hermanos').val("");
+            $('#id_antecedentes_clinicos').val("");
+            $('#id_otros_antecedentes').val("");
+        }
+
+        $('#btn-buscar').on("click", function(){
+            limpiar_campos();
+
+            var id_paciente = $('#id_paciente').val();
+
+            if(id_paciente == ""){
+                mensaje_toastr('warning', 'Por favor, seleccione un paciente.');
+            }else{
+                $.ajax({
+                    data: {'id_paciente': id_paciente},
+                    url: "{% url 'get_antecedente_familiar_ajax' %}",
+                    success: function(data){
+                        if(data !== ""){
+                            var json = JSON.parse(data)
+                            $('#id_enfermedad_madre').val(json.enfermedad_madre);
+                            $('#id_enfermedad_padre').val(json.enfermedad_padre);
+                            $('#id_enfermedad_hermanos').val(json.enfermedad_hermanos);
+                            $('#id_antecedentes_clinicos').val(json.antecedentes_clinicos);
+                            $('#id_otros_antecedentes').val(json.otros_antecedentes);
+                        }else{
+                            mensaje_toastr('warning', 'No hay antecedentes.');
+                        }
+                    },
+                    dataType: "json",
+                    error: function () {
+                        mensaje_toastr('error', 'Ocurrió un error al conectar con el servidor.');
+                    }
+
+                });
+            }
+        });
+    </script>
+
+{% endblock %}
+
+{% block footer_content_block %}
+
+
+{% endblock  %}

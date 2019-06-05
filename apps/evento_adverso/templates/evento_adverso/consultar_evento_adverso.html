@@ -1,0 +1,92 @@
+{% extends 'base/base_tables.html' %}
+{% load bootstrap3 %}
+{% load staticfiles %}
+
+
+{% block titulo_block %} BloomIPS | Consultar evento adversp{% endblock %}
+
+{% block title_content_block %}<strong>Consultar evento adverso</strong>{% endblock %}
+
+
+
+
+
+{% block content_body_block %}
+
+    <div class="row">
+        <div class="col-md-12 ">
+            <table id="example1" class="table table-bordered table-striped my_datatable">
+                <thead>
+                <tr>
+                    <th style="text-align:justify" style="width: 5%">Implicado</th>
+                    <th style="text-align:justify" style="width: 10%">Tipo de evento</th>
+                    <th class="search-date" style="text-align:center" style="width: 2%">Fecha</th>
+                    <th style="text-align:center" style="width: 30%">Lugar</th>
+                    <th style="width: 30%">Descripción</th>
+                    <th class="no_search" style="vertical-align: middle">Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <th style="text-align:justify" style="width: 5%">Implicado</th>
+                    <th style="text-align:justify" style="width: 10%">Tipo de evento</th>
+                    <th style="text-align:center" style="width: 2%">Fecha</th>
+                    <th style="text-align:center" style="width: 30%">Lugar</th>
+                    <th style="width: 30%">Descripción</th>
+                    <th style="vertical-align: middle" style="width: 10%">Acciones</th>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block js_block %}
+    {{ block.super }}
+    <!-- DataTables -->
+    <script src="{% static 'bower_components/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
+
+    <script>
+        function procesar_datos(json) {
+            for (var i = 0; i < json.data.length; i++) {
+                var objs_botones = json.data[i][5];
+                var lista_tipos_evento = json.data[i][1];
+                var botones = '';
+                var tipos_evento = '<ul>';
+                for (var j = 0; j < lista_tipos_evento.length; j++) {
+                    var tipo_actual = lista_tipos_evento[j];
+                    tipos_evento += `<li>${tipo_actual}</li>`;
+                }
+                for (var k = 0; k < objs_botones.length; k++) {
+                    var btn_actual = objs_botones[k];
+                    botones += `<a href="${btn_actual.url}" class="btn-sm btn-block ${btn_actual.color}" style="text-align: center">${btn_actual.texto_boton}</a>`
+                }
+                tipos_evento += '</ul>';
+                json.data[i][1] = tipos_evento;
+                json.data[i][5] = botones;
+            }
+            return json.data
+        }
+
+        function obtener_datos(data) {
+            data.csrfmiddlewaretoken = '{{ csrf_token }}'
+        }
+
+        $(function () {
+            iniciar_datatable("{% url 'ajax_filtro_consultar_evento' %}", {
+                'actualizar_datos': obtener_datos,
+                'funcion_ajax': procesar_datos,
+                'tipo_peticion': 'POST'
+            });
+            agregar_busqueda_columnas();
+        });
+    </script>
+
+{% endblock %}
+
+{% block footer_content_block %}
+{% endblock %}

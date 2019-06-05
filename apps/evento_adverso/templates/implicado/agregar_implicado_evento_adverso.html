@@ -1,0 +1,109 @@
+{% extends 'base/base.html' %}
+{% load bootstrap3 %}
+{% load staticfiles %}
+
+{% block titulo_block %} BloomIPS | Crear evento adverso{% endblock %}
+
+{% block title_content_block %}<strong>Registro de implicado a evento adverso</strong>{% endblock %}
+
+{% block css_block %}
+
+    <!-- Select2 -->
+    {{ AgregarImplicadoEventoForm.media.css }}
+    <link rel="stylesheet" href="{% static 'css/css_personalizados.css' %}">
+
+    <style>
+
+    </style>
+
+{% endblock %}
+
+{% block content_body_block %}
+    <form role="form" method="POST"> {% csrf_token %}
+
+        <div class="box-body">
+            <div class="form-group">
+
+                <div class="row">
+                    <div class="col-md-5 col-md-offset-1">
+                        <h4> Informacion personal</h4>
+                    </div>
+                    <div class="col-md-10 col-md-offset-1">
+                        <hr/>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-5 col-md-offset-1">
+                        {% bootstrap_field form_crear_implicado.id_implicado layout="vertical" %}
+                    </div>
+                    <div class="col-md-5">
+                        {% bootstrap_field form_crear_implicado.nombre layout="vertical" %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-5 col-md-offset-1">
+                        {% bootstrap_field form_crear_implicado.seguridad_social layout="vertical" %}
+                    </div>
+                    <div class="col-md-5">
+                        {% bootstrap_field form_crear_implicado.edad layout="vertical" %}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="box-footer">
+            <button type="button" class="btn btn-primary" data-target="#modal-default" onclick="setText()"
+                    type="button">Guardar
+            </button>
+        </div>
+
+
+        <!-- Modal -->
+        <div class="modal fade" id="modal-default">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Guardar Implicado a evento adverso</h4>
+                    </div>
+                    <div class="modal-body" id="mostrar-alerta">
+                        <p id="info_mostrar"> &hellip;</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-primary" onclick="cerrarModal()">Registrar</button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+
+    </form>
+{% endblock %}
+
+
+{% block js_block %}
+    {{ AgregarImplicadoEventoForm.media.js }}
+
+    <script>
+        function setText() {
+            //Información a mostrar
+            document.getElementById("info_mostrar").innerHTML = "¿Está seguro que desea registrar el implicado?"
+            $("#modal-default").modal('toggle');
+        }
+
+        function cerrarModal(){
+            $("#modal-default .close").click()
+        }
+
+    </script>
+{% endblock %}
+
+{% block footer_content_block %}
+
+
+{% endblock  %}
+

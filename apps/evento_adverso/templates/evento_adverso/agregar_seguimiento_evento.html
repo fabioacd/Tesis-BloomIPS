@@ -1,0 +1,337 @@
+{% extends 'base/base.html' %}
+{% load bootstrap3 %}
+{% load staticfiles %}
+
+{% block titulo_block %} BloomIPS | Seguimiento a evento adverso{% endblock %}
+
+{% block title_content_block %}<strong>Seguimiento a evento adverso</strong>{% endblock %}
+
+{% block css_block %}
+
+    <!-- Select2 -->
+    {{ form.media.css }}
+
+
+
+    <style type="text/css">
+        dummydeclaration {
+            padding-left: 4em;
+        }
+
+        /* Firefox ignores first declaration for some reason */
+        tab1 {
+            padding-left: 4em;
+        }
+
+        tab2 {
+            padding-left: 8em;
+        }
+
+        tab3 {
+            padding-left: 12em;
+        }
+
+        tab4 {
+            padding-left: 16em;
+        }
+
+        tab5 {
+            padding-left: 20em;
+        }
+
+        tab6 {
+            padding-left: 24em;
+        }
+
+        tab7 {
+            padding-left: 28em;
+        }
+
+        tab8 {
+            padding-left: 32em;
+        }
+
+        tab9 {
+            padding-left: 36em;
+        }
+
+        tab10 {
+            padding-left: 40em;
+        }
+
+        tab11 {
+            padding-left: 44em;
+        }
+
+        tab12 {
+            padding-left: 48em;
+        }
+
+        tab13 {
+            padding-left: 52em;
+        }
+
+        tab14 {
+            padding-left: 56em;
+        }
+
+        tab15 {
+            padding-left: 60em;
+        }
+
+        tab16 {
+            padding-left: 64em;
+        }
+    </style>
+
+    <style>
+
+        #div-seguimientos {
+            height: 340px;
+            overflow: auto;
+        }
+
+    </style>
+
+
+    <!-- bootstrap datepicker -->
+    <link rel="stylesheet"
+          href="{% static 'bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css' %}">
+
+    <link rel="stylesheet" href="{% static 'css/css_personalizados.css' %}">
+{% endblock %}
+
+{% block content_body_block %}
+    <form role="form" method="POST"> {% csrf_token %}
+        <div class="box-body">
+            <div class="form-group">
+
+                {% if user.cargo == "Coordinador" or user.cargo == "Administrador" %}
+                    <div class="row">
+                        <div class="col-md-5" id="div-seguimientos">
+                            <ul class='timeline' id="ul-seguimientos">
+
+
+                            </ul>
+                        </div>
+
+                        <div class="col-md-7">
+
+                            <div class="row">
+                                <div class="col-md-5 col-md-offset-1">
+                                    <h4>Descripción del seguimiento</h4>
+                                </div>
+                                <div class="col-md-10 col-md-offset-1">
+                                    <hr/>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-10 col-md-offset-1">
+                                    {% bootstrap_field form.descripcion layout="vertical" %}
+                                    {% bootstrap_field form.fecha layout="vertical" %}
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <div class="box-footer" align="center">
+                        <button type="button" class="btn btn-primary" data-target="#modal-default" onclick="setText()">
+                            Registrar
+                        </button>
+                    </div>
+                {% else %}
+                    <div class="row">
+                        <div class="col-md-12" id="div-seguimientos">
+                            <ul class='timeline' id="ul-seguimientos">
+
+
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="box-footer" align="center">
+                        <a type="button" class="btn btn-primary"
+                           href="/evento_adverso/consultar_evento_adverso/">Volver</a>
+                    </div>
+                {% endif %}
+
+
+                <!-- Modal -->
+                <div class="modal fade" id="modal-default">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title">Registrar seguimiento</h4>
+                            </div>
+                            <div class="modal-body">
+                                <p id="info_mostrar"> &hellip;</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cerrar
+                                </button>
+                                <button type="submit" class="btn btn-primary" onclick="cerrarModal()">Registrar</button>
+                            </div>
+                        </div>
+                        <!-- /.modal-content -->
+                    </div>
+                    <!-- /.modal-dialog -->
+                </div>
+
+            </div>
+        </div>
+    </form>
+{% endblock %}
+
+
+{% block js_block %}
+
+    {{ form.media.js }}
+    <!-- bootstrap datepicker -->
+    <script src="{% static 'bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+    <script>
+
+        //Date picker
+        $('#id_fecha').datepicker({
+            format: "dd/mm/yyyy",
+            autoclose: true
+        })
+        $('#id_descripcion').val('')
+
+        function setText() {
+            //Información a mostrar
+            {#document.getElementById("info_mostrar").innerHTML = "¿Está seguro que desea registrar el implicado?"#}
+            document.getElementById("info_mostrar").innerHTML = "¿Está seguro que desea registrar el seguimiento al evento?"
+
+            $("#modal-default").modal('toggle');
+        }
+
+        function cerrarModal() {
+            $("#modal-default .close").click()
+
+
+            //Se agrega el seguimiento
+            var myDescripcion = $('#id_descripcion').val()
+            var myFecha = $('#id_fecha').val()
+
+
+            //Se crea el ajax
+            $.ajax({
+
+                type: "POST",
+                data: {desc: myDescripcion, fecha: myFecha},
+                url: "{% url 'agregar_seguimientos_ajax'%}",
+                dataType: 'json',
+
+            });
+
+        }
+
+
+        //Para traer todos los seguimientos realizados al mismo evento
+        $(function () {
+            id_evento = {{ evento.id }};
+
+            //Limpia el div
+            $("#ul-seguimientos").append("")
+
+            $.ajax({
+                url: "{% url 'get_seguimientos_ajax' %}",
+                data: {'id_evento': id_evento},
+                dataType: 'json',
+                success: function (data) {
+                    var json = JSON.parse(data)
+                    var json_size = Object.keys(json).length;
+
+                    //En caso de que hayan seguimientos..
+
+                    if (json_size > 0) {
+
+                        for (var i in json)
+
+                            //En caso de que la fecha del actual seguimiento sea igual a la del anterior, no se coloca un label indicando la fecha.
+                            if (i != 0 && json[i].fecha == json[i - 1].fecha) {
+
+                                $("#ul-seguimientos").append(
+                                    "<!-- /.timeline-label -->" +
+                                    "<!-- timeline item -->" +
+                                    "<li>" +
+                                    "<!-- timeline icon -->" +
+                                    "<i class='fa fa-sticky-note-o bg-blue'></i>" +
+                                    "<div class='timeline-item'>" +
+                                    "<h3 class='timeline-header'><a href='#'>Seguimiento " + (json_size - i) + "</a></h3>" +
+                                    "<div class='timeline-body'>" +
+                                    json[i].descripcion +
+                                    "</div>" +
+                                    "</div>" +
+                                    "</li>" +
+                                    "<!-- END timeline item -->"
+                                )
+
+                            }
+
+                            //En caso de que no correspondan las fechas, se agrega un nuevo label con la fecha
+                            else {
+
+                                $("#ul-seguimientos").append(
+                                    "<li class='time-label' id=li_'" + i + "'>" +
+                                    "<span class='bg-red'>" +
+                                    json[i].fecha +
+                                    "</span>" +
+                                    "</li>" +
+                                    "<!-- /.timeline-label -->" +
+                                    "<!-- timeline item -->" +
+                                    "<li>" +
+                                    "<!-- timeline icon -->" +
+                                    "<i class='fa fa-sticky-note-o bg-blue'></i>" +
+                                    "<div class='timeline-item'>" +
+                                    "<h3 class='timeline-header'><a href='#'>Seguimiento " + (json_size - i) + "</a></h3>" +
+                                    "<div class='timeline-body'>" +
+                                    json[i].descripcion +
+                                    "</div>" +
+                                    "</div>" +
+                                    "</li>" +
+                                    "<!-- END timeline item -->"
+                                )
+                            }
+
+
+                    }
+                    //En caso de que no hayan seguimientos
+                    else {
+
+                        $("#ul-seguimientos").append(
+                            "<li>" +
+                            "<!-- timeline icon -->" +
+                            "<i class='fa fa-sticky-note-o bg-blue'></i>" +
+                            "<div class='timeline-item'>" +
+                            "<h3 class='timeline-header'><a href='#'>Seguimiento</a></h3>" +
+                            "<div class='timeline-body'>" +
+                            "No hay seguimientos registrados" +
+                            "</div>" +
+                            "</div>" +
+                            "</li>"
+                        )
+
+                    }
+
+
+                }
+            }); //Fin ajax
+
+        })
+
+
+    </script>
+
+{% endblock %}
+
+
+{% block footer_content_block %}
+
+
+{% endblock  %}
+
+

@@ -1,0 +1,269 @@
+{% extends 'base/base.html'%}
+{% load bootstrap3 %}
+{% load staticfiles %}
+
+{% block titulo_block %} BloomIPS | Consulta de antecedentes gestacionales {% endblock  %}
+
+{% block title_content_block %}<strong>Consulta de antecedentes gestacionales</strong>{% endblock %}
+
+{% block css_block %}
+
+    <!-- Select2 -->
+    {{ form.media.css }}
+    <link rel="stylesheet" href="{% static 'css/css_personalizados.css' %}">
+
+    <style>
+
+        #btn-buscar {
+            margin: 25px 0px;
+        }
+
+    </style>
+
+{% endblock %}
+
+{% block content_body_block %}
+<form role="form" method="POST"> {% csrf_token %}
+    <div class="box-body">
+        <div class="form-group">
+
+            <div class="row">
+                <div class="col-md-5 col-md-offset-1">
+                    {% bootstrap_field form.paciente layout="vertical" %}
+                </div>
+                <div class="col-md-2">
+                    <button type="button" class="btn btn-info" id="btn-buscar">Buscar</button>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-5 col-md-offset-1">
+                    <h4> Embarazo </h4>
+                </div>
+                <div class="col-md-10 col-md-offset-1">
+                    <hr/>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3 col-md-offset-1">
+                    {% bootstrap_field form.planeado layout="vertical" %}
+                </div>
+                <div class="col-md-3">
+                    {% bootstrap_field form.deseado layout="vertical" %}
+                </div>
+                <div class="col-md-3">
+                    {% bootstrap_field form.controlado layout="vertical" %}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-5 col-md-offset-1">
+                    {% bootstrap_field form.semanas_gestacion layout="vertical" %}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-5 col-md-offset-1">
+                    {% bootstrap_field form.consumo_embarazo layout="vertical" %}
+                </div>
+                <div class="col-md-5">
+                    {% bootstrap_field form.otro_consumo layout="vertical" %}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-5 col-md-offset-1">
+                    <h4> Parto </h4>
+                </div>
+                <div class="col-md-10 col-md-offset-1">
+                    <hr/>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3 col-md-offset-1">
+                    {% bootstrap_field form.gemelar layout="vertical" %}
+                </div>
+                <div class="col-md-3">
+                    {% bootstrap_field form.parto_termino layout="vertical" %}
+                </div>
+                <div class="col-md-3">
+                    {% bootstrap_field form.parto_prematuro layout="vertical" %}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3 col-md-offset-1">
+                    {% bootstrap_field form.amenaza_aborto layout="vertical" %}
+                </div>
+                <div class="col-md-3">
+                    {% bootstrap_field form.trabajo_parto_prolongado layout="vertical" %}
+                </div>
+                <div class="col-md-3">
+                    {% bootstrap_field form.meconio layout="vertical" %}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3 col-md-offset-1">
+                    {% bootstrap_field form.diabetes layout="vertical" %}
+                </div>
+                <div class="col-md-3">
+                    {% bootstrap_field form.placenta_previa layout="vertical" %}
+                </div>
+                <div class="col-md-3">
+                    {% bootstrap_field form.circular_cordon layout="vertical" %}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3 col-md-offset-1">
+                    {% bootstrap_field form.torchs layout="vertical" %}
+                </div>
+                <div class="col-md-3">
+                    {% bootstrap_field form.cesarea layout="vertical" %}
+                </div>
+                <div class="col-md-3">
+                    {% bootstrap_field form.preeclamsia layout="vertical" %}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3 col-md-offset-1">
+                    {% bootstrap_field form.forceps layout="vertical" %}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-5 col-md-offset-1">
+                    {% bootstrap_field form.otro_sintoma layout="vertical" %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+</form>
+{% endblock %}
+
+{% block js_block %}
+
+    {{ form.media.js }}
+
+    <script>
+
+        function limpiar_campos(){
+            $('#id_semanas_gestacion').val("");
+            $('#id_consumo_embarazo').val("");
+            $('#id_otro_consumo').val("");
+            $('#id_otro_sintoma').val("");
+            $('#id_planeado').prop('checked', false);
+            $('#id_deseado').prop('checked', false);
+            $('#id_controlado').prop('checked', false);
+            $('#id_gemelar').prop('checked', false);
+            $('#id_parto_termino').prop('checked', false);
+            $('#id_parto_prematuro').prop('checked', false);
+            $('#id_amenaza_aborto').prop('checked', false);
+            $('#id_trabajo_parto_prolongado').prop('checked', false);
+            $('#id_meconio').prop('checked', false);
+            $('#id_diabetes').prop('checked', false);
+            $('#id_placenta_previa').prop('checked', false);
+            $('#id_circular_cordon').prop('checked', false);
+            $('#id_torchs').prop('checked', false);
+            $('#id_cesarea').prop('checked', false);
+            $('#id_preeclamsia').prop('checked', false);
+            $('#id_forceps').prop('checked', false);
+        }
+
+
+        $('#btn-buscar').on("click", function(){
+            limpiar_campos();
+
+            var id_paciente = $('#id_paciente').val();
+
+            if(id_paciente == ""){
+                mensaje_toastr('warning', 'Por favor, seleccione un paciente.');
+            }else{
+                $.ajax({
+                    data: {'id_paciente': id_paciente},
+                    url: "{% url 'get_antecedente_gestacional_ajax' %}",
+                    success: function(data){
+                        var selected_values_consumo = [];
+                        if(data !== ""){
+                            var json = JSON.parse(data);
+                            if(json.planeado == true){
+                                $('#id_planeado').prop('checked', true);
+                            }
+                            if(json.deseado == true){
+                                $('#id_deseado').prop('checked', true);
+                            }
+                            if(json.controlado == true){
+                                $('#id_controlado').prop('checked', true);
+                            }
+                            if(json.gemelar == true){
+                                $('#id_gemelar').prop('checked', true);
+                            }
+                            if(json.parto_termino == true){
+                                $('#id_parto_termino').prop('checked', true);
+                            }
+                            if(json.parto_prematuro == true){
+                                $('#id_parto_prematuro').prop('checked', true);
+                            }
+                            if(json.amenaza_aborto == true){
+                                $('#id_amenaza_aborto').prop('checked', true);
+                            }
+                            if(json.trabajo_parto_prolongado == true){
+                                $('#id_trabajo_parto_prolongado').prop('checked', true);
+                            }
+                            if(json.meconio == true){
+                                $('#id_meconio').prop('checked', true);
+                            }
+                            if(json.diabetes == true){
+                                $('#id_diabetes').prop('checked', true);
+                            }
+                            if(json.placenta_previa == true){
+                                $('#id_placenta_previa').prop('checked', true);
+                            }
+                            if(json.circular_cordon == true){
+                                $('#id_circular_cordon').prop('checked', true);
+                            }
+                            if(json.torchs == true){
+                                $('#id_torchs').prop('checked', true);
+                            }
+                            if(json.cesarea == true){
+                                $('#id_cesarea').prop('checked', true);
+                            }
+                            if(json.preeclamsia == true){
+                                $('#id_preeclamsia').prop('checked', true);
+                            }
+                            if(json.forceps == true){
+                                $('#id_forceps').prop('checked', true);
+                            }
+                            $('#id_semanas_gestacion').val(json.semanas_gestacion);
+
+                            for(var j = 0; j < json.consumo_embarazo.length; j++){
+                                selected_values_consumo.push(String(json.consumo_embarazo[j].id));
+                            }
+                            $('#id_consumo_embarazo').val(selected_values_consumo).change();
+                            $('#id_otro_consumo').val(json.otro_consumo);
+                            $('#id_otro_sintoma').val(json.otro_sintoma);
+                        }else{
+                            mensaje_toastr('warning', 'No hay antecedentes.');
+                        }
+                    },
+                    dataType: "json",
+                    error: function () {
+                        mensaje_toastr('error', 'Ocurrió un error al conectar con el servidor.');
+                    }
+
+                });
+            }
+        });
+    </script>
+
+{% endblock %}
+
+{% block footer_content_block %}
+
+
+{% endblock  %}

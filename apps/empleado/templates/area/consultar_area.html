@@ -1,0 +1,75 @@
+{% extends 'base/base_tables.html' %}
+{% load bootstrap3 %}
+{% load staticfiles %}
+
+{% block titulo_block %} BloomIPS | Consultar área{% endblock %}
+
+{% block css_block %}
+    {{ block.super }}
+{% endblock %}
+
+{% block title_content_block %}<strong>Consultar área</strong>{% endblock %}
+
+{% block content_body_block %}
+
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <div class="table-responsive">
+                <table id="example1" class="table table-bordered table-striped my_datatable">
+
+                    <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Tipo</th>
+                        <th style="text-align:center">Descripción</th>
+                        <th class="no_search" style="text-align:center">Modificar</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Tipo</th>
+                        <th style="text-align:center">Descripción</th>
+                        <th style="text-align:center">Modificar</th>
+                    </tr>
+                    </tfoot>
+
+                </table>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block js_block %}
+    {{ block.super }}
+    <script>
+        function procesar_datos(json) {
+            for(var i=0; i< json.data.length; i++){
+                var temporal = json.data[i][3]
+                json.data[i][3] = '<a href="'+temporal+'"class="btn-sm btn-block btn-primary" style="text-align: center">Modificar</a>'
+            }
+            return json.data
+        }
+
+        function obtener_datos(data) {
+            data.csrfmiddlewaretoken = '{{ csrf_token }}'
+
+        }
+
+        $(function () {
+            iniciar_datatable("{% url 'ajax_filtro_consultar_area' %}", {
+                'actualizar_datos': obtener_datos,
+                'funcion_ajax': procesar_datos,
+                'tipo_peticion': 'POST'
+            })
+        });
+    </script>
+
+{% endblock %}
+
+{% block footer_content_block %}
+
+{% endblock %}

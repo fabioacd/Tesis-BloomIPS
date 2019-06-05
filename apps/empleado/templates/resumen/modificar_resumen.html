@@ -1,0 +1,154 @@
+{% extends 'base/base.html' %}
+{% load bootstrap3 %}
+{% load staticfiles %}
+
+{% block titulo_block %} BloomIPS | Modificar informe mensual{% endblock %}
+
+{% block title_content_block %}<strong>Modificar informe mensual</strong>{% endblock %}
+
+{% block css_block %}
+    {{ form.media.css }}
+    <!-- Switch Bootstrap -->
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+    <style>
+        #div-entradas {
+            height: 340px;
+            overflow: auto;
+        }
+    </style>
+{% endblock %}
+
+{% block content_body_block %}
+    <form role="form" method="POST" enctype="multipart/form-data"> {% csrf_token %}
+        <div class="box-body">
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="col-md-12" id="div-entradas">
+                            {% for entrada in entradas %}
+                                <ul class='timeline'>
+                                    <li class='time-label'>
+                        <span class='bg-red'>
+                        {{ entrada.fecha }}
+                        </span>
+                                    </li>
+                                    <!-- /.timeline-label -->
+                                    <!-- timeline item -->
+                                    <li>
+                                        <!-- timeline icon -->
+                                        <i class='fa fa-sticky-note-o bg-blue'></i>
+                                        <div class='timeline-item'>
+                                            <span class='time'><i class='fa fa-clock-o'></i> {{ entrada.hora }}</span>
+                                            <h3 class='timeline-header'><a href='#'>Entrada Numero 1</a></h3>
+                                            <div class='timeline-body'>
+                                                {{ entrada.descripcion | safe }}
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <!-- END timeline item -->
+                                </ul>
+                            {% endfor %}
+
+                        </div>
+
+                    </div>
+                    <div class="col-md-6 ">
+                        <div class="row ">
+                            <div class="col-md-6">
+                                <div class="">
+                                    <label>Creado por: <span
+                                            style="font-weight: normal;">{{ form.instance.empleado }} </span></label>
+                                </div>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label>Área: <span style="font-weight: normal;">{{ form.instance.area }} </span></label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 form-group">
+                                <label>Paciente: <span style="font-weight: normal;">{{ paciente }} </span></label>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label>Mes: <span
+                                        style="font-weight: normal;">{{ form.instance.get_mes }} </span></label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 form-group">
+                                {% if user.cargo == "Administrador" or user.cargo == "Coordinador" %}
+                                    {% bootstrap_field form.revisado layout="vertical" %}
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-md-12 form-group">
+                            {% bootstrap_field form.descripcion layout="vertical" %}
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="box-footer">
+            <button type="button" class="btn btn-primary" onclick="setText()">Modificar</button>
+        </div>
+
+
+        <!-- Modal -->
+        <div class="modal fade" id="modal-default">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Modificar Informe mensual</h4>
+                    </div>
+                    <div class="modal-body" id="mostrar-alerta">
+                        <p id="info_mostrar"> &hellip;</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-primary" onclick="cerrarModal()">Modificar</button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+
+    </form>
+{% endblock %}
+
+{% block js_block %}
+    {{ form.media.js }}
+    <!-- CK Editor -->
+    <script src="{% static 'bower_components/ckeditor/ckeditor.js' %}"></script>
+    <!-- Switch Bootstrap -->
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+    <script>
+
+        function setText() {
+            //Información a mostrar
+            document.getElementById("info_mostrar").innerHTML = "¿Está seguro que desea modificar el informe mensual?"
+            $("#modal-default").modal('toggle');
+        }
+
+        function cerrarModal() {
+            $("#modal-default .close").click()
+        }
+
+        $(function () {
+            // Replace the <textarea id="editor1"> with a CKEditor
+            // instance, using default configuration.
+            CKEDITOR.replace('editor1')
+        })
+
+
+    </script>
+
+{% endblock %}
+
+{% block footer_content_block %}
+
+
+{% endblock %}

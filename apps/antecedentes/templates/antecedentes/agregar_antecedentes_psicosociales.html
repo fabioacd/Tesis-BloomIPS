@@ -1,0 +1,248 @@
+{% extends 'base/base.html' %}
+{% load bootstrap3 %}
+{% load staticfiles %}
+
+{% block titulo_block %} BloomIPS | Registro de antecedentes psicosociales {% endblock %}
+
+{% block title_content_block %}<strong>Registro de antecedentes psicosociales</strong>{% endblock %}
+
+{% block css_block %}
+
+    <!-- Select2 -->
+    {{ form.media.css }}
+    <link rel="stylesheet" href="{% static 'css/css_personalizados.css' %}">
+    <link rel="stylesheet" type="text/css"
+          href="https://cdn.datatables.net/v/bs/jq-3.3.1/jszip-2.5.0/dt-1.10.18/b-1.5.4/b-colvis-1.5.4/b-html5-1.5.4/datatables.min.css"/>
+
+{% endblock %}
+
+{% block content_body_block %}
+    <form role="form" method="POST" id="form_antecedente"> {% csrf_token %}
+        {{ formset_familiar.management_form }}
+        <div class="box-body">
+            <div class="form-group">
+
+                <div class="row">
+                    <div class="col-md-5 col-md-offset-1">
+                        {% bootstrap_field form.paciente layout="vertical" %}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-5 col-md-offset-1">
+                        {% bootstrap_field form.numero_habitantes layout="vertical" %}
+                    </div>
+
+                    <div class="col-md-5">
+                        {% bootstrap_field form.num_integrantes_laboran layout="vertical" %}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-5 col-md-offset-1">
+                        {% bootstrap_field form.num_hermanos layout="vertical" %}
+                    </div>
+                    <div class="col-md-5">
+                        {% bootstrap_field form.lugar_entre_hermanos layout="vertical" %}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-5 col-md-offset-1">
+                        <h5 style="font-weight: bold;">
+                            Personas que viven con el paciente
+                        </h5>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
+                        <div class="table-responsive">
+                            <table id="example1" class="table table-bordered table-striped my_datatable">
+                                <thead>
+                                <tr>
+                                    <th>Identificación</th>
+                                    <th>Nombre</th>
+                                    <th>Ocupación</th>
+                                    <th>Escolaridad</th>
+                                    <th>Edad</th>
+                                    <th>Relación</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                {% for form in formset_familiar %}
+                                    <tr class="tr-formset">
+                                        <td> {% bootstrap_field form.identificacion_familiar layout="inline" %}</td>
+                                        <td> {% bootstrap_field form.nombre layout="inline" %}</td>
+                                        <td> {% bootstrap_field form.ocupacion layout="inline" %}</td>
+                                        <td> {% bootstrap_field form.escolaridad layout="inline" %}</td>
+                                        <td> {% bootstrap_field form.edad layout="inline" %}</td>
+                                        <td> {% bootstrap_field form.relacion layout="inline" %}</td>
+                                    </tr>
+                                {% endfor %}
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div><!--final div-->
+                <!--</div>--><!--box-body div-->
+
+
+                <div class="row">
+                    <div class="col-md-5 col-md-offset-1">
+                        {% bootstrap_field form.total_ingresos layout="vertical" %}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-5 col-md-offset-1">
+                        {% bootstrap_field form.tipo_vivienda layout="vertical" %}
+                    </div>
+                    <div class="col-md-5">
+                        {% bootstrap_field form.otro_tipo_vivienda layout="vertical" %}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-5 col-md-offset-1">
+                        {% bootstrap_field form.sector_vivienda layout="vertical" %}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
+                        {% bootstrap_field form.observaciones_vivienda layout="vertical" %}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-2 col-md-offset-1">
+                        <h5 style="font-weight: bold;">
+                            Servicios públicos
+                        </h5>
+                    </div>
+                    <div class="col-md-2">
+                        {% bootstrap_field form.agua layout="vertical" %}
+                    </div>
+                    <div class="col-md-2">
+                        {% bootstrap_field form.energia layout="vertical" %}
+                    </div>
+                    <div class="col-md-2">
+                        {% bootstrap_field form.gas layout="vertical" %}
+                    </div>
+                    <div class="col-md-2">
+                        {% bootstrap_field form.internet layout="vertical" %}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
+                        {% bootstrap_field form.observacion_servicios layout="vertical" %}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
+                        {% bootstrap_field form.gmfcs layout="vertical" %}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="box-footer">
+            <button type="button" class="btn btn-primary" data-target="#modal-default" onclick="setText()"
+                    type="button">Guardar
+            </button>
+        </div>
+        <!-- Modal -->
+        <div class="modal fade" id="modal-default">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Registrar antecedentes psicosociales</h4>
+                    </div>
+                    <div class="modal-body" id="mostrar-alerta">
+                        <p id="info_mostrar"> &hellip;</p>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="row">
+                            <div class="col-md-2 col-sm-2">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                            </div>
+                            <div class="col-md-6 col-md-offset-1 col-sm-6 col-sm-offset-1">
+                                <button type="submit" name="save_and_records" value="1" class="btn btn-primary"
+                                        onclick="cerrarModal()">Registrar y continuar con antecedentes familiares
+                                </button>
+                            </div>
+                            <div class="col-md-2 col-sm-2 col-sm-offset-1">
+                                <button type="submit" name="save" value="1" class="btn btn-primary"
+                                        onclick="cerrarModal()">Registrar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+    </form>
+{% endblock %}
+
+{% block js_block %}
+
+    {{ form.media.js }}
+    <script type="text/javascript"
+            src="https://cdn.datatables.net/v/bs/jszip-2.5.0/dt-1.10.18/b-1.5.4/b-colvis-1.5.4/b-html5-1.5.4/datatables.min.js"></script>
+    <script src="{% static 'js/django-dynamic-formset/django-dynamic-formset-master/src/jquery.formset.js' %}"></script>
+
+    <script>
+        $(document).ready(function () {
+
+
+            //$('#form_antecedente tbody tr').formset();
+            $('.tr-formset').formset({
+                prefix: '{{ formset_familiar.prefix }}',
+                addText: 'Agregar familiar',
+                addCssClass: 'btn btn-success btn-xs',
+                deleteText: 'Remover familiar',
+                deleteCssClass: 'btn btn-danger btn-xs',
+
+            });
+
+
+            $('#tipo_vivienda').on('click', function () {
+
+                var selected_value = $('#tipo_vivienda option:selected').text();
+
+                if (selected_value == "Otro") {
+                    $('#otro_tipo_vivienda').prop('disabled', false);
+                } else {
+                    $('#otro_tipo_vivienda').prop('disabled', true);
+                }
+            });
+        });
+
+
+        function setText() {
+            //Información a mostrar
+            document.getElementById("info_mostrar").innerHTML = "¿Está seguro que desea registrar los antecedentes?"
+            $("#modal-default").modal('toggle');
+        }
+
+        function cerrarModal() {
+            $("#modal-default .close").click()
+        }
+
+
+    </script>
+
+{% endblock %}
+
+{% block footer_content_block %}
+
+
+{% endblock %}

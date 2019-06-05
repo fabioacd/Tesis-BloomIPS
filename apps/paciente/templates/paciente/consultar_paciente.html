@@ -1,0 +1,95 @@
+{% extends 'base/base_tables.html' %}
+{% load bootstrap3 %}
+{% load staticfiles %}
+
+{% block titulo_block %} BloomIPS | Consultar paciente{% endblock %}
+
+{% block title_content_block %}<strong>Consultar paciente</strong>{% endblock %}
+
+{% block css_block %}
+    {{ block.super }}
+    <style>
+        #example1 {
+            width: 100% !important;
+        }
+    </style>
+{% endblock %}
+
+{% block content_body_block %}
+    <!--<div class="box-body">-->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table-responsive">
+                <table id="example1" class="table table-bordered table-striped my_datatable">
+                    <thead>
+                    <tr>
+                        <th>Identificación</th>
+                        <th>Nombres</th>
+                        <th>Apellidos</th>
+                        <th>Email</th>
+                        <th>Celular</th>
+                        <th class="search-select">EPS</th>
+                        <th class="search-select">Estado</th>
+                        <th class="no_search" style="vertical-align: middle">Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <th>Identificación</th>
+                        <th>Nombres</th>
+                        <th>Apellidos</th>
+                        <th>Email</th>
+                        <th>Celular</th>
+                        <th>EPS</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div><!--final div-->
+    <!--</div>--><!--box-body div-->
+
+{% endblock %}
+
+{% block js_block %}
+    {{ block.super }}
+    <!-- DataTables -->
+    <script src="{% static 'bower_components/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
+
+    <script>
+        function procesar_datos(json) {
+            for (var i = 0; i < json.data.length; i++) {
+                var objs_botones = json.data[i][7];
+                var botones = '';
+                for (var j = 0; j < objs_botones.length; j++) {
+                    var btn_actual = objs_botones[j];
+                    botones += `<a href="${btn_actual.url}" class="btn-sm btn-block ${btn_actual.color}" style="text-align: center">${btn_actual.texto_boton}</a>`
+                }
+                json.data[i][7] = botones;
+            }
+            return json.data
+        }
+
+        function obtener_datos(data) {
+            data.csrfmiddlewaretoken = '{{ csrf_token }}'
+        }
+
+        $(function () {
+            iniciar_datatable("{% url 'ajax_filtro_consultar_paciente' %}", {
+                'actualizar_datos': obtener_datos,
+                'funcion_ajax': procesar_datos,
+                'tipo_peticion': 'POST'
+            });
+            agregar_busqueda_columnas();
+        });
+    </script>
+
+{% endblock %}
+
+{% block footer_content_block %}
+{% endblock %}

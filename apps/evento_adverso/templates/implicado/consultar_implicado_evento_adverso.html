@@ -1,0 +1,80 @@
+{% extends 'base/base_tables.html' %}
+{% load bootstrap3 %}
+{% load staticfiles %}
+
+{% block titulo_block %} BloomIPS | Consultar implicados a evento adversos{% endblock %}
+
+{% block css_block %}
+
+    <link rel="stylesheet" href="{% static 'bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css' %}">
+
+{% endblock %}
+
+{% block title_content_block %}<strong>Consultar implicados a eventos adversos</strong>{% endblock %}
+
+{% block content_body_block %}
+
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <div class="table-responsive">
+                <table id="example1" class="table table-bordered table-striped">
+                    <thead>
+                    <tr>
+                        <th style="text-align:center">Cédula</th>
+                        <th style="text-align:center">Seguridad Social</th>
+                        <th style="text-align:center">Nombre</th>
+                        <th class="no_search" style="text-align:center">Modificar</th>
+                    </tr>
+                    </thead>
+                    <tbody
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <th style="text-align:center">Cédula</th>
+                        <th style="text-align:center">Seguridad Social</th>
+                        <th style="text-align:center">Nombre</th>
+                        <th style="text-align:center">Modificar</th>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block js_block %}
+    {{ block.super }}
+    <!-- DataTables -->
+    <script src="{% static 'bower_components/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
+
+    <script>
+        function procesar_datos(json) {
+            for (var i = 0; i < json.data.length; i++) {
+                var temporal = json.data[i][3]
+                json.data[i][3] = '<a href="' + temporal + '"class="btn-sm btn-block btn-primary" style="text-align: center">Modificar</a>'
+            }
+            return json.data
+        }
+
+        function obtener_datos(data) {
+            data.csrfmiddlewaretoken = '{{ csrf_token }}'
+
+        }
+
+        $(function () {
+            iniciar_datatable("{% url 'ajax_filtro_consultar_implicado' %}", {
+                'actualizar_datos': obtener_datos,
+                'funcion_ajax': procesar_datos,
+                'tipo_peticion': 'POST'
+            })
+        });
+    </script>
+
+{% endblock %}
+
+{% block footer_content_block %}
+
+
+{% endblock %}
