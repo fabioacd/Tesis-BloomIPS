@@ -27,6 +27,7 @@ urlpatterns = [
     path('evento_adverso/', include('apps.evento_adverso.urls')),
     path('paciente/', include('apps.paciente.urls')),
     path('antecedentes/', include('apps.antecedentes.urls')),
+    path('citas/', include('apps.citas.urls')),
     path('select2/', include('django_select2.urls')),
 
 ]

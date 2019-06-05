@@ -72,18 +72,6 @@ class Resumen(models.Model):
         fecha_resumen = mes + " del " + self.fecha.strftime("%Y")
         return fecha_resumen
 
-
-class Cita(models.Model):
-    class Meta:
-        unique_together = (('terapeuta', 'fecha', 'hora'))
-    asignador = models.ForeignKey(Empleado, on_delete=models.CASCADE, related_name='asignador') #FORANEA
-    terapeuta = models.ForeignKey(Empleado, on_delete=models.CASCADE, related_name='terapeuta') #FORANEA
-    paciente = models.ForeignKey('paciente.Paciente', on_delete=models.CASCADE) #FORANEA
-    hora = models.TimeField()
-    fecha = models.DateField()
-    estado = models.CharField(max_length = 20)
-
-
 class Consolidado(models.Model):
     empleado = models.ForeignKey(Empleado, on_delete=models.CASCADE, related_name='coordinador')  # FORANEA
     paciente = models.ForeignKey('paciente.Paciente', on_delete=models.CASCADE) #FORANEA
