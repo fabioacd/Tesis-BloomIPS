@@ -3,6 +3,7 @@ import datetime
 import json
 from datetime import date
 from html import escape
+import unidecode
 
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db.models import Q, Count, F
@@ -633,7 +634,8 @@ def generar_consolidado(request, id_paciente, fecha, tipo_area):
         if resumenes_paciente:
             fecha_actual = datetime.datetime.now()
             nombre_archivo = str(fecha_actual.year) + "_" + str(fecha_actual.month) + "_" + str(
-                fecha_actual.day) + "_EI_" + str(paciente.eps) + "_" + paciente.nombre
+                fecha_actual.day) + "_EI_" + str(paciente.eps) + "_" + paciente.nombre + "_" + paciente.apellido
+            nombre_archivo = unidecode.unidecode(nombre_archivo)
             contexto = {'resumenes': resumenes_paciente, 'paciente': paciente, 'fecha_inicio': fecha_inicio,
                         'fecha_fin': fecha_fin}
             pdf = convertir_a_pdf('pdf/consolidado_paciente.html', nombre_archivo, contexto)

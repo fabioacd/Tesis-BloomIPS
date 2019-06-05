@@ -3,6 +3,7 @@ import csv
 import json
 import magic
 import mimetypes
+import unidecode
 from datetime import date
 from django.core import serializers
 from io import StringIO
@@ -216,7 +217,8 @@ def consultar_evolucion_diaria(request):
         if entradas_paciente:
             if request.user.cargo != 'Terapeuta':
                 nombre_archivo = str(fecha_inicial) + '-a-' + str(fecha_final) + '-HC-' + \
-                                 str(paciente.eps) + '-' + str(paciente.nombre) + ' ' + str(paciente.apellido)
+                                 str(paciente.eps) + '-' + paciente.nombre + '-' + paciente.apellido
+                nombre_archivo = unidecode.unidecode(nombre_archivo)
                 contexto = {'paciente': paciente, 'edad_paciente': edad_paciente,
                             'entradas_paciente': entradas_paciente}
                 pdf = convertir_a_pdf('pdf/historia_clinica.html', nombre_archivo, contexto)
