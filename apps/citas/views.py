@@ -9,7 +9,17 @@ from django.contrib import messages
 # Create your views here.
 @login_required
 @user_passes_test(check_cargos(['Administrador', 'Coordinador']))
-def ver_citas(request):
+def consultar_cita(request):
+    print('here')
+    contexto = {}
+    return render(request, 'ver_citas.html', contexto)
+
+def agregar_cita(request):
+    print('here')
+    contexto = {}
+    return render(request, 'ver_citas.html', contexto)
+
+def modificar_cita(request):
     print('here')
     contexto = {}
     return render(request, 'ver_citas.html', contexto)

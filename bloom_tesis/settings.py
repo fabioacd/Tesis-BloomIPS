@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'apps.evento_adverso',
     'apps.paciente',
     'apps.login',
+    'apps.citas',
     'bootstrap3',
     'django_select2',
     'django_cleanup'
@@ -89,7 +90,7 @@ WSGI_APPLICATION = 'bloom_tesis.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'bloom_db',
+        'NAME': 'bloomtesis_db',
         'USER': 'bloom_admin',
         'PASSWORD': 'bl00m_4dm1n',
         'HOST': 'localhost',

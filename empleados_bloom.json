@@ -502,5 +502,29 @@
    "fecha_nacimiento": "1989-06-28",
    "area": [8]
    }
+},
+{
+   "model": "empleado.empleado",
+   "pk": 22,
+   "fields":{
+   "password": "pbkdf2_sha256$100000$NzYxpU3SrTBn$1ctUZ1OqHqYVtqTwB3iJLKeaWNfBVy6uDFq7TTJGdg4=",
+   "last_login": "2019-06-04",
+   "is_superuser": false,
+   "username": "123",
+   "first_name": "Sebastian",
+   "last_name": "Castaño",
+   "email": "alexandrauribe@bloomips.com",
+   "is_staff": true,
+   "is_active": true,
+   "date_joined": "2019-06-04",
+   "imagen": "",
+   "firma": "",
+   "cargo": "Terapeuta",
+   "direccion": "CARRERA 96C #50A-280 BARRIO CALASANZ",
+   "telefono": "2603286994",
+   "celular": "1424114179",
+   "fecha_nacimiento": "1980-09-25",
+   "area": [8]
+   }
 }
 ]

@@ -1,6 +1,8 @@
 from django.urls import path
-from apps.citas.views import ver_citas
+from apps.citas.views import consultar_cita, agregar_cita, modificar_cita
 
 urlpatterns = [
-    path('hola', ver_citas, name='ver_citas'),
+    path('consultar', consultar_cita, name='consultar_cita'),
+    path('agregar', agregar_cita, name='agregar_cita'),
+    path('modificar', modificar_cita, name='modificar_cita'),
 ]
