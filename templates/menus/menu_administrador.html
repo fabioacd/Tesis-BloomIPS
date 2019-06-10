@@ -186,25 +186,25 @@
 <li class="treeview {% if 'citas/' in request.path %} active {% else %} disabled {% endif %}">
 
     <a href="#">
-        <i class="fa fa-male"></i> <span>Citas</span>
+        <i class="fa fa-calendar"></i> <span>Citas</span>
         <span class="pull-right-container">
                 <i class="fa fa-angle-left pull-right"></i>
         </span>
     </a>
     <ul class="treeview-menu">
-        <li class="{% if 'agregar_cita' in request.path %} active {% else %} disabled {% endif %}">
+        <li class="{% if 'agregar' in request.path %} active {% else %} disabled {% endif %}">
             <a href="{% url 'agregar_cita' %}">
-                <i class="fa fa-user-plus">
+                <i class="fa fa-calendar-plus-o">
                 </i> Agregar cita </a>
         </li>
-        <li class="{% if 'consultar_cita' in request.path %} active {% else %} disabled {% endif %}">
+        <li class="{% if 'consultar' in request.path %} active {% else %} disabled {% endif %}">
             <a href="{% url 'consultar_cita' %}">
-                <i class="fa fa-user-plus">
+                <i class="fa fa-calendar-o">
                 </i> Consultar cita </a>
         </li>
-        <li class="{% if 'modificar_cita' in request.path %} active {% else %} disabled {% endif %}">
+        <li class="{% if 'modificar' in request.path %} active {% else %} disabled {% endif %}">
             <a href="{% url 'modificar_cita' %}">
-                <i class="fa fa-user-plus">
+                <i class="fa fa-calendar-check-o">
                 </i> Modificar cita </a>
         </li>
     </ul>

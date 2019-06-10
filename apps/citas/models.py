@@ -8,6 +8,12 @@ from apps.empleado.models import Empleado
 
 
 class Cita(models.Model):
+
+    ESTADO_CHOICES = (
+        ('Agendada', 'Agendada'),
+        ('Finalizada', 'Finalizada'),
+    )
+
     class Meta:
         unique_together = ('terapeuta', 'fecha', 'hora')
     asignador = models.ForeignKey(Empleado, on_delete=models.CASCADE, related_name='asignador_cita') #FORANEA
@@ -15,5 +21,5 @@ class Cita(models.Model):
     paciente = models.ForeignKey('paciente.Paciente', on_delete=models.CASCADE) #FORANEA
     hora = models.TimeField()
     fecha = models.DateField()
-    estado = models.CharField(max_length=20)
+    estado = models.CharField(max_length=20, choices=ESTADO_CHOICES, default='Agendada')
 
