@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse, Http404
 import json
 
-from apps.citas.forms import AgregarCitaForm
+from apps.citas.forms import AgregarCitaForm, ModificarCitaForm
 from apps.citas.models import Cita
 from utils.utils import check_cargos
 from django.contrib import messages
@@ -12,11 +12,22 @@ from django.contrib import messages
 # Create your views here.
 @login_required
 @user_passes_test(check_cargos(['Administrador', 'Coordinador']))
-def consultar_cita(request):
-    print('here')
-    contexto = {}
-    return render(request, 'ver_citas.html', contexto)
-
+def modificar_cita(request, id_cita):
+    cita = get_object_or_404(Cita, id=id_cita)
+    if request.method == 'POST':
+        form = ModificarCitaForm(request.POST, instance=cita)
+        if form.is_valid():
+            cita = form.save(commit=False)
+            cita.asignador = request.user
+            cita.save()
+            messages.success(request, 'Cita registrada exitosamente')
+            return redirect(consultar_cita)
+        else:
+            messages.error(request, 'No se pudo registrar la cita')
+    else:
+        form = ModificarCitaForm(instance=cita)
+    contexto = {'form': form}
+    return render(request, 'ver_cita.html', contexto)
 
 @login_required
 @user_passes_test(check_cargos(['Administrador']))
@@ -29,16 +40,15 @@ def agregar_cita(request):
             cita.asignador = request.user
             cita.save()
             messages.success(request, 'Cita registrada exitosamente')
-            return redirect(consultar_cita)
+            return redirect(agregar_cita)
         else:
             messages.error(request, 'No se pudo registrar la cita')
     citas = Cita.objects.all()
-    print(citas)
     contexto = {'form': form, 'citas': citas}
     return render(request, 'agregar_cita.html', contexto)
 
 
-def modificar_cita(request):
+def consultar_cita(request):
     print('here')
     contexto = {}
-    return render(request, 'ver_citas.html', contexto)
+    return render(request, 'ver_cita.html', contexto)

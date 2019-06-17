@@ -47,22 +47,6 @@
                                     {% bootstrap_field form.hora layout="vertical" %}
                                 </div>
                             </div>
-                            {% comment %}
-                        <!-- the events -->
-                        <div id="external-events">
-                            <div class="external-event bg-green">Lunch</div>
-                            <div class="external-event bg-yellow">Go home</div>
-                            <div class="external-event bg-aqua">Do homework</div>
-                            <div class="external-event bg-light-blue">Work on UI design</div>
-                            <div class="external-event bg-red">Sleep tight</div>
-                            <div class="checkbox">
-                                <label for="drop-remove">
-                                    <input type="checkbox" id="drop-remove">
-                                    remove after drop
-                                </label>
-                            </div>
-                        </div>
-                        {% endcomment %}
                         </div>
                         <!-- /.box-body -->
                         <div class="box-footer">
@@ -71,7 +55,7 @@
                                 Agendar
                             </button>
                         </div>
-                        <!-- Modal -->
+                        <!-- Modal Agendar Cita-->
                         <div class="modal fade" id="modal-default">
                             <div class="modal-dialog">
                                 <div class="modal-content">
@@ -95,45 +79,32 @@
                             </div>
                             <!-- /.modal-dialog -->
                         </div>
-                    </div>
-                    {% comment %}
-                <!-- /. box -->
-                <div class="box box-solid">
-                    <div class="box-header with-border">
-                        <h3 class="box-title">Create Event</h3>
-                    </div>
-                    <div class="box-body">
-                        <div class="btn-group" style="width: 100%; margin-bottom: 10px;">
-                            <!--<button type="button" id="color-chooser-btn" class="btn btn-info btn-block dropdown-toggle" data-toggle="dropdown">Color <span class="caret"></span></button>-->
-                            <ul class="fc-color-picker" id="color-chooser">
-                                <li><a class="text-aqua" href="#"><i class="fa fa-square"></i></a></li>
-                                <li><a class="text-blue" href="#"><i class="fa fa-square"></i></a></li>
-                                <li><a class="text-light-blue" href="#"><i class="fa fa-square"></i></a></li>
-                                <li><a class="text-teal" href="#"><i class="fa fa-square"></i></a></li>
-                                <li><a class="text-yellow" href="#"><i class="fa fa-square"></i></a></li>
-                                <li><a class="text-orange" href="#"><i class="fa fa-square"></i></a></li>
-                                <li><a class="text-green" href="#"><i class="fa fa-square"></i></a></li>
-                                <li><a class="text-lime" href="#"><i class="fa fa-square"></i></a></li>
-                                <li><a class="text-red" href="#"><i class="fa fa-square"></i></a></li>
-                                <li><a class="text-purple" href="#"><i class="fa fa-square"></i></a></li>
-                                <li><a class="text-fuchsia" href="#"><i class="fa fa-square"></i></a></li>
-                                <li><a class="text-muted" href="#"><i class="fa fa-square"></i></a></li>
-                                <li><a class="text-navy" href="#"><i class="fa fa-square"></i></a></li>
-                            </ul>
-                        </div>
-                        <!-- /btn-group -->
-                        <div class="input-group">
-                            <input id="new-event" type="text" class="form-control" placeholder="Event Title">
-
-                            <div class="input-group-btn">
-                                <button id="add-new-event" type="button" class="btn btn-primary btn-flat">Add</button>
+                         <!-- Modal Info Cita-->
+                        <div class="modal fade" id="modal-info-cita">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span></button>
+                                        <h4 class="modal-title">Informacion de Cita</h4>
+                                    </div>
+                                    <div class="modal-body" id="mostrar-alerta">
+                                        <p id="info_mostrar_cita"> &hellip;</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">
+                                            Cerrar
+                                        </button>
+                                        <button type="submit" class="btn btn-primary" onclick="cerrarModal()">Agendar
+                                        </button>
+                                    </div>
+                                </div>
+                                <!-- /.modal-content -->
                             </div>
-                            <!-- /btn-group -->
+                            <!-- /.modal-dialog -->
                         </div>
-                        <!-- /input-group -->
+
                     </div>
-                </div>
-                {% endcomment %}
                 </form>
             </div>
             <!-- /.col -->
@@ -176,7 +147,13 @@
         }
 
         function cerrarModal() {
-            $("#modal-default .close").click()
+            $("#modal-default.close").click()
+        }
+
+        function setTextCita() {
+            //Información a mostrar
+            document.getElementById("info_mostrar").innerHTML = "¿Está seguro que desea agendar la cita?"
+            $("#modal-info-cita").modal('toggle');
         }
 
         $(function () {
@@ -237,31 +214,29 @@
                     right: 'month,agendaWeek,agendaDay'
                 },
                 buttonText: {
-                    today: 'today',
-                    month: 'month',
-                    week: 'week',
-                    day: 'day'
+                    today: 'Hoy',
+                    month: 'Mes',
+                    week: 'Semana',
+                    day: 'Día'
                 },
                 //Random default events
                 events: [
                     {% for cita in citas %}
 
                         {
+                            id: {{ cita.id }},
                             title: '{{ cita.paciente }}',
-                            start: new Date({{ cita.fecha.year }}, {{ cita.fecha.month }}, {{ cita.fecha.day }}),
-                            end: new Date({{ cita.fecha.year }}, {{ cita.fecha.month }}, {{ cita.fecha.day }}),
-                            url: '{% url 'consultar_cita' %}',
+                            start: new Date({{ cita.fecha.year }}, {{ cita.fecha.month }} -1, {{ cita.fecha.day }}),
+                            end: new Date({{ cita.fecha.year }}, {{ cita.fecha.month }} -1, {{ cita.fecha.day }}),
                             backgroundColor: '#0073b7', //blue
                             borderColor: '#0073b7' //blue
                         },
                     {% endfor %}
-                    {
-                        title: 'Evento mio',
-                        start: new Date(2019, m, 19),
-                        backgroundColor: '#f56954', //red
-                        borderColor: '#f56954' //red
-                    }
                 ],
+                eventClick: function (info) {
+                    console.log(info);
+                    setTextCita();
+                },
                 /*
                 events: [
                     {
