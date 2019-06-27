@@ -20,20 +20,25 @@ var Paciente = function () {
     };
 
     var buscar_cie10 = function () {
-        var codigo_palabra = $("#codigo_palabra_cie10").val()
-        $.ajax({
-            url: "/paciente/get_diagnosticos_ajax",
-            data: {'codigo_palabra': codigo_palabra},
-            dataType: 'json',
-            success: function (data) {
-                $("#codigo_palabra_cie10").val('');
-                var diagnosticos = JSON.parse(data);
-                eliminar_opciones_no_seleccionadas_cie10();
-                $.each(diagnosticos, function (index, item) {
-                    agregar_opciones_cie10_select(item);
-                });
-            }
-        });
+        var codigo_palabra = $("#codigo_palabra_cie10").val();
+        if (codigo_palabra.trim() !== '') {
+            $.ajax({
+                url: "/paciente/get_diagnosticos_ajax",
+                data: {'codigo_palabra': codigo_palabra},
+                dataType: 'json',
+                success: function (data) {
+                    $("#codigo_palabra_cie10").val('');
+                    var diagnosticos = JSON.parse(data);
+                    eliminar_opciones_no_seleccionadas_cie10();
+                    $.each(diagnosticos, function (index, item) {
+                        agregar_opciones_cie10_select(item);
+                    });
+                }
+            });
+        }else{
+            mensaje_toastr('warning', 'Por favor, ingrese texto válido.');
+        }
+
     };
 
     var eliminar_opciones_no_seleccionadas_cie10 = function () {
