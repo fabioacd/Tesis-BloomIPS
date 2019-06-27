@@ -5,7 +5,7 @@ from datetime import datetime
 from utils.utils import rango_fechas_informe_mensual
 from django_select2.forms import Select2Widget, Select2MultipleWidget
 from apps.paciente.models import Eps, Paciente
-from bloomips import settings
+from bloom_tesis import settings
 from .models import Empleado, Area, Resumen, Consolidado
 from django import forms
 
