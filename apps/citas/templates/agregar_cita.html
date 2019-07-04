@@ -79,7 +79,7 @@
                             </div>
                             <!-- /.modal-dialog -->
                         </div>
-                         <!-- Modal Info Cita-->
+                        <!-- Modal Info Cita-->
                         <div class="modal fade" id="modal-info-cita">
                             <div class="modal-dialog">
                                 <div class="modal-content">
@@ -95,7 +95,7 @@
                                         <button type="button" class="btn btn-default pull-left" data-dismiss="modal">
                                             Cerrar
                                         </button>
-                                        <button type="submit" class="btn btn-primary" onclick="cerrarModal()">Agendar
+                                        <button type="submit" class="btn btn-danger" onclick="cerrarModal()">Cancelar cita
                                         </button>
                                     </div>
                                 </div>
@@ -150,10 +150,23 @@
             $("#modal-default.close").click()
         }
 
-        function setTextCita() {
+        function getInfoCita(id_cita) {
             //Información a mostrar
-            document.getElementById("info_mostrar").innerHTML = "¿Está seguro que desea agendar la cita?"
-            $("#modal-info-cita").modal('toggle');
+
+            $.ajax({
+                data: {'id_cita': id_cita},
+                dataType: "json",
+                url: "{% url 'get_info_cita' %}",
+                success: function (data) {
+                    console.log(data)
+                    document.getElementById("info_mostrar_cita").innerHTML = "Informacion de cita:" +
+                        "<br>" + "Paciente: " + data.paciente_cita + "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp" +
+                        "Terapeuta: " + data.terapeuta_cita + "<br>" +  "Fecha: " + data.fecha_cita +
+                        "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp" + "Hora: " + data.hora_cita
+                    $("#modal-info-cita").modal('toggle');
+                    }
+                });
+
         }
 
         $(function () {
@@ -234,8 +247,9 @@
                     {% endfor %}
                 ],
                 eventClick: function (info) {
-                    console.log(info);
-                    setTextCita();
+                    console.log(info.id);
+                    var id_cita =  info.id;
+                    getInfoCita(id_cita);
                 },
                 /*
                 events: [

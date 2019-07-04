@@ -52,3 +52,15 @@ def consultar_cita(request):
     print('here')
     contexto = {}
     return render(request, 'ver_cita.html', contexto)
+
+def get_info_cita(request):
+    id_cita = request.GET.get('id_cita')
+    cita = Cita.objects.get(id=id_cita)
+    json_data = {
+        'id_cita': cita.id,
+        'paciente_cita': cita.paciente.identificacion + ' - ' + cita.paciente.nombre + ' ' + cita.paciente.apellido,
+        'terapeuta_cita': cita.terapeuta.first_name + ' ' + cita.terapeuta.last_name,
+        'fecha_cita': cita.fecha,
+        'hora_cita': cita.hora
+    }
+    return JsonResponse(json_data, safe=False)
