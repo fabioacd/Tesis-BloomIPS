@@ -1,3 +1,5 @@
+from imghdr import test_rast
+
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse, Http404
@@ -38,8 +40,16 @@ def agregar_cita(request):
         if form.is_valid():
             cita = form.save(commit=False)
             cita.asignador = request.user
-            cita.save()
-            messages.success(request, 'Cita registrada exitosamente')
+            hora_ini = cita.hora.replace(hour=(cita.hora.hour - 1) % 24)
+            hora_fin = cita.hora.replace(hour=(cita.hora.hour + 1) % 24)
+            print("Horas: ", hora_ini, hora_fin, cita.hora)
+            citas = Cita.objects.filter(hora__range=[hora_ini, hora_fin], fecha=cita.fecha, terapeuta=cita.terapeuta)
+            print(citas)
+            if not citas:
+                cita.save()
+                messages.success(request, 'Cita registrada exitosamente')
+            else:
+                messages.error(request, 'No se pudo registrar la cita')
             return redirect(agregar_cita)
         else:
             messages.error(request, 'No se pudo registrar la cita')
@@ -62,5 +72,18 @@ def get_info_cita(request):
         'terapeuta_cita': cita.terapeuta.first_name + ' ' + cita.terapeuta.last_name,
         'fecha_cita': cita.fecha,
         'hora_cita': cita.hora
+    }
+    return JsonResponse(json_data, safe=False)
+
+def cancelar_cita(request):
+    id_cita = request.GET.get('id_cita')
+    cita = Cita.objects.get(id=id_cita)
+    status_delete = cita.delete()
+    if status_delete[0] == 1:
+        status = True
+    else:
+        status = False
+    json_data = {
+        'status': status,
     }
     return JsonResponse(json_data, safe=False)

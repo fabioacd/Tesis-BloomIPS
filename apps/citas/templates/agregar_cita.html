@@ -95,7 +95,8 @@
                                         <button type="button" class="btn btn-default pull-left" data-dismiss="modal">
                                             Cerrar
                                         </button>
-                                        <button type="submit" class="btn btn-danger" onclick="cerrarModal()">Cancelar cita
+                                        <button id="btn_cancelar_cita" type="button" class="btn btn-danger"
+                                                onclick="cancelarCita($(this).attr('data-idcita'))">Cancelar cita
                                         </button>
                                     </div>
                                 </div>
@@ -147,7 +148,8 @@
         }
 
         function cerrarModal() {
-            $("#modal-default.close").click()
+            $("#modal-info-cita").modal('hide');
+            $("#modal-default").modal('hide');
         }
 
         function getInfoCita(id_cita) {
@@ -161,13 +163,39 @@
                     console.log(data)
                     document.getElementById("info_mostrar_cita").innerHTML = "Informacion de cita:" +
                         "<br>" + "Paciente: " + data.paciente_cita + "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp" +
-                        "Terapeuta: " + data.terapeuta_cita + "<br>" +  "Fecha: " + data.fecha_cita +
+                        "Terapeuta: " + data.terapeuta_cita + "<br>" + "Fecha: " + data.fecha_cita +
                         "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp" + "Hora: " + data.hora_cita
+
+                    $('#btn_cancelar_cita').attr("data-idcita", id_cita);
+                    console.log($("#btn_cancelar_cita"));
+                    //$("#btn_cancelar_cita").data('idCita', id_cita);
                     $("#modal-info-cita").modal('toggle');
-                    }
-                });
+                }
+            });
 
         }
+
+        function cancelarCita(id_cita) {
+            //Información a mostrar
+
+            $.ajax({
+                data: {'id_cita': id_cita},
+                dataType: "json",
+                url: "{% url 'cancelar_cita' %}",
+                success: function (data) {
+                    if (data.status) {
+                        $("#calendar").fullCalendar('removeEvents', id_cita);
+                        $("#modal-info-cita").modal('hide');
+                        mensaje_toastr("success", "Cita cancelada exitosamente");
+                    }else {
+                        mensaje_toastr("error", "No se pudo cancelar la cita");
+                    }
+
+                }
+            });
+
+        }
+
 
         $(function () {
 
@@ -248,7 +276,7 @@
                 ],
                 eventClick: function (info) {
                     console.log(info.id);
-                    var id_cita =  info.id;
+                    var id_cita = info.id;
                     getInfoCita(id_cita);
                 },
                 /*
