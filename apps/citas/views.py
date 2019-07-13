@@ -42,7 +42,7 @@ def agregar_cita(request):
             cita.asignador = request.user
             hora_ini = cita.hora.replace(hour=(cita.hora.hour - 1) % 24)
             hora_fin = cita.hora.replace(hour=(cita.hora.hour + 1) % 24)
-            print("Horas: ", hora_ini, hora_fin, cita.hora)
+            print("Horas: ", hora_ini, hora_fin, cita.hora, cita.fecha)
             citas = Cita.objects.filter(hora__range=[hora_ini, hora_fin], fecha=cita.fecha, terapeuta=cita.terapeuta)
             print(citas)
             if not citas:

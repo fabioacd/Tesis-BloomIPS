@@ -7,7 +7,6 @@
 {% block title_content_block %}<strong>Agregar cita</strong>{% endblock %}
 
 {% block css_block %}
-    <link rel="stylesheet" href="{% static 'css/css_personalizados.css' %}">
     <!-- Select2 -->
     {{ form.media.css }}
     <link rel="stylesheet" href="{% static 'css/css_personalizados.css' %}">
@@ -137,10 +136,22 @@
     <script src="{% static 'bower_components/fullcalendar/dist/fullcalendar.min.js' %}"></script>
     <!-- bootstrap datepicker -->
     <script src="{% static 'bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+    <script src="{% static 'bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+    <script src="{% static 'bower_components/bootstrap-datepicker/js/locales/bootstrap-datepicker.es.js' %}"
+            charset="UTF-8"></script>
     <!-- bootstrap time picker -->
     <script src="{% static 'plugins/timepicker/bootstrap-timepicker.min.js' %}"></script>
     {{ form.media.js }}
     <script>
+
+        //Timepicker
+        $('#id_hora').timepicker({
+            showInputs: false,
+            minuteStep: 1,
+            secondStep: 1,
+            showMeridian: false
+        });
+
         function setText() {
             //Información a mostrar
             document.getElementById("info_mostrar").innerHTML = "¿Está seguro que desea agendar la cita?"
@@ -187,7 +198,7 @@
                         $("#calendar").fullCalendar('removeEvents', id_cita);
                         $("#modal-info-cita").modal('hide');
                         mensaje_toastr("success", "Cita cancelada exitosamente");
-                    }else {
+                    } else {
                         mensaje_toastr("error", "No se pudo cancelar la cita");
                     }
 
@@ -207,13 +218,6 @@
                 startDate: new Date()
             });
 
-            //Timepicker
-            $('#id_hora').timepicker({
-                showInputs: false,
-                minuteStep: 1,
-                secondStep: 1,
-                showMeridian: false
-            });
 
             /* initialize the external events
              -----------------------------------------------------------------*/
