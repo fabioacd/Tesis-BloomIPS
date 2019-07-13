@@ -1,0 +1,55 @@
+{% extends 'base/base.html' %}
+{% load bootstrap3 %}
+{% load staticfiles %}
+
+{% block titulo_block %} BloomIPS | Citas{% endblock %}
+
+{% block title_content_block %}<strong>Citas</strong>{% endblock %}
+
+{% block css_block %}
+    <link rel="stylesheet" href="{% static 'css/css_personalizados.css' %}">
+    <!-- Select2 -->
+    {{ form.media.css }}
+    <link rel="stylesheet" href="{% static 'css/css_personalizados.css' %}">
+    <!-- Switch Bootstrap -->
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block content_body_block %}
+    <div class="box-body">
+        <div class="row">
+            <div class="col-md-12">
+                {% bootstrap_field form.paciente layout="vertical" %}
+            </div>
+            <div class="col-md-12">
+                {% bootstrap_field form.fecha layout="vertical" %}
+            </div>
+            <div class="col-md-12">
+                {% bootstrap_field form.terapeuta layout="vertical" %}
+            </div>
+            <div class="col-md-12">
+                {% bootstrap_field form.hora layout="vertical" %}
+            </div>
+            <div class="col-md-12">
+                {% bootstrap_field form.cancelar layout="vertical" %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block footer_content_block %}
+{% endblock %}
+
+{% block js_block %}
+    <!-- Switch Bootstrap -->
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $('#id_cancelar').bootstrapToggle({
+                onstyle: 'danger',
+                offstyle: 'danger'
+            });
+            console.log("Hola mundo");
+        })
+    </script>
+{% endblock %}
