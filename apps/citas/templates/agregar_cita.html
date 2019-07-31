@@ -1,0 +1,403 @@
+{% extends 'base/base.html' %}
+{% load bootstrap3 %}
+{% load staticfiles %}
+
+{% block titulo_block %} BloomIPS | Agregar cita{% endblock %}
+
+{% block title_content_block %}<strong>Agregar cita</strong>{% endblock %}
+
+{% block css_block %}
+    <!-- Select2 -->
+    {{ form.media.css }}
+    <link rel="stylesheet" href="{% static 'css/css_personalizados.css' %}">
+    <!-- fullCalendar -->
+    <link rel="stylesheet" href="{% static 'bower_components/fullcalendar/dist/fullcalendar.min.css' %}">
+    <link rel="stylesheet" href="{% static 'bower_components/fullcalendar/dist/fullcalendar.print.min.css' %}"
+          media="print">
+    <!-- bootstrap datepicker -->
+    <link rel="stylesheet"
+          href="{% static 'bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css' %}">
+    <!-- Bootstrap time Picker -->
+    <link rel="stylesheet" href="{% static 'plugins/timepicker/bootstrap-timepicker.min.css' %}">
+{% endblock %}
+
+{% block content_body_block %}
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-md-3">
+                <form role="form" method="POST"> {% csrf_token %}
+                    <div class="box box-solid">
+                        <div class="box-header with-border">
+                            <h4 class="box-title">Formulario de citas</h4>
+                        </div>
+                        <div class="box-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    {% bootstrap_field form.paciente layout="vertical" %}
+                                </div>
+                                <div class="col-md-12">
+                                    {% bootstrap_field form.fecha layout="vertical" %}
+                                </div>
+                                <div class="col-md-12">
+                                    {% bootstrap_field form.terapeuta layout="vertical" %}
+                                </div>
+                                <div class="col-md-12">
+                                    {% bootstrap_field form.hora layout="vertical" %}
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.box-body -->
+                        <div class="box-footer">
+                            <button type="button" class="btn btn-primary" data-target="#modal-default"
+                                    onclick="setText()">
+                                Agendar
+                            </button>
+                        </div>
+                        <!-- Modal Agendar Cita-->
+                        <div class="modal fade" id="modal-default">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span></button>
+                                        <h4 class="modal-title">Agendar Cita</h4>
+                                    </div>
+                                    <div class="modal-body" id="mostrar-alerta">
+                                        <p id="info_mostrar"> &hellip;</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">
+                                            Cerrar
+                                        </button>
+                                        <button type="submit" class="btn btn-primary" onclick="cerrarModal()">Agendar
+                                        </button>
+                                    </div>
+                                </div>
+                                <!-- /.modal-content -->
+                            </div>
+                            <!-- /.modal-dialog -->
+                        </div>
+                        <!-- Modal Info Cita-->
+                        <div class="modal fade" id="modal-info-cita">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span></button>
+                                        <h4 class="modal-title">Informacion de Cita</h4>
+                                    </div>
+                                    <div class="modal-body" id="mostrar-alerta">
+                                        <p id="info_mostrar_cita"> &hellip;</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">
+                                            Cerrar
+                                        </button>
+                                        <button id="btn_cancelar_cita" type="button" class="btn btn-danger"
+                                                onclick="cancelarCita($(this).attr('data-idcita'))">Cancelar cita
+                                        </button>
+                                    </div>
+                                </div>
+                                <!-- /.modal-content -->
+                            </div>
+                            <!-- /.modal-dialog -->
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+            <!-- /.col -->
+            <div class="col-md-9">
+                <div class="box box-primary">
+                    <div class="box-body no-padding">
+                        <!-- THE CALENDAR -->
+                        <div id="calendar"></div>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /. box -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+{% endblock %}
+
+{% block footer_content_block %}
+{% endblock %}
+
+{% block js_block %}
+    <!-- jQuery UI 1.11.4 -->
+    <script src="{% static 'bower_components/jquery-ui/jquery-ui.min.js' %}"></script>
+    <!-- fullCalendar -->
+    <script src="{% static 'bower_components/moment/moment.js' %}"></script>
+    <script src="{% static 'bower_components/fullcalendar/dist/fullcalendar.min.js' %}"></script>
+    <!-- bootstrap datepicker -->
+    <script src="{% static 'bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+    <script src="{% static 'bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+    <script src="{% static 'bower_components/bootstrap-datepicker/js/locales/bootstrap-datepicker.es.js' %}"
+            charset="UTF-8"></script>
+    <!-- bootstrap time picker -->
+    <script src="{% static 'plugins/timepicker/bootstrap-timepicker.min.js' %}"></script>
+    {{ form.media.js }}
+    <script>
+
+        //Timepicker
+        $('#id_hora').timepicker({
+            showInputs: false,
+            minuteStep: 1,
+            secondStep: 1,
+            showMeridian: false
+        });
+
+        function setText() {
+            //Información a mostrar
+            document.getElementById("info_mostrar").innerHTML = "¿Está seguro que desea agendar la cita?"
+            $("#modal-default").modal('toggle');
+        }
+
+        function cerrarModal() {
+            $("#modal-info-cita").modal('hide');
+            $("#modal-default").modal('hide');
+        }
+
+        function getInfoCita(id_cita) {
+            //Información a mostrar
+
+            $.ajax({
+                data: {'id_cita': id_cita},
+                dataType: "json",
+                url: "{% url 'get_info_cita' %}",
+                success: function (data) {
+                    console.log(data)
+                    document.getElementById("info_mostrar_cita").innerHTML = "Informacion de cita:" +
+                        "<br>" + "Paciente: " + data.paciente_cita + "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp" +
+                        "Terapeuta: " + data.terapeuta_cita + "<br>" + "Fecha: " + data.fecha_cita +
+                        "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp" + "Hora: " + data.hora_cita
+
+                    $('#btn_cancelar_cita').attr("data-idcita", id_cita);
+                    console.log($("#btn_cancelar_cita"));
+                    //$("#btn_cancelar_cita").data('idCita', id_cita);
+                    $("#modal-info-cita").modal('toggle');
+                }
+            });
+
+        }
+
+        function cancelarCita(id_cita) {
+            //Información a mostrar
+
+            $.ajax({
+                data: {'id_cita': id_cita},
+                dataType: "json",
+                url: "{% url 'cancelar_cita' %}",
+                success: function (data) {
+                    if (data.status) {
+                        $("#calendar").fullCalendar('removeEvents', id_cita);
+                        $("#modal-info-cita").modal('hide');
+                        mensaje_toastr("success", "Cita cancelada exitosamente");
+                    } else {
+                        mensaje_toastr("error", "No se pudo cancelar la cita");
+                    }
+
+                }
+            });
+
+        }
+
+
+        $(function () {
+
+            //Date picker
+            $('#id_fecha').datepicker({
+                format: "dd/mm/yyyy",
+                autoclose: true,
+                language: "es",
+                startDate: new Date()
+            });
+
+
+            /* initialize the external events
+             -----------------------------------------------------------------*/
+            function init_events(ele) {
+                ele.each(function () {
+
+                    // create an Event Object (http://arshaw.com/fullcalendar/docs/event_data/Event_Object/)
+                    // it doesn't need to have a start or end
+                    var eventObject = {
+                        title: $.trim($(this).text()) // use the element's text as the event title
+                    }
+
+                    // store the Event Object in the DOM element so we can get to it later
+                    $(this).data('eventObject', eventObject)
+
+                    // make the event draggable using jQuery UI
+                    $(this).draggable({
+                        zIndex: 1070,
+                        revert: true, // will cause the event to go back to its
+                        revertDuration: 0  //  original position after the drag
+                    })
+
+                })
+            }
+
+            init_events($('#external-events div.external-event'))
+
+            /* initialize the calendar
+             -----------------------------------------------------------------*/
+            //Date for the calendar events (dummy data)
+            var date = new Date()
+            var d = date.getDate(),
+                m = date.getMonth(),
+                y = date.getFullYear()
+            $('#calendar').fullCalendar({
+                header: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'month,agendaWeek,agendaDay'
+                },
+                buttonText: {
+                    today: 'Hoy',
+                    month: 'Mes',
+                    week: 'Semana',
+                    day: 'Día'
+                },
+                //Random default events
+                events: [
+                    {% for cita in citas %}
+
+                        {
+                            id: {{ cita.id }},
+                            title: '{{ cita.paciente }}',
+                            start: new Date({{ cita.fecha.year }}, {{ cita.fecha.month }} -1, {{ cita.fecha.day }}),
+                            end: new Date({{ cita.fecha.year }}, {{ cita.fecha.month }} -1, {{ cita.fecha.day }}),
+                            backgroundColor: '#0073b7', //blue
+                            borderColor: '#0073b7' //blue
+                        },
+                    {% endfor %}
+                ],
+                eventClick: function (info) {
+                    console.log(info.id);
+                    var id_cita = info.id;
+                    getInfoCita(id_cita);
+                },
+                /*
+                events: [
+                    {
+                        title: 'All Day Event',
+                        start: new Date(y, m, 1),
+                        backgroundColor: '#f56954', //red
+                        borderColor: '#f56954' //red
+                    },
+                    {
+                        title: 'Long Event',
+                        start: new Date(y, m, d - 5),
+                        end: new Date(y, m, d - 2),
+                        backgroundColor: '#f39c12', //yellow
+                        borderColor: '#f39c12' //yellow
+                    },
+                    {
+                        title: 'Meeting',
+                        start: new Date(y, m, d, 10, 30),
+                        allDay: false,
+                        backgroundColor: '#0073b7', //Blue
+                        borderColor: '#0073b7' //Blue
+                    },
+                    {
+                        title: 'Lunch',
+                        start: new Date(y, m, d, 12, 0),
+                        end: new Date(y, m, d, 14, 0),
+                        allDay: false,
+                        backgroundColor: '#00c0ef', //Info (aqua)
+                        borderColor: '#00c0ef' //Info (aqua)
+                    },
+                    {
+                        title: 'Birthday Party',
+                        start: new Date(y, m, d + 1, 19, 0),
+                        end: new Date(y, m, d + 1, 22, 30),
+                        allDay: false,
+                        backgroundColor: '#00a65a', //Success (green)
+                        borderColor: '#00a65a' //Success (green)
+                    },
+                    {
+                        title: 'Click for Google',
+                        start: new Date(y, m, 28),
+                        end: new Date(y, m, 29),
+                        url: 'http://google.com/',
+                        backgroundColor: '#3c8dbc', //Primary (light-blue)
+                        borderColor: '#3c8dbc' //Primary (light-blue)
+                    }
+                ],*/
+                editable: true,
+                droppable: true, // this allows things to be dropped onto the calendar !!!
+
+                drop: function (date, allDay) { // this function is called when something is dropped
+
+                    // retrieve the dropped element's stored Event Object
+                    var originalEventObject = $(this).data('eventObject')
+
+                    // we need to copy it, so that multiple events don't have a reference to the same object
+                    var copiedEventObject = $.extend({}, originalEventObject)
+
+                    // assign it the date that was reported
+                    copiedEventObject.start = date
+                    copiedEventObject.allDay = allDay
+                    copiedEventObject.backgroundColor = $(this).css('background-color')
+                    copiedEventObject.borderColor = $(this).css('border-color')
+
+                    // render the event on the calendar
+                    // the last `true` argument determines if the event "sticks" (http://arshaw.com/fullcalendar/docs/event_rendering/renderEvent/)
+                    $('#calendar').fullCalendar('renderEvent', copiedEventObject, true)
+
+                    // is the "remove after drop" checkbox checked?
+                    if ($('#drop-remove').is(':checked')) {
+                        // if so, remove the element from the "Draggable Events" list
+                        $(this).remove()
+                    }
+
+                }
+            })
+
+            /* ADDING EVENTS */
+            var currColor = '#3c8dbc' //Red by default
+            //Color chooser button
+            var colorChooser = $('#color-chooser-btn')
+            $('#color-chooser > li > a').click(function (e) {
+                e.preventDefault()
+                //Save color
+                currColor = $(this).css('color')
+                //Add color effect to button
+                $('#add-new-event').css({'background-color': currColor, 'border-color': currColor})
+            })
+            $('#add-new-event').click(function (e) {
+                e.preventDefault()
+                //Get value and make sure it is not null
+                var val = $('#new-event').val()
+                if (val.length == 0) {
+                    return
+                }
+
+                //Create events
+                var event = $('<div />')
+                event.css({
+                    'background-color': currColor,
+                    'border-color': currColor,
+                    'color': '#fff'
+                }).addClass('external-event')
+                event.html(val)
+                $('#external-events').prepend(event)
+
+                //Add draggable funtionality
+                init_events(event)
+
+                //Remove event from text input
+                $('#new-event').val('')
+
+            })
+        })
+    </script>
+{% endblock %}
+
+

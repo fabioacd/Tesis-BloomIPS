@@ -183,6 +183,28 @@
     </ul>
 </li>
 
+<li class="treeview {% if 'citas/' in request.path %} active {% else %} disabled {% endif %}">
+
+    <a href="#">
+        <i class="fa fa-calendar"></i> <span>Citas</span>
+        <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+        </span>
+    </a>
+    <ul class="treeview-menu">
+        <li class="{% if 'agregar' in request.path %} active {% else %} disabled {% endif %}">
+            <a href="{% url 'agregar_cita' %}">
+                <i class="fa fa-calendar-plus-o">
+                </i> Agregar cita </a>
+        </li>
+        <li class="{% if 'consultar' in request.path %} active {% else %} disabled {% endif %}">
+            <a href="{% url 'consultar_cita' %}">
+                <i class="fa fa-calendar-o">
+                </i> Consultar cita </a>
+        </li>
+    </ul>
+</li>
+
 <li class="treeview {% if 'antecedentes/' in request.path %} active {% else %} disabled {% endif %}">
     <a href="#">
         <i class="fa fa-clipboard"></i> <span>Antecedentes</span>
