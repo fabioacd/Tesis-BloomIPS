@@ -1,0 +1,32 @@
+[
+ {
+   "model": "paciente.eps",
+   "pk": 1,
+   "fields":{
+   "nit": "800.088.702-2",
+   "nombre": "SURA",
+   "direccion": "Cr 63 49 A 31",
+   "telefono": "2602100"
+	}
+ },
+ {
+   "model": "paciente.eps",
+   "pk": 2,
+   "fields":{
+   "nit": "830.009.783-0",
+   "nombre": "CRUZ BLANCA",
+   "direccion": "Cr 81 37 B 59 ",
+   "telefono": "4139236"
+	}
+ },
+ {
+   "model": "paciente.eps",
+   "pk": 3,
+   "fields":{
+   "nit": "800.130.907",
+   "nombre": "SALUD TOTAL",
+   "direccion": "Cr 43 A 25 41",
+   "telefono": "3199900"
+	}
+ }
+]
