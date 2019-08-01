@@ -37,10 +37,10 @@
                                     {% bootstrap_field form.paciente layout="vertical" %}
                                 </div>
                                 <div class="col-md-12">
-                                    {% bootstrap_field form.fecha layout="vertical" %}
+                                    {% bootstrap_field form.terapeuta layout="vertical" %}
                                 </div>
                                 <div class="col-md-12">
-                                    {% bootstrap_field form.terapeuta layout="vertical" %}
+                                    {% bootstrap_field form.fecha layout="vertical" %}
                                 </div>
                                 <div class="col-md-12">
                                     {% bootstrap_field form.hora layout="vertical" %}
@@ -88,7 +88,7 @@
                                         <h4 class="modal-title">Informacion de Cita</h4>
                                     </div>
                                     <div class="modal-body" id="mostrar-alerta">
-                                        <p id="info_mostrar_cita"> &hellip;</p>
+                                        <div id="info_mostrar_cita"> &hellip;</div>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-default pull-left" data-dismiss="modal">
@@ -171,11 +171,13 @@
                 dataType: "json",
                 url: "{% url 'get_info_cita' %}",
                 success: function (data) {
-                    console.log(data)
-                    document.getElementById("info_mostrar_cita").innerHTML = "Informacion de cita:" +
-                        "<br>" + "Paciente: " + data.paciente_cita + "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp" +
-                        "Terapeuta: " + data.terapeuta_cita + "<br>" + "Fecha: " + data.fecha_cita +
-                        "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp" + "Hora: " + data.hora_cita
+                    console.log(data);
+                    var info = `<div style= "display: inline">`;
+                    info += `<span><h5>Paciente: </h5> <p>${data.paciente_cita}</p></span><hr>`;
+                    info += `<h5>Terapeuta: </h5> <p>${data.terapeuta_cita}</p><hr>`;
+                    info += `<h5>Fecha y hora: </h5> <p>${data.fecha_cita} / ${data.hora_cita}</p>`;
+                    info += `</div>`;
+                    $('#info_mostrar_cita').html(info);
 
                     $('#btn_cancelar_cita').attr("data-idcita", id_cita);
                     console.log($("#btn_cancelar_cita"));
@@ -183,7 +185,6 @@
                     $("#modal-info-cita").modal('toggle');
                 }
             });
-
         }
 
         function cancelarCita(id_cita) {
@@ -204,12 +205,9 @@
 
                 }
             });
-
         }
 
-
         $(function () {
-
             //Date picker
             $('#id_fecha').datepicker({
                 format: "dd/mm/yyyy",
@@ -217,13 +215,10 @@
                 language: "es",
                 startDate: new Date()
             });
-
-
             /* initialize the external events
              -----------------------------------------------------------------*/
             function init_events(ele) {
                 ele.each(function () {
-
                     // create an Event Object (http://arshaw.com/fullcalendar/docs/event_data/Event_Object/)
                     // it doesn't need to have a start or end
                     var eventObject = {
@@ -242,7 +237,6 @@
 
                 })
             }
-
             init_events($('#external-events div.external-event'))
 
             /* initialize the calendar

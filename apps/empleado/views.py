@@ -687,8 +687,10 @@ def get_pacientes_informe_ajax(request):
     rango_fechas = rango_fechas_informe_mensual()
     pacientes_entrada = Paciente.objects.filter(estado='Activo', entradas_paciente__area=area, entradas_paciente__empleado=empleado,
                                                 entradas_paciente__fecha__range=rango_fechas)
-    pacientes_resumen = Paciente.objects.exclude(resumenes__fecha__range=[rango_fechas[0], rango_fechas[1]],
-                                                 resumenes__area=area)
+    # pacientes_resumen = Paciente.objects.exclude(resumenes__fecha__range=rango_fechas, resumenes__area=area)
+    ids_paciente_resumen = Resumen.objects.filter(fecha__range = rango_fechas, area=area).values_list('paciente__id', flat=True)
+    pacientes_resumen = Paciente.objects.exclude(id__in=ids_paciente_resumen)
+
     pacientes = list(pacientes_resumen.intersection(pacientes_entrada))
     datos = []
     for paciente in pacientes:
