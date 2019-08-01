@@ -205,12 +205,9 @@
 
                 }
             });
-
         }
 
-
         $(function () {
-
             //Date picker
             $('#id_fecha').datepicker({
                 format: "dd/mm/yyyy",
@@ -218,13 +215,10 @@
                 language: "es",
                 startDate: new Date()
             });
-
-
             /* initialize the external events
              -----------------------------------------------------------------*/
             function init_events(ele) {
                 ele.each(function () {
-
                     // create an Event Object (http://arshaw.com/fullcalendar/docs/event_data/Event_Object/)
                     // it doesn't need to have a start or end
                     var eventObject = {
@@ -243,7 +237,6 @@
 
                 })
             }
-
             init_events($('#external-events div.external-event'))
 
             /* initialize the calendar
