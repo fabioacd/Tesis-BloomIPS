@@ -19,6 +19,7 @@ from .forms import AgregarEmpleadoForm, AgregarEpsForm, AgregarAreaForm, Modific
 from django.contrib import messages
 from .models import Area, Resumen, Empleado
 from apps.paciente.models import Entrada, Paciente, Eps
+from apps.citas.models import Cita
 from django.shortcuts import redirect
 from utils.utils import convertir_a_pdf, rango_fechas_informe_mensual, check_cargos, nombre_mes
 
@@ -26,7 +27,9 @@ from utils.utils import convertir_a_pdf, rango_fechas_informe_mensual, check_car
 # Create your views here.
 @login_required
 def dashboard(request):
-    return render(request, 'empleado/dashboard.html')
+    citas = Cita.objects.filter(terapeuta = request.user)
+    contexto = {'citas': citas}
+    return render(request, 'empleado/dashboard.html', contexto)
 
 
 @login_required
